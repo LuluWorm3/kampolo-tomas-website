@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kampolo Tomas — Software Engineer &amp; IT Specialist</title>
+  <meta name="description" content="Kampolo Tomas Vaino Amunyela — Software Engineer, IT Support Specialist, and Informatics graduate based in Windhoek, Namibia. React Native, Python, databases, networking, and AI." />
+  <meta name="author" content="Kampolo Tomas" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Kampolo Tomas — Software Engineer &amp; IT Specialist" />
+  <meta property="og:description" content="Software Engineer and IT Specialist based in Windhoek, Namibia. React Native, Python, databases, networking, and AI." />
+  <meta property="og:type" content="website" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Sora:wght@600;700;800&amp;display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- Navigation -->
+  <header class="nav" id="nav">
+    <div class="container nav__inner">
+      <a href="#home" class="nav__brand">KT<span class="dot">.</span></a>
+      <nav class="nav__links" id="navLinks">
+        <a href="#about">About</a>
+        <a href="#experience">Experience</a>
+        <a href="#projects">Projects</a>
+        <a href="#skills">Skills</a>
+        <a href="#education">Education</a>
+        <a href="#contact" class="nav__cta">Contact</a>
+      </nav>
+      <button class="nav__toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero" id="home">
+    <div class="container hero__inner">
+      <p class="hero__eyebrow">Windhoek, Namibia</p>
+      <h1 class="hero__title">Kampolo Tomas</h1>
+      <p class="hero__subtitle">Software Engineer &amp; IT Specialist</p>
+      <p class="hero__lead">
+        Informatics graduate building mobile and web applications with React Native,
+        Python, and modern cloud tooling — with a strong foundation in IT support,
+        networking, databases, and applied AI.
+      </p>
+      <div class="hero__actions">
+        <a href="#projects" class="btn btn--primary">View my work</a>
+        <a href="#contact" class="btn btn--ghost">Get in touch</a>
+      </div>
+      <div class="hero__meta">
+        <a href="mailto:kampolotomasva@gmail.com">kampolotomasva@gmail.com</a>
+        <span>·</span>
+        <a href="https://linkedin.com/in/kampolo-tomas-8453b129b" target="_blank" rel="noopener">LinkedIn</a>
+      </div>
+    </div>
+  </section>
+
+  <main>
+    <!-- About -->
+    <section class="section" id="about">
+      <div class="container">
+        <p class="section__kicker">01 — About</p>
+        <h2 class="section__title">Who I am</h2>
+        <div class="about__grid">
+          <div class="about__text">
+            <p>
+              I'm Kampolo Tomas, a Namibian software engineer and IT specialist based in
+              Windhoek. I'm completing a Bachelor of Informatics at the Namibia University
+              of Science and Technology and currently work as a Software Engineer (WIL) at
+              Kellerman ICT, building mobile and backend features on the Janeebra platform.
+            </p>
+            <p>
+              My background spans hands-on IT support, network configuration, and database
+              design, combined with modern software development in React Native, Python, and
+              Firebase. I've also completed MIT Open Learning's Universal AI programme,
+              giving me a working foundation in machine learning, LLMs, and AI agents.
+            </p>
+            <p>
+              I care about building things that are reliable, secure, and genuinely useful —
+              from automated monitoring tools to API security test suites.
+            </p>
+          </div>
+          <div class="about__facts">
+            <div class="fact">
+              <span class="fact__num">5+</span>
+              <span class="fact__label">Years in IT support &amp; development</span>
+            </div>
+            <div class="fact">
+              <span class="fact__num">19</span>
+              <span class="fact__label">MIT Universal AI certificates</span>
+            </div>
+            <div class="fact">
+              <span class="fact__num">3</span>
+              <span class="fact__label">Languages spoken</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Experience -->
+    <section class="section section--alt" id="experience">
+      <div class="container">
+        <p class="section__kicker">02 — Experience</p>
+        <h2 class="section__title">Where I've worked</h2>
+        <div class="timeline">
+          <article class="timeline__item">
+            <div class="timeline__head">
+              <h3>Software Engineer (WIL)</h3>
+              <span class="timeline__date">Jul 2026 – Present</span>
+            </div>
+            <p class="timeline__org">Kellerman ICT — Janeebra platform</p>
+            <ul>
+              <li>Built mobile features in React Native and Expo: authentication flows, in-app password change, and dark mode theming aligned to the web design system.</li>
+              <li>Developed backend REST APIs for employee management, audit trail logging, and bulk data upload.</li>
+              <li>Authored Firestore security rules and a structured deals schema for role-based access control.</li>
+              <li>Created an automated API security test suite in pytest covering BOLA/IDOR, privilege escalation, and JWT validation.</li>
+            </ul>
+          </article>
+          <article class="timeline__item">
+            <div class="timeline__head">
+              <h3>IT Support Specialist (Freelance)</h3>
+              <span class="timeline__date">Jan 2021 – Present</span>
+            </div>
+            <p class="timeline__org">Independent Contractor, Windhoek</p>
+            <ul>
+              <li>Delivered hardware maintenance, network configuration, and system administration for individual and small-business clients.</li>
+              <li>Administered Microsoft 365 environments: user accounts, permissions, Azure AD, Teams, SharePoint, and OneDrive.</li>
+              <li>Troubleshot TCP/IP, DNS, DHCP, VPN, and email issues across Windows, macOS, and Linux.</li>
+            </ul>
+          </article>
+          <article class="timeline__item">
+            <div class="timeline__head">
+              <h3>General IT &amp; Administration Assistant</h3>
+              <span class="timeline__date">2020 – Present</span>
+            </div>
+            <p class="timeline__org">Benito Trading Enterprises, Outapi/Windhoek</p>
+            <ul>
+              <li>Set up and maintained equipment, high-volume printers, and office systems.</li>
+              <li>Produced graphic design and branded materials for clients.</li>
+              <li>Supervised a subcontracted team in 2024, tracking hours, equipment, and incident handling.</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Projects -->
+    <section class="section" id="projects">
+      <div class="container">
+        <p class="section__kicker">03 — Projects</p>
+        <h2 class="section__title">Things I've built</h2>
+        <div class="projects">
+          <article class="card">
+            <h3 class="card__title">Patient Records Data Management System</h3>
+            <p class="card__year">2025</p>
+            <p>Relational database prototype for patient intake records, modelled on DHIS2 structures used in Namibia's public health facilities, with role-based access control, query reports, and backup/recovery procedures.</p>
+            <div class="tags"><span>PostgreSQL</span><span>DHIS2</span><span>RBAC</span></div>
+          </article>
+          <article class="card">
+            <h3 class="card__title">Automated Network Uptime Monitor</h3>
+            <p class="card__year">2025</p>
+            <p>Python tool that pings critical network nodes, triggers email alerts on failure, logs uptime history to a local database, and generates daily availability reports.</p>
+            <div class="tags"><span>Python</span><span>Networking</span><span>Automation</span></div>
+          </article>
+          <article class="card">
+            <h3 class="card__title">IT Infrastructure Security Audit</h3>
+            <p class="card__year">2025</p>
+            <p>Audited a simulated enterprise network, identified access-control and compliance vulnerabilities, implemented system hardening, and defined incident response procedures.</p>
+            <div class="tags"><span>Security</span><span>Firewall</span><span>Hardening</span></div>
+          </article>
+          <article class="card">
+            <h3 class="card__title">HR Management System — Support Module</h3>
+            <p class="card__year">2024</p>
+            <p>Backend module with role-based access control and performance optimisation, delivered with admin documentation and user guides.</p>
+            <div class="tags"><span>Backend</span><span>RBAC</span><span>Docs</span></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Skills -->
+    <section class="section section--alt" id="skills">
+      <div class="container">
+        <p class="section__kicker">04 — Skills</p>
+        <h2 class="section__title">What I work with</h2>
+        <div class="skills">
+          <div class="skills__group">
+            <h3>Software Development</h3>
+            <div class="chips">
+              <span>Python</span><span>JavaScript</span><span>TypeScript</span>
+              <span>React.js</span><span>React Native</span><span>Expo</span>
+              <span>Node.js</span><span>PHP</span><span>Django REST</span>
+            </div>
+          </div>
+          <div class="skills__group">
+            <h3>Data &amp; AI</h3>
+            <div class="chips">
+              <span>PostgreSQL</span><span>MySQL</span><span>Firebase/Firestore</span>
+              <span>Business Intelligence</span><span>Machine Learning</span>
+              <span>LLMs</span><span>AI Agents</span>
+            </div>
+          </div>
+          <div class="skills__group">
+            <h3>IT &amp; Networking</h3>
+            <div class="chips">
+              <span>System Administration</span><span>TCP/IP</span><span>DNS</span>
+              <span>DHCP</span><span>VPN</span><span>Firewall Config</span>
+              <span>Microsoft 365</span><span>Azure AD</span>
+            </div>
+          </div>
+          <div class="skills__group">
+            <h3>Security &amp; Tools</h3>
+            <div class="chips">
+              <span>API Security Testing</span><span>pytest</span><span>Web Scraping</span>
+              <span>Git</span><span>Vulnerability Assessment</span><span>Access Control</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Education -->
+    <section class="section" id="education">
+      <div class="container">
+        <p class="section__kicker">05 — Education &amp; Certifications</p>
+        <h2 class="section__title">Learning</h2>
+        <div class="edu">
+          <div class="edu__item">
+            <h3>Bachelor of Informatics</h3>
+            <p class="edu__org">Namibia University of Science and Technology (NUST)</p>
+            <p class="edu__date">Expected October 2026</p>
+            <p>Business Intelligence &amp; Analytics, Data Analytics, Database Programming, Information Systems Security, Systems Analysis &amp; Design, Data Networks, Website Development.</p>
+          </div>
+          <div class="edu__item">
+            <h3>Universal AI Programme — 19 Certificates</h3>
+            <p class="edu__org">MIT Open Learning</p>
+            <p class="edu__date">Feb – Jun 2026</p>
+            <p>Python, Data Analytics &amp; ML, Neural Networks, Deep Learning, Computer Vision, LLMs, AI Agents, Multimodal AI, Prescriptive AI, Explainability &amp; AI Ethics.</p>
+          </div>
+          <div class="edu__item">
+            <h3>HP LIFE &amp; Project Management</h3>
+            <p class="edu__org">HP Foundation · Simplilearn</p>
+            <p class="edu__date">Jun 2026</p>
+            <p>IT for Business Success, Customer Experience, Social Media Marketing, Project Management 101.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <section class="section section--contact" id="contact">
+      <div class="container">
+        <p class="section__kicker">06 — Contact</p>
+        <h2 class="section__title">Let's work together</h2>
+        <p class="contact__lead">
+          I'm open to software engineering, IT, and data roles. The fastest way to reach me is by email.
+        </p>
+        <div class="contact__links">
+          <a class="contact__card" href="mailto:kampolotomasva@gmail.com">
+            <span class="contact__label">Email</span>
+            <span class="contact__value">kampolotomasva@gmail.com</span>
+          </a>
+          <a class="contact__card" href="tel:+264818503687">
+            <span class="contact__label">Phone</span>
+            <span class="contact__value">+264 81 850 3687</span>
+          </a>
+          <a class="contact__card" href="https://linkedin.com/in/kampolo-tomas-8453b129b" target="_blank" rel="noopener">
+            <span class="contact__label">LinkedIn</span>
+            <span class="contact__value">kampolo-tomas</span>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer__inner">
+      <span>© <span id="year"></span> Kampolo Tomas Vaino Amunyela</span>
+      <span>Windhoek, Namibia</span>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
