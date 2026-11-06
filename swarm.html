@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>How the swarm works — Kampolo Tomas</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <script>
+    (function () {
+      try { var t = localStorage.getItem('theme'); if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t); } catch (e) {}
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="wrap doc__top">
+    <a href="/">← Back to the site</a>
+    <span class="section__num">Hidden page</span>
+  </div>
+
+  <header class="doc__hero">
+    <div class="wrap">
+      <p class="section__num">You found it</p>
+      <h1>How the swarm<br />works.</h1>
+      <p>The cursor-agent rebuild you just watched, explained with the real code. There are two different "swarms" here, and it matters which is which.</p>
+    </div>
+  </header>
+
+  <main>
+    <section class="doc__block">
+      <div class="wrap grid">
+        <header class="section__head col-3"><p class="section__num">00</p><h2 class="section__title">Two swarms</h2></header>
+        <div class="col-9">
+          <p><b>The real one</b> ran on my machine while I was building this site: a fleet of AI agents read my project folders (read-only) and a second agent fact-checked the result. That is section 03 and 04.</p>
+          <p><b>The one you watched</b> is a front-end effect. The twelve cursors are not AI. They are small scripted actors that pick a block, fly to it and flash a selection box. It is theatre, built to show the idea, and the code is in sections 01 and 02.</p>
+          <p class="doc__note">No libraries, no tracking. One JavaScript function and a few dozen lines of CSS. Your XP and badges live only in your own browser.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="doc__block">
+      <div class="wrap grid">
+        <header class="section__head col-3"><p class="section__num">01</p><h2 class="section__title">The effect</h2></header>
+        <div class="col-9">
+          <h3>1. Pick the layers</h3>
+          <p>Every headline, job, project, skill group and education item counts as a "layer", sorted top to bottom.</p>
+          <pre class="code code--full" tabindex="0">const layers = $$('.hero__title, .hero__role, .section__head, .job, .project, .skills__group, .edu__item, .facts &gt; div, .contact__links li')
+  .filter((el) =&gt; el.getBoundingClientRect().width &gt; 0)
+  .sort((x, y) =&gt; docTop(x) - docTop(y));</pre>
+          <h3>2. Each agent picks a layer and flies to it</h3>
+          <p>Agent 0 is the lead: it takes the earliest unbuilt layer and the page scrolls to follow it. The other agents take whichever unbuilt layer is nearest to where the lead is working, which keeps the swarm on screen. Reduced-motion visitors get a calmer version (no flicker, no smooth scroll, shorter moves).</p>
+          <pre class="code code--full" tabindex="0">async function work(agent, idx) {
+  while (!run.stop &amp;&amp; todo.length) {
+    // The lead agent takes the earliest unbuilt layer and the page follows it;
+    // the others take whichever unbuilt layer is nearest to where the lead is working.
+    let pick = 0;
+    if (idx !== 0) {
+      let best = Infinity;
+      todo.forEach((t, i) =&gt; {
+        const d = Math.abs(docTop(t) - run.focusY);
+        if (d &lt; best) { best = d; pick = i; }
+      });
+    }
+    const el = todo.splice(pick, 1)[0];
+    const r = el.getBoundingClientRect();
+    if (idx === 0) {
+      run.focusY = r.top + scrollY;
+      window.scrollTo({ top: Math.max(0, run.focusY - innerHeight * 0.3), behavior: calm ? 'auto' : 'smooth' });
+    }
+    const x = Math.min(maxX(), Math.max(8, r.left + r.width * (0.2 + Math.random() * 0.6)));
+    const y = r.top + scrollY + r.height * (0.15 + Math.random() * 0.7);
+    agent.el.style.transitionDuration = ((calm ? 0.25 : 0.7) / run.speed) + 's';
+    agent.el.style.transform = 'translate(' + x + 'px, ' + y + 'px)';
+    await sleep(750 + Math.random() * 350);
+    if (run.stop) break;
+    build(el, agent.color);
+    await sleep(300);
+  }
+}</pre>
+          <h3>3. "Build" the layer</h3>
+          <p>A dashed box in the agent's colour is laid over the block with its size, the block flickers, then both disappear.</p>
+          <pre class="code code--full" tabindex="0">function build(el, color) {
+  const r = el.getBoundingClientRect();
+  const box = document.createElement('div');
+  box.className = 'swarm-box';
+  box.style.setProperty('--c', color);
+  box.style.left = r.left + scrollX + 'px';
+  box.style.top = r.top + scrollY + 'px';
+  box.style.width = r.width + 'px';
+  box.style.height = r.height + 'px';
+  const tag = document.createElement('span');
+  tag.textContent = Math.round(r.width) + ' × ' + Math.round(r.height);
+  box.appendChild(tag);
+  overlay.appendChild(box);
+  el.classList.add('sw-building');
+  setTimeout(() =&gt; { el.classList.remove('sw-building'); box.remove(); }, 650 / run.speed);
+  run.done++;
+  progress();
+}</pre>
+          <h3>4. The CSS</h3>
+          <pre class="code code--full" tabindex="0">.swarm-agent { position: absolute; top: 0; left: 0; display: flex; align-items: flex-start; gap: 2px; transition: transform 0.7s cubic-bezier(0.3, 0.8, 0.3, 1); will-change: transform; }
+.swarm-agent svg { filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.35)); }
+.swarm-agent__name { margin-top: 16px; padding: 1px 7px; font-size: 0.68rem; font-weight: 700; color: #fff; background: var(--c); white-space: nowrap; }
+.swarm-box { position: absolute; border: 2px dashed var(--c); background: color-mix(in srgb, var(--c) 10%, transparent); }
+.swarm-box span { position: absolute; left: -2px; bottom: -22px; padding: 1px 6px; font-size: 0.68rem; font-weight: 700; color: #fff; background: var(--c); }
+.sw-building { animation: sw-flicker 0.6s steps(6) 1; }
+@keyframes sw-flicker { 0% { opacity: 0.1; } 20% { opacity: 1; } 35% { opacity: 0.3; } 55% { opacity: 1; } 70% { opacity: 0.5; } 100% { opacity: 1; } }</pre>
+        </div>
+      </div>
+    </section>
+
+    <section class="doc__block">
+      <div class="wrap grid">
+        <header class="section__head col-3"><p class="section__num">02</p><h2 class="section__title">The triggers</h2></header>
+        <div class="col-9">
+          <p>Two ways in: the Konami code, or asking the assistant for something cool. Both of these phrases are matched in your browser before any message is sent to the AI, so they work even when the AI is offline.</p>
+          <pre class="code code--full" tabindex="0">const COOL = /something cool|anything cool|(show|give|do|got).{0,20}(something|anything|stuff).{0,12}(cool|awesome|impressive|fun|wild|neat)|\b(wow|impress|surprise) me\b/i;
+
+const HOW = /\bhow\s+(was|is|did|does|do)\s+(that|this|it|the\s+(swarm|animation|effect|cursors?|site|website|page))\b.{0,25}(done|made|built|work|works|happen)|\bhow\s+did\s+you\s+(do|build|make|code|create)\s+(that|this|it|the\s+(swarm|animation|effect|site|website|page))|show me (the )?code|behind the scenes|swarm code/i;</pre>
+        </div>
+      </div>
+    </section>
+
+    <section class="doc__block">
+      <div class="wrap grid">
+        <header class="section__head col-3"><p class="section__num">03</p><h2 class="section__title">The real swarm</h2></header>
+        <div class="col-9">
+          <p>Phase 1: one read-only agent per project folder, then a synthesis agent and a fact-checking critic. Repo names are placeholders. The critic caught several over-claims, which is why employer work on this site is described as "contributor" and some projects are left out.</p>
+          <pre class="code code--full" tabindex="0">export const meta = {
+  name: 'portfolio-project-discovery',
+  description: 'Read-only scan of project folders + profile data to build a public-safe knowledge base',
+  phases: [
+    { title: 'Scan', detail: 'one read-only agent per project folder' },
+    { title: 'Synthesize', detail: 'merge into knowledge base + critic pass' },
+  ],
+}
+
+const BASE = '~/code/'
+const REPOS = ['api', 'web-app', 'mobile-app', 'chatbot', 'saas-widget', 'tooling'] // placeholders
+
+const SCAN = {
+  type: 'object',
+  properties: {
+    folder: { type: 'string' }, exists: { type: 'boolean' },
+    name: { type: 'string' }, oneLiner: { type: 'string' }, summary: { type: 'string' },
+    stack: { type: 'array', items: { type: 'string' } },
+    highlights: { type: 'array', items: { type: 'string' } },
+    role: { type: 'string' },                    // what the git history says I did
+    employerConfidential: { type: 'boolean' },
+    publicSafeNotes: { type: 'string' },
+  },
+  required: ['folder', 'exists', 'name', 'oneLiner', 'summary', 'stack', 'highlights', 'employerConfidential', 'publicSafeNotes'],
+}
+
+phase('Scan')
+const scans = await parallel(REPOS.map(r =&gt; () =&gt; agent(
+  `READ-ONLY. Inspect "${BASE}${r}": README, manifests, layout, git log and shortlog.
+   Never open .env or key files. Never output secrets, URLs, customer names or personal data.
+   Describe only what the evidence shows. Judge whether it is proprietary and say what is safe to publish.`,
+  { label: `scan:${r}`, phase: 'Scan', schema: SCAN, effort: 'low' }
+)))
+const found = scans.filter(Boolean).filter(s =&gt; s.exists)
+log(`${found.length}/${REPOS.length} scanned`)
+
+phase('Synthesize')
+const kb = await agent(
+  `Build the portfolio knowledge base from these scans and my master profile. Pick the strongest projects,
+   describe employer work generically, and keep a "never claim" list. Accuracy over flattery.
+   Scans: ${JSON.stringify(found)}`,
+  { label: 'synthesize', phase: 'Synthesize', effort: 'high' }
+)
+
+// Adversarial pass: a second agent tries to refute the first.
+const critic = await agent(
+  `Fact-check this knowledge base against the scans. Flag anything unsupported, inflated, or leaking
+   confidential detail, and give concrete fixes.\nKB: ${JSON.stringify(kb)}\nScans: ${JSON.stringify(found)}`,
+  { label: 'critic', phase: 'Synthesize', effort: 'medium' }
+)
+return { kb, critic }</pre>
+        </div>
+      </div>
+    </section>
+
+    <section class="doc__block">
+      <div class="wrap grid">
+        <header class="section__head col-3"><p class="section__num">04</p><h2 class="section__title">The rebuild blueprint</h2></header>
+        <div class="col-9">
+          <p>Phase 2 as a blueprint: what gets fanned out across agents and how the result is checked.</p>
+          <p class="doc__note">A sketch of the approach, not a log of one run.</p>
+          <pre class="code code--full" tabindex="0">// Blueprint for the rebuild phase: what fans out across agents, and how it is checked.
+// A sketch of the approach, not a log of one run.
+export const meta = {
+  name: 'portfolio-rebuild',
+  description: 'Rebuild a static portfolio: design system, chatbot, gamification, verification',
+  phases: [
+    { title: 'Design', detail: 'one agent sets the Swiss design tokens and grid' },
+    { title: 'Build', detail: 'parallel agents, each owning separate files' },
+    { title: 'Verify', detail: 'browser tests + adversarial fact-check' },
+  ],
+}
+
+phase('Design')
+const tokens = await agent(
+  'Define a Swiss/International-style system: 12-column grid, one typeface, one accent, light + dark tokens.',
+  { label: 'design-tokens', phase: 'Design' }
+)
+
+phase('Build')
+// Each agent owns different files, so no worktree isolation is needed.
+const OWNERS = [
+  { key: 'chat-api', files: 'netlify/functions/*', task: 'Server-side chat endpoint: key stays in env, input caps, rate limit, grounded system prompt.' },
+  { key: 'chat-ui', files: 'chat panel in script.js + css', task: 'Accessible chat widget with suggested questions and an offline fallback.' },
+  { key: 'gamify', files: 'xp / badges in script.js', task: 'XP, levels, badges, localStorage only, decorative and honest about it.' },
+  { key: 'content', files: 'index.html', task: 'Projects and skills strictly from the fact-checked knowledge base.' },
+]
+const built = await parallel(OWNERS.map(o =&gt; () =&gt;
+  agent(`${o.task}\\nOnly edit: ${o.files}.\\nDesign tokens:\\n${tokens}`, { label: o.key, phase: 'Build' })))
+
+phase('Verify')
+const LENSES = ['keyboard + screen reader', 'mobile overflow', 'prompt-injection against the chatbot', 'claims vs evidence']
+const verdicts = await parallel(LENSES.map(l =&gt; () =&gt;
+  agent(`Try to break the site through this lens: ${l}. Report only reproducible failures.`,
+        { label: `verify:${l}`, phase: 'Verify', effort: 'high' })))
+return { built, verdicts }</pre>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap footer__inner">
+      <span>Kampolo Tomas · Windhoek, Namibia</span>
+      <a href="/" class="footer__top">Back to the site ↑</a>
+    </div>
+  </footer>
+</body>
+</html>
