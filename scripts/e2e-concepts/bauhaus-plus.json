@@ -1,0 +1,30 @@
+{
+ "home": {
+  "name": "tilted cover and a contents strip of six pictograms",
+  "js": "getComputedStyle(document.querySelector('#home .hero__title')).transform!=='none' && document.querySelectorAll('.bh-curr a[href^=\"#\"]').length===6 && document.querySelectorAll('.bh-curr svg .bh-f').length>=20 && (document.querySelectorAll('.bh-piece').length===14 ? document.querySelector('.bh-board').getAttribute('role')==='group' && document.querySelectorAll('.bh-piece[tabindex=\"0\"]').length===1 : document.querySelectorAll('#home .bh-plate svg').length===1)"
+ },
+ "about": {
+  "name": "circle in square, a block lead and shape badges",
+  "js": "document.getElementById('about').dataset.bhKind==='circle in square' && (document.querySelectorAll('.bh-piece').length===14 || document.querySelectorAll('#about .bh-plate svg').length===1) && getComputedStyle(document.querySelector('#about .about__lead')).backgroundColor!=='rgba(0, 0, 0, 0)' && getComputedStyle(document.querySelector('#about .facts dt')).borderRadius==='50%'"
+ },
+ "experience": {
+  "name": "stairs: numbered step squares, each job set in further",
+  "js": "document.getElementById('experience').dataset.bhKind==='stairs' && (document.querySelectorAll('.bh-piece').length===14 || document.querySelectorAll('#experience .bh-plate svg').length===1) && /counter\\(bh-step\\)/.test(getComputedStyle(document.querySelector('#experience .job'),'::before').content) && (innerWidth<=720 || document.documentElement.dataset.bhMode==='static' || (parseFloat(getComputedStyle(document.querySelectorAll('#experience .job')[2]).marginLeft)>parseFloat(getComputedStyle(document.querySelectorAll('#experience .job')[1]).marginLeft) && parseFloat(getComputedStyle(document.querySelectorAll('#experience .job')[1]).marginLeft)>0))"
+ },
+ "projects": {
+  "name": "stacked blocks of different widths on a blue band",
+  "js": "document.getElementById('projects').dataset.bhKind==='stacked blocks' && (document.querySelectorAll('.bh-piece').length===14 || document.querySelectorAll('#projects .bh-plate svg').length===1) && getComputedStyle(document.getElementById('projects')).backgroundColor==='rgb(31, 79, 163)' && getComputedStyle(document.querySelector('#projectList')).display==='grid' && (document.documentElement.dataset.bhMode==='static' || getComputedStyle(document.querySelectorAll('#projectList .project')[0]).gridColumnStart!==getComputedStyle(document.querySelectorAll('#projectList .project')[1]).gridColumnStart) && getComputedStyle(document.querySelector('#projects .project')).backgroundColor!=='rgba(0, 0, 0, 0)'"
+ },
+ "skills": {
+  "name": "squares as a chart: square meters, and a chart of the page's own levels",
+  "js": "document.getElementById('skills').dataset.bhKind==='square chart' && (document.querySelectorAll('.bh-piece').length===14 || document.querySelectorAll('#skills .bh-plate svg').length===1) && getComputedStyle(document.querySelector('#skills .skill-list li'),'::after').height==='11px' && /repeating-linear-gradient/.test(getComputedStyle(document.querySelector('#skills .skill-list li'),'::after').webkitMaskImage||'')"
+ },
+ "education": {
+  "name": "rising triangle: each course card wider than the one above, on a red band",
+  "js": "document.getElementById('education').dataset.bhKind==='rising triangle' && (document.querySelectorAll('.bh-piece').length===14 || document.querySelectorAll('#education .bh-plate svg').length===1) && getComputedStyle(document.getElementById('education')).backgroundColor==='rgb(200, 32, 26)' && (function(){var w=[].map.call(document.querySelectorAll('#education .edu__item'),function(n){return n.getBoundingClientRect().width;}); return w.length===4 && (document.documentElement.dataset.bhMode==='static' ? w[0]===w[3] : (w[0]+4<w[1] && w[1]+4<w[2] && w[2]+4<w[3]));})()"
+ },
+ "contact": {
+  "name": "night poster: every link a line with a circle on it",
+  "js": "document.getElementById('contact').dataset.bhKind==='circle and line' && (document.querySelectorAll('.bh-piece').length===14 || document.querySelectorAll('#contact .bh-plate svg').length===1) && getComputedStyle(document.getElementById('contact')).backgroundColor!=='rgba(0, 0, 0, 0)' && getComputedStyle(document.querySelector('#contact .contact__links li'),'::before').borderRadius==='50%' && parseFloat(getComputedStyle(document.querySelector('#contact .contact__links li')).borderTopWidth)>=4"
+ }
+}

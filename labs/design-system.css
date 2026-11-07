@@ -1,0 +1,126 @@
+/* Design system gallery. Only layout for the gallery itself: every colour, border and size comes from the site tokens in /styles.css,
+   and the sample components use the site's own classes untouched. Loaded after /styles.css and /labs/lab.css. */
+.ds-probe { position: absolute; width: 0; height: 0; overflow: hidden; visibility: hidden; }
+.ds-vh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+main code { font-family: ui-monospace, 'SFMono-Regular', Consolas, 'Liberation Mono', monospace; font-size: 0.88em; overflow-wrap: anywhere; }
+
+/* Blocks inside the demo */
+.ds-block { padding: 28px 0 8px; border-top: 1px solid var(--hair); }
+.ds-block:first-of-type { border-top: 0; padding-top: 0; }
+.ds-block h3 { font-size: 1.3rem; font-weight: 700; letter-spacing: -0.03em; margin: 0 0 8px; }
+.ds-block p { max-width: 46em; }
+.ds-sub { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; margin: 28px 0 10px; }
+.ds-name { font-weight: 600; color: var(--text) !important; margin-bottom: 10px !important; }
+.ds-spec { margin-top: 10px; overflow-wrap: anywhere; font-family: ui-monospace, 'SFMono-Regular', Consolas, 'Liberation Mono', monospace; font-size: 0.78rem; max-width: none !important; }
+.ds-row { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+.ds-comp { border-top: 1px solid var(--hair); padding: 20px 0 8px; }
+.ds-comp:first-of-type { border-top: 0; }
+.ds-comp__sample { margin-top: 4px; }
+
+/* Theme row and facts */
+.ds-theme { align-items: center; margin-top: 14px; }
+.ds-theme .lab-note { margin: 0; max-width: 40em; }
+.lab-controls button:disabled { opacity: 0.55; cursor: not-allowed; }
+.ds-facts { margin: 8px 0 24px; max-width: 46rem; }
+.ds-facts dt { min-width: 3.4rem; }
+
+/* Swatches */
+.ds-swatches, .ds-other { display: grid; grid-template-columns: repeat(auto-fill, minmax(172px, 1fr)); gap: 14px; margin: 0 0 14px; }
+.ds-sw, .ds-ot { display: flex; flex-direction: column; gap: 4px; padding: 0 0 12px; border: 1px solid var(--rule); background: var(--bg); min-width: 0; }
+.ds-sw__face { display: block; height: 68px; border-bottom: 1px solid var(--rule); background: var(--bg); }
+.ds-sw__face i { display: block; width: 100%; height: 100%; }
+.ds-sw__name, .ds-ot__name { padding: 0 12px; font-weight: 700; }
+.ds-sw__name { margin-top: 6px; }
+.ds-ot__name { margin-top: 12px; }
+.ds-sw__val, .ds-ot__val { padding: 0 12px; font-size: 0.8rem; color: var(--text); overflow-wrap: anywhere; font-family: ui-monospace, 'SFMono-Regular', Consolas, monospace; }
+.ds-sw__role, .ds-ot__role { padding: 0 12px; font-size: 0.8rem; line-height: 1.4; color: var(--muted); }
+.ds-other { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+
+/* Tables: a real table that stacks into labelled rows on narrow screens */
+.ds-table { margin: 12px 0; }
+.ds-table th { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+.ds-table td { vertical-align: middle; padding-top: 9px; padding-bottom: 9px; }
+.ds-table .ds-pass { font-weight: 600; }
+.ds-table .ds-fail { font-weight: 700; }
+.ds-chip { display: inline-grid; place-items: center; min-width: 3.4rem; height: 2.2rem; padding: 0 8px; font-weight: 700; border: 1px solid var(--hair); }
+.ds-chip--line { border: 3px solid currentColor; }
+@media (max-width: 640px) {
+  .ds-table, .ds-table tbody, .ds-table tr, .ds-table td { display: block; width: 100%; }
+  .ds-table thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+  .ds-table tr { padding: 10px 0; border-bottom: 1px solid var(--rule); }
+  .ds-table td { display: grid; grid-template-columns: 6.2rem 1fr; gap: 10px; border: 0; padding: 3px 0; text-align: left !important; }
+  .ds-table td::before { content: attr(data-label); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+}
+
+/* Type and spacing */
+.ds-type { margin: 0; }
+.ds-type > li { padding: 18px 0 14px; border-top: 1px solid var(--hair); }
+.ds-type > li:first-child { border-top: 0; padding-top: 4px; }
+.ds-type .hero__title { margin-bottom: 4px; overflow-wrap: anywhere; }
+.ds-type .about__lead { margin-bottom: 4px; }
+.ds-type .section__title { margin-top: 0; }
+.ds-space { margin: 12px 0 14px; }
+.ds-gapbar { height: 12px; width: var(--gap); background: var(--accent); margin-bottom: 8px; }
+.ds-maxbar { height: 12px; width: 100%; max-width: var(--max); background: var(--hair); border-right: 4px solid var(--accent); margin-bottom: 10px; }
+.ds-grid { margin: 0 0 8px; row-gap: 8px; grid-template-columns: repeat(12, minmax(0, 1fr)); }
+@media (max-width: 640px) { .ds-grid { column-gap: 3px; } .ds-grid > span { padding-left: 0; padding-right: 0; font-size: 0.65rem; } }
+.ds-grid > span { display: block; padding: 7px 4px; text-align: center; font-size: 0.72rem; font-weight: 600; background: var(--bg-alt); border: 1px solid var(--hair); min-width: 0; }
+
+/* The page's generic heading rule would shrink the sample .job heading; this puts back what .job h3 declares */
+.ds-real .job h3 { font-size: 1.4rem; margin: 0; }
+.ds-real .form { margin-top: 0; }
+.ds-projects { margin-top: 0; }
+.ds-tags { margin-top: 4px; }
+.ds-levels { max-width: 28rem; }
+main ul.ds-points { list-style: disc; padding-left: 1.3em; margin: 0 0 14px; max-width: 46em; }
+main ul.ds-points li { margin-bottom: 8px; color: var(--muted); }
+.lab-limits ul { list-style: disc; }
+.lab-limits ul li { margin-bottom: 6px; }
+
+/* Contrast checker, built from the site's own .form styles */
+.form.ds-cc { margin-top: 12px; max-width: none; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: start; }
+.ds-cc__row { display: flex !important; align-items: center; gap: 10px; text-transform: none !important; letter-spacing: 0 !important; font-size: 1rem !important; color: var(--text) !important; }
+.form__field .ds-cc__row input { flex: 1 1 auto; min-width: 0; font-family: ui-monospace, 'SFMono-Regular', Consolas, monospace; font-size: 0.95rem; }
+.form input[aria-invalid='true'] { border-color: var(--accent); }
+.ds-cc__chip { flex: none; width: 2.6rem; height: 2.6rem; border: 2px solid var(--rule); background: var(--bg); }
+.ds-cc__tools { grid-column: 1 / -1; align-items: end; margin: 0; }
+.ds-cc__pick { display: flex; flex-direction: column; gap: 4px; font-size: 0.78rem; color: var(--muted); }
+.ds-cc__pick select { padding: 7px 10px; border: 2px solid var(--rule); border-radius: 0; background: var(--bg); color: var(--text); font: inherit; font-size: 0.9rem; min-width: 12rem; }
+.ds-cc__pick select:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.ds-cc__preview { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 28px; padding: 18px 20px; margin: 16px 0 10px; border: 2px solid var(--rule); background: var(--bg); color: var(--text); }
+.ds-cc__small { font-size: 1rem; }
+.ds-cc__large { font-size: 1.5rem; }
+.ds-block .ds-cc__summary { font-weight: 700; color: var(--text); font-size: 1.05rem; min-height: 1.6em; margin: 0 0 6px; }
+.ds-cc__table { max-width: 40rem; }
+@media (max-width: 640px) { .form.ds-cc { grid-template-columns: 1fr; } .ds-cc__pick select { width: 100%; } }
+
+/* Keyboard */
+.ds-focus { margin: 6px 0 12px; }
+.ds-focus .form { margin-top: 0; width: 14rem; max-width: 100%; gap: 0; }
+.ds-focus__details summary { cursor: pointer; padding: 8px 4px; font-weight: 600; }
+.ds-order { columns: 17rem; column-gap: 28px; margin: 6px 0 0; padding: 0; list-style: none; counter-reset: stop; }
+.ds-order li { counter-increment: stop; break-inside: avoid; padding: 5px 8px 5px 2.4rem; position: relative; font-size: 0.85rem; border-bottom: 1px solid var(--hair); overflow-wrap: anywhere; }
+.ds-order li::before { content: counter(stop); position: absolute; left: 0; width: 2rem; text-align: right; font-weight: 700; color: var(--muted); font-variant-numeric: tabular-nums; }
+.ds-order li[aria-current='step'] { background: var(--text); color: var(--bg); }
+.ds-order li[aria-current='step']::before { color: var(--bg); }
+.ds-order__kind { display: inline-block; min-width: 4.8rem; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; opacity: 0.85; }
+
+/* Reduced motion: the dot only moves when asked, and only when the OS has not asked for less */
+.ds-rm__read { display: grid; gap: 4px; margin: 8px 0 14px; max-width: 34rem; }
+.ds-rm__read div { display: grid; grid-template-columns: minmax(12rem, 1fr) 1fr; gap: 12px; border-bottom: 1px solid var(--hair); padding: 6px 0; font-size: 0.88rem; }
+.ds-rm__read dt { color: var(--muted); }
+.ds-rm__read dd { font-weight: 700; font-family: ui-monospace, 'SFMono-Regular', Consolas, monospace; }
+.ds-rm__track { position: relative; height: 28px; max-width: 34rem; border: 2px solid var(--rule); margin-bottom: 14px; }
+.ds-rm__dot { position: absolute; top: 4px; left: 4px; width: 16px; height: 16px; background: var(--accent); }
+.ds-rm.is-moved .ds-rm__dot { left: calc(100% - 20px); }
+@media (prefers-reduced-motion: no-preference) {
+  .ds-rm:not(.is-calm) .ds-rm__dot { transition: left 0.8s ease-in-out; }
+}
+@media (max-width: 520px) { .ds-rm__read div { grid-template-columns: 1fr; gap: 0; } }
+
+/* Styles on this page */
+.ds-skins { margin-top: 10px; }
+.ds-audit { max-width: 52rem; }
+.ds-real .form { margin-bottom: 14px; }
+@media (max-width: 520px) { .ds-swatches { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; } .ds-sw__role { display: none; } }

@@ -1,5 +1,14 @@
+// Older browsers without IntersectionObserver: show everything, skip scroll tracking.
+if (!('IntersectionObserver' in window)) {
+  window.IntersectionObserver = function (cb, opts) {
+    this.observe = opts && opts.rootMargin ? () => {} : (el) => cb([{ isIntersecting: true, target: el }]);
+    this.unobserve = () => {};
+  };
+}
+
 const $ = (sel, ctx = document) => ctx.querySelector(sel);
 const $$ = (sel, ctx = document) => [...ctx.querySelectorAll(sel)];
+const track = window.track || (() => {});
 
 $('#year').textContent = new Date().getFullYear();
 
@@ -22,6 +31,9 @@ const BADGES = [
   { id: 'networker', name: 'Networker', hint: 'Copy my email address' },
   { id: 'cheat', name: 'Cheat Code', hint: 'Find the secret' },
   { id: 'curiousdev', name: 'Under the Hood', hint: 'Ask how the swarm works' },
+  { id: 'shapeshifter', name: 'Shapeshifter', hint: 'Switch the site to another view' },
+  { id: 'door', name: 'Secret Door', hint: 'Find the door in the logo' },
+  { id: 'hacker', name: 'Hacker', hint: 'Find the terminal' },
 ];
 const STORE = 'kt-progress-v1';
 const fresh = () => ({ xp: 0, sections: [], projects: [], badges: [], once: [] });
@@ -111,7 +123,8 @@ themeToggle.addEventListener('click', () => {
   syncThemeLabel();
   if (next === 'dark') unlock('night');
 });
-systemDark.addEventListener('change', syncThemeLabel);
+if (systemDark.addEventListener) systemDark.addEventListener('change', syncThemeLabel);
+else if (systemDark.addListener) systemDark.addListener(syncThemeLabel);
 syncThemeLabel();
 
 /* ---------- Navigation ---------- */
@@ -147,14 +160,14 @@ const allSections = $$('[data-section]');
 const spy = new IntersectionObserver(
   (entries) => entries.forEach((en) => {
     if (!en.isIntersecting) return;
-    links.forEach((a) => a.classList.remove('active'));
+    links.forEach((a) => { a.classList.remove('active'); a.removeAttribute('aria-current'); });
     const a = links.get(en.target.id);
-    if (a) a.classList.add('active');
+    if (a) { a.classList.add('active'); a.setAttribute('aria-current', 'true'); }
     const name = en.target.dataset.section;
     if (name && !state.sections.includes(name)) {
       state.sections.push(name);
       award(SECTION_XP, `Visited ${name}`);
-      if (allSections.every((s) => state.sections.includes(s.dataset.section))) unlock('explorer');
+      if (allSections.filter((s) => s.offsetParent !== null).every((s) => state.sections.includes(s.dataset.section))) unlock('explorer');
     }
   }),
   { rootMargin: '-45% 0px -50% 0px' }
@@ -192,6 +205,7 @@ document.addEventListener('copy', () => {
 
 /* ---------- Progress dialog ---------- */
 const dlg = $('#progressDialog');
+if (typeof dlg.showModal !== 'function') $('#hudBtn').hidden = true;
 $('#hudBtn').addEventListener('click', () => { renderHud(); dlg.showModal(); });
 dlg.addEventListener('click', (e) => { if (e.target === dlg) dlg.close(); });
 $('#resetProgress').addEventListener('click', () => { state = fresh(); save(); renderHud(); toast('Progress reset'); });
@@ -222,19 +236,21 @@ const AGENTS = [
 const CURSOR_SVG = '<svg viewBox="0 0 20 24" width="20" height="24" aria-hidden="true"><path d="M2 2v18l5-4.2 3.2 6.7 3-1.4-3.2-6.6H17z" fill="var(--c)" stroke="#fff" stroke-width="1.4" stroke-linejoin="round"/></svg>';
 let swarmRun = null;
 
-function swarmRebuild() {
+function swarmRebuild(opts = {}) {
   if (swarmRun) return;
   // Started on purpose by the visitor, so it always runs. Reduced motion gets a calm version:
   // no flicker, no smooth scrolling, faster and shorter cursor moves.
   const calm = reducedMotion.matches;
   document.body.classList.toggle('swarm-calm', calm);
   swarmBtn.hidden = false;
+  track('swarm', opts.onHalf ? 'persona' : 'effect');
 
   const docTop = (el) => el.getBoundingClientRect().top + scrollY;
   const layers = $$('.hero__title, .hero__role, .section__head, .job, .project, .skills__group, .edu__item, .facts > div, .contact__links li')
     .filter((el) => el.getBoundingClientRect().width > 0)
     .sort((x, y) => docTop(x) - docTop(y));
   const run = { stop: false, speed: 1, done: 0, focusY: 0 };
+  let halved = false;
   const todo = layers.slice();
   swarmRun = run;
   const sleep = (ms) => new Promise((r) => setTimeout(r, ms / run.speed));
@@ -306,6 +322,7 @@ function swarmRebuild() {
     setTimeout(() => { el.classList.remove('sw-building'); box.remove(); }, 650 / run.speed);
     run.done++;
     progress();
+    if (opts.onHalf && !halved && run.done >= layers.length / 2) { halved = true; opts.onHalf(); }
   }
 
   async function work(agent, idx) {
@@ -349,7 +366,11 @@ function swarmRebuild() {
     layers.forEach((l) => l.classList.remove('sw-building'));
     swarmRun = null;
     document.body.classList.remove('swarm-calm');
-    if (completed) afterSwarm();
+    if (opts.onHalf && !halved) opts.onHalf();
+    if (completed) {
+      if (opts.quiet) window.scrollTo({ top: 0, behavior: reducedMotion.matches ? 'auto' : 'smooth' });
+      else afterSwarm();
+    }
   });
 }
 
@@ -365,13 +386,14 @@ const sendBtn = $('#chatSend');
 const chips = $('#chatChips');
 const SUGGESTED = [
   'Show me something cool',
+  'Match a job ad',
   'What is Kampolo working on right now?',
   'Tell me about his chatbot platform.',
   'Where is he strongest, and where is he still learning?',
   'How does he approach security and testing?',
   'How can I contact him?',
 ];
-const history = [];
+const chatHistory = [];
 let busy = false;
 
 function addMsg(text, kind) {
@@ -445,7 +467,7 @@ function explainSwarm() {
   swarmBtn.hidden = false;
   addLinkMsg(
     "Short version: twelve small agents each grab a block of the page, fly to it and 'rebuild' it while the page follows the lead agent. It's plain JavaScript and CSS, no libraries. I put the real code on a hidden page:",
-    'swarm.html',
+    '/swarm.html',
     'Open the swarm write-up →'
   );
   unlock('curiousdev');
@@ -464,10 +486,88 @@ function afterSwarm() {
   chips.appendChild(b);
 }
 
+// A pasted job advert is compared with Kampolo's profile by the assistant, honestly, including gaps.
+const MATCH = /job\s+(ad|advert|description|posting|spec)|does he (fit|match)|match (me|a job|this job)|fit (this|the) (role|job)/i;
+const matchForm = $('#matchForm');
+const matchText = $('#matchText');
+
+function openMatch() {
+  chips.replaceChildren();
+  matchForm.hidden = false;
+  matchText.focus();
+}
+
+function friendlyError(err) {
+  const m = err && err.message;
+  return m && m !== 'offline' && m !== 'Failed to fetch'
+    ? m
+    : 'The assistant is offline right now. You can email Kampolo at kampolotomasva@gmail.com.';
+}
+
+// Sends the request; reads a streamed plain-text answer when the browser supports it, JSON otherwise.
+async function streamAnswer(payload, typing) {
+  const canStream = !!(window.ReadableStream && window.TextDecoder);
+  const res = await fetch('/api/chat', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(Object.assign({ stream: canStream }, payload)),
+  });
+  const type = res.headers.get('content-type') || '';
+  if (!res.ok || type.indexOf('text/plain') !== 0 || !res.body) {
+    const data = await res.json().catch(() => ({}));
+    typing.remove();
+    if (!res.ok || !data.reply) throw new Error(data.error || 'offline');
+    addMsg(data.reply, 'bot');
+    return data.reply;
+  }
+  typing.remove();
+  const el = addMsg('', 'bot');
+  const reader = res.body.getReader();
+  const dec = new TextDecoder();
+  let text = '';
+  for (;;) {
+    const chunk = await reader.read();
+    if (chunk.done) break;
+    text += dec.decode(chunk.value, { stream: true });
+    el.textContent = text;
+    log.scrollTop = log.scrollHeight;
+  }
+  text = text.trim();
+  if (!text) { el.remove(); throw new Error('offline'); }
+  return text;
+}
+
+matchForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  if (busy) return;
+  const ad = matchText.value.trim();
+  if (ad.length < 60) { addMsg('Paste the full job advert (at least a few sentences).', 'err'); return; }
+  busy = true;
+  sendBtn.disabled = true;
+  matchForm.hidden = true;
+  addMsg('Job advert pasted (' + ad.length + ' characters). Comparing it with the profile...', 'user');
+  const typing = addMsg('Thinking…', 'bot');
+  typing.classList.add('msg--typing');
+  track('match');
+  try {
+    await streamAnswer({ mode: 'match', jobAd: ad }, typing);
+    matchText.value = '';
+    if (once('match', 20, 'Compared a job ad')) unlock('talker');
+  } catch (err) {
+    typing.remove();
+    addMsg(friendlyError(err), 'err');
+    matchForm.hidden = false;
+  } finally {
+    busy = false;
+    sendBtn.disabled = false;
+  }
+});
+
 async function ask(text) {
   text = text.trim();
   if (!text || busy) return;
   chips.replaceChildren();
+  track('chat');
   if (COOL.test(text)) {
     addMsg(text, 'user');
     input.value = '';
@@ -480,33 +580,29 @@ async function ask(text) {
     explainSwarm();
     return;
   }
+  if (MATCH.test(text)) {
+    addMsg(text, 'user');
+    input.value = '';
+    addMsg('Sure. Paste the job advert below and I will compare it with his profile, including the gaps.', 'bot');
+    openMatch();
+    return;
+  }
   busy = true;
   sendBtn.disabled = true;
   addMsg(text, 'user');
-  history.push({ role: 'user', content: text });
+  chatHistory.push({ role: 'user', content: text });
   input.value = '';
   const typing = addMsg('Thinking…', 'bot');
   typing.classList.add('msg--typing');
 
   try {
-    const res = await fetch('/api/chat', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ messages: history.slice(-10) }),
-    });
-    const data = await res.json().catch(() => ({}));
-    typing.remove();
-    if (!res.ok || !data.reply) throw new Error(data.error || 'offline');
-    addMsg(data.reply, 'bot');
-    history.push({ role: 'assistant', content: data.reply });
+    const reply = await streamAnswer({ messages: chatHistory.slice(-10) }, typing);
+    chatHistory.push({ role: 'assistant', content: reply });
     if (once('chat', 20, 'Asked the assistant')) unlock('talker');
   } catch (err) {
     typing.remove();
-    history.pop();
-    const msg = err.message && err.message !== 'offline' && err.message !== 'Failed to fetch'
-      ? err.message
-      : "The assistant is offline right now. You can email Kampolo at kampolotomasva@gmail.com.";
-    addMsg(msg, 'err');
+    chatHistory.pop();
+    addMsg(friendlyError(err), 'err');
   } finally {
     busy = false;
     sendBtn.disabled = false;
@@ -514,5 +610,246 @@ async function ask(text) {
   }
 }
 form.addEventListener('submit', (e) => { e.preventDefault(); ask(input.value); });
+
+/* ---------- Personas: live switch (through the swarm), labs ---------- */
+const PERSONAS = window.PERSONAS || {};
+const personaSelect = $('#personaSelect');
+let currentPersona = document.documentElement.getAttribute('data-persona') || 'corporate';
+
+function personaFromPath(path) {
+  const norm = path.slice(-1) === '/' ? path : path + '/';
+  return Object.keys(PERSONAS).find((k) => PERSONAS[k].path === norm) || 'corporate';
+}
+
+function applyPersona(key, push) {
+  const p = PERSONAS[key];
+  if (!p) return;
+  currentPersona = key;
+  const rootEl = document.documentElement;
+  if (key === 'corporate') rootEl.removeAttribute('data-persona');
+  else rootEl.setAttribute('data-persona', key);
+  ['role', 'lead', 'status'].forEach((slot) => $$('[data-slot="' + slot + '"]').forEach((el) => { el.textContent = p[slot]; }));
+  $$('[data-cv-link]').forEach((a) => a.setAttribute('href', p.cv));
+  document.title = p.title;
+  const list = $('#projectList');
+  p.projects.forEach((id, i) => {
+    const el = list.querySelector('[data-project="' + id + '"]');
+    if (!el) return;
+    $('.project__idx', el).textContent = String(i + 1).padStart(2, '0');
+    list.appendChild(el);
+  });
+  if (personaSelect) personaSelect.value = key;
+  if (push) history.pushState({ persona: key }, '', p.path);
+  initLabs(key);
+  track('persona', key);
+  if (window.Edition) window.Edition.refresh();
+}
+
+function switchPersona(key) {
+  if (key === currentPersona || swarmRun) { if (personaSelect) personaSelect.value = currentPersona; return; }
+  unlock('shapeshifter');
+  swarmRebuild({ quiet: true, onHalf: () => applyPersona(key, true) });
+}
+
+if (personaSelect) personaSelect.addEventListener('change', () => switchPersona(personaSelect.value));
+window.addEventListener('popstate', () => applyPersona((history.state && history.state.persona) || personaFromPath(location.pathname), false));
+
+const labsReady = {};
+function initLabs(key) {
+  if (key === 'data' && !labsReady.data) { labsReady.data = true; initDataLab(); }
+  if (key === 'design' && !labsReady.design) { labsReady.design = true; initStyleLab(); }
+  if (key === 'shop' && !labsReady.shop) { labsReady.shop = true; initImageLab(); }
+}
+
+/* Data lab: synthetic availability data, drawn as an SVG bar chart */
+function initDataLab() {
+  let seed = 7;
+  const rnd = () => { seed = (seed + 0x6d2b79f5) | 0; let t = Math.imul(seed ^ (seed >>> 15), 1 | seed); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+  const days = [];
+  for (let i = 1; i <= 30; i++) {
+    let v = 99.55 + rnd() * 0.45;
+    if (i === 6 || i === 17 || i === 24) v = 97.2 + rnd() * 1.4;
+    days.push({ day: i, v: Math.round(v * 100) / 100 });
+  }
+  const mean = days.reduce((s, d) => s + d.v, 0) / days.length;
+  const low = days.filter((d) => d.v < 99);
+  const worst = days.reduce((m, d) => (d.v < m.v ? d : m), days[0]);
+  const kpi = [
+    [mean.toFixed(2) + '%', 'Mean availability'],
+    [String(low.length), 'Days below 99%'],
+    [worst.v.toFixed(2) + '%', 'Lowest day (day ' + worst.day + ')'],
+    [String(low.length * 2), 'Alert emails (synthetic)'],
+  ];
+  const k = $('#kpis');
+  kpi.forEach(([n, l]) => {
+    const d = document.createElement('div');
+    d.className = 'kpi';
+    const b = document.createElement('b');
+    b.textContent = n;
+    const s = document.createElement('span');
+    s.textContent = l;
+    d.append(b, s);
+    k.appendChild(d);
+  });
+  const NS = 'http://www.w3.org/2000/svg';
+  const svg = $('#uptimeChart');
+  const x0 = 38, y0 = 190, w = 550, h = 170, min = 96, max = 100;
+  const y = (v) => y0 - ((Math.max(min, v) - min) / (max - min)) * h;
+  const el = (name, attrs) => { const n = document.createElementNS(NS, name); Object.keys(attrs).forEach((a) => n.setAttribute(a, attrs[a])); return n; };
+  [96, 97, 98, 99, 100].forEach((t) => {
+    svg.appendChild(el('line', { x1: x0, x2: x0 + w, y1: y(t), y2: y(t), class: t === 99 ? 'chart__limit' : 'chart__grid' }));
+    const tx = el('text', { x: x0 - 6, y: y(t) + 3, 'text-anchor': 'end', class: 'chart__tick' });
+    tx.textContent = t + '%';
+    svg.appendChild(tx);
+  });
+  const bw = w / days.length;
+  days.forEach((d, i) => {
+    svg.appendChild(el('rect', { x: x0 + i * bw + 2, y: y(d.v), width: bw - 4, height: y0 - y(d.v), class: d.v < 99 ? 'bar bar--low' : 'bar' }));
+    if (i % 5 === 0 || i === days.length - 1) {
+      const tx = el('text', { x: x0 + i * bw + bw / 2, y: y0 + 14, 'text-anchor': 'middle', class: 'chart__tick' });
+      tx.textContent = 'd' + d.day;
+      svg.appendChild(tx);
+    }
+  });
+  const table = $('#dataTable');
+  const head = document.createElement('tr');
+  ['Day', 'Availability %'].forEach((t) => { const th = document.createElement('th'); th.textContent = t; head.appendChild(th); });
+  table.appendChild(head);
+  days.forEach((d) => {
+    const tr = document.createElement('tr');
+    [d.day, d.v.toFixed(2)].forEach((t) => { const td = document.createElement('td'); td.textContent = t; tr.appendChild(td); });
+    table.appendChild(tr);
+  });
+}
+
+/* Style lab: re-skin the whole page by switching design tokens */
+function initStyleLab() {
+  const NOTES = {
+    swiss: 'Swiss: strict grid, one sans-serif typeface, one accent colour, heavy rules. The default of this site.',
+    editorial: 'Editorial: serif type, warm paper background, hairline rules and a restrained rust accent.',
+    brutalist: 'Brutalist: monospace type, thick black borders, hard offset shadows and one loud accent.',
+    renaissance: 'Renaissance: parchment colours, oxblood ink, small-capital headings and double-line borders.',
+    'renaissance-plus': 'Renaissance Edition: a complete redesign. The site becomes a gallery of painted scenes in light and dark, with huge headlines, a Roman chapter index, torn-paper edges and a hidden layer (press X) that shows the real code under each painting.',
+    'swiss-plus': 'Swiss Edition: a complete redesign. Every section is a numbered poster sheet on a visible grid, with giant outlined numerals and one red circle that moves from sheet to sheet.',
+    'editorial-plus': 'Editorial Edition: a complete redesign. The site is a magazine issue: a cover, a contents page, then every section as a full-page feature opener with a screened painting that the spread slides over, with running heads, columns and a colophon.',
+    'brutalist-plus': 'Brutalist Edition: a complete redesign. Raw monospace, every block is an OS-style window with a hard shadow, and a marquee of skills scrolls under the headline.',
+    'bauhaus-plus': 'Bauhaus Edition: a complete redesign. A circle, a square and a triangle in primary colours re-compose behind every chapter, and each section is a numbered studio.',
+    'minimal-plus': 'Minimalism Edition: a complete redesign. Lots of empty space, slow fades and a quiet counter. Press j and k, or the left and right arrow keys, to step between chapters.',
+    'neural-plus': 'Neural Edition: a complete redesign. The profile becomes a graph of glowing nodes behind glass cards. Move the cursor to pull nodes together; Pause motion stops it.',
+    'cosmos-plus': 'Cosmos Edition: a complete redesign. Scroll through a parallax sky, navigate with the orrery, and trace each skill group as a constellation. Daylight mode is a sky chart.',
+    bauhaus: 'Bauhaus: primary colours, geometric sans-serif, heavy blocks and round and square forms.',
+    minimal: 'Minimalism: white space, light type weights and almost no lines. Content first, nothing else.',
+    neural: 'Neural: the AI-company look. Deep navy, a soft glow, rounded cards and a gradient headline.',
+    cosmos: 'Cosmos: deep space, slowly drifting stars, a neon accent and glowing type. Stars stand still if you prefer reduced motion.',
+  };
+  const note = $('#styleNote');
+  const buttons = $$('.style-picker button');
+  function setStyle(name) {
+    if (name === 'swiss') document.documentElement.removeAttribute('data-style');
+    else document.documentElement.setAttribute('data-style', name);
+    buttons.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.style === name)));
+    note.textContent = NOTES[name];
+  }
+  buttons.forEach((b) => b.addEventListener('click', () => {
+    if (b.dataset.style === 'renaissance-plus' && window.Edition && !window.Edition.active()) window.Edition.enter();
+    else if (/^[a-z]+-plus$/.test(b.dataset.style) && window.PlusEditions) window.PlusEditions.enter(b.dataset.style);
+    else setStyle(b.dataset.style);
+  }));
+  setStyle(document.documentElement.getAttribute('data-style') || 'swiss');
+}
+
+/* Image lab: placeholder blur, live layout-shift and transfer numbers, naive comparison */
+function initImageLab() {
+  const box = $('#imgMetrics');
+  let cls = 0;
+  function render() {
+    const res = performance.getEntriesByType('resource').filter((r) => r.name.indexOf('/img/shop/') > -1);
+    const bytes = res.reduce((s, r) => s + (r.transferSize || r.encodedBodySize || 0), 0);
+    const pending = $$('#shop-lab img').filter((i) => !i.complete).length;
+    box.textContent = 'Layout shift (CLS): ' + cls.toFixed(3) + '  ·  Images requested: ' + res.length + '  ·  Transferred: ' + Math.round(bytes / 1024) + ' KB  ·  Still waiting (lazy): ' + pending;
+  }
+  try {
+    new PerformanceObserver((list) => {
+      list.getEntries().forEach((e) => { if (!e.hadRecentInput) cls += e.value; });
+      render();
+    }).observe({ type: 'layout-shift', buffered: true });
+  } catch (e) {}
+  try { new PerformanceObserver(render).observe({ type: 'resource', buffered: true }); } catch (e) {}
+  $('#shop-lab').addEventListener('load', render, true);
+  render();
+
+  const naive = $('#naiveToggle');
+  const nbox = $('#naiveBox');
+  naive.addEventListener('click', () => {
+    const open = nbox.hidden;
+    nbox.hidden = !open;
+    naive.setAttribute('aria-expanded', String(open));
+    naive.textContent = open ? 'Hide the naive markup' : 'Compare with naive markup';
+    if (open && !nbox.children.length) {
+      const p = document.createElement('p');
+      p.className = 'style-note';
+      const ref = $('.product__img');
+      const probe = (dims) => {
+        const wrap = document.createElement('div');
+        wrap.style.width = ref.getBoundingClientRect().width + 'px';
+        const im = document.createElement('img');
+        im.alt = '';
+        if (dims) { im.width = 1200; im.height = 900; }
+        im.style.width = '100%';
+        im.style.height = 'auto';
+        wrap.appendChild(im);
+        nbox.appendChild(wrap);
+        const reserved = Math.round(im.getBoundingClientRect().height);
+        wrap.remove();
+        return reserved;
+      };
+      p.textContent = 'Same images, but one large JPEG each, no dimensions, no lazy loading. Before an image arrives, the optimised markup reserves ' + probe(true) + ' px of height per image and the naive markup reserves ' + probe(false) + ' px, so the naive page jumps as its images load. Compare the transferred size above.';
+      const grid = document.createElement('div');
+      grid.className = 'naive-grid';
+      ['mug', 'lamp', 'pack', 'phones', 'plant', 'book'].forEach((n) => {
+        const im = document.createElement('img');
+        im.src = '/img/shop/' + n + '-1200.jpg?naive=1';
+        im.alt = '';
+        grid.appendChild(im);
+      });
+      nbox.append(p, grid);
+    }
+    render();
+  });
+}
+$$('.product__img').forEach((el) => { if (el.dataset.lqip) el.style.backgroundImage = 'url(' + el.dataset.lqip + ')'; });
+
+if (personaSelect) personaSelect.value = currentPersona;
+initLabs(currentPersona);
+
+/* ---------- More secrets ---------- */
+const brand = $('.nav__brand');
+let brandClicks = 0;
+let brandTimer;
+brand.addEventListener('click', () => {
+  brandClicks++;
+  clearTimeout(brandTimer);
+  brandTimer = setTimeout(() => { brandClicks = 0; }, 3000);
+  if (brandClicks >= 7) {
+    brandClicks = 0;
+    unlock('door');
+    toast('Secret door found. Opening the lab...');
+    setTimeout(() => { location.href = '/lab/'; }, 1200);
+  }
+});
+document.addEventListener('keydown', (e) => {
+  const t = e.target;
+  if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.tagName === 'SELECT' || t.isContentEditable)) return;
+  if (e.key === '?') toast('Hints: a famous cheat code, the assistant, the logo, and the backtick key.');
+  else if (e.key === '`') { unlock('hacker'); location.href = '/terminal/'; }
+});
+window.kampolo = {
+  help: () => 'kampolo.swarm()  kampolo.lab()  kampolo.terminal()',
+  swarm: () => swarmRebuild(),
+  lab: () => { location.href = '/lab/'; },
+  terminal: () => { location.href = '/terminal/'; },
+};
+console.info('%cHello, curious one.%c Try kampolo.help()', 'font-weight:700;color:#e30613', '');
+if (/[?&]swarm=1(&|$)/.test(location.search)) { unlock('cheat'); setTimeout(() => swarmRebuild(), 700); }
 
 renderHud();

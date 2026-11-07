@@ -10,18 +10,20 @@
   <meta name="theme-color" content="#0a0a0a" media="(prefers-color-scheme: dark)" />
   <meta name="color-scheme" content="light dark" />
 
-  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="canonical" href="https://kampolo-tomas-website.netlify.app/" />
 
   <meta property="og:title" content="Kampolo Tomas — Software Engineer &amp; IT Specialist" />
   <meta property="og:description" content="Software Engineer and IT Specialist based in Windhoek, Namibia. React Native, Node.js, Python, networking, and AI." />
   <meta property="og:type" content="website" />
-  <meta property="og:image" content="og-image.png" />
+  <meta property="og:url" content="https://kampolo-tomas-website.netlify.app/" />
+  <meta property="og:image" content="https://kampolo-tomas-website.netlify.app/og-image.png" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Kampolo Tomas — Software Engineer &amp; IT Specialist" />
   <meta name="twitter:description" content="Software Engineer and IT Specialist based in Windhoek, Namibia." />
-  <meta name="twitter:image" content="og-image.png" />
+  <meta name="twitter:image" content="https://kampolo-tomas-website.netlify.app/og-image.png" />
 
   <script type="application/ld+json">
   {
@@ -51,7 +53,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="/styles.css" />
+  <link rel="stylesheet" href="/editions-plus.css" />
 </head>
 <body>
   <a href="#main" class="skip-link">Skip to content</a>
@@ -65,6 +68,7 @@
         <a href="#projects">Projects</a>
         <a href="#skills">Skills</a>
         <a href="#education">Education</a>
+        <a href="/cv/">CV</a>
         <a href="#contact">Contact</a>
       </nav>
       <div class="nav__tools">
@@ -90,16 +94,18 @@
       <p class="hero__meta">Portfolio — 2026 &nbsp;/&nbsp; Windhoek, Namibia</p>
       <h1 class="hero__title">Kampolo<br />Tomas.</h1>
       <div class="grid hero__row">
-        <p class="hero__role col-5">Software Engineer<br />&amp; IT Specialist</p>
+        <p class="hero__role col-5" data-slot="role">Software Engineer
+&amp; IT Specialist</p>
         <div class="col-7">
-          <p class="hero__lead">
+          <p class="hero__lead" data-slot="lead">
             Informatics graduate building mobile, web and backend software with React Native,
             Node.js and Python — on a foundation of IT support, networking, databases and applied AI.
           </p>
-          <p class="hero__status"><span class="pulse" aria-hidden="true"></span>Open to graduate software &amp; IT roles</p>
+          <p class="hero__status"><span class="pulse" aria-hidden="true"></span><span data-slot="status">Open to graduate software &amp; IT roles</span></p>
           <div class="hero__actions">
             <a href="#projects" class="btn btn--solid">View my work</a>
             <button type="button" class="btn btn--line" data-open-chat>Ask my assistant</button>
+            <a href="/files/Kampolo-Tomas-CV.pdf" class="btn btn--line" data-cv-link>Download CV (PDF)</a>
           </div>
         </div>
       </div>
@@ -323,6 +329,113 @@
       </div>
     </section>
 
+    <!-- Persona labs: visible only in the matching view -->
+    <section class="section section--alt persona-only" id="data-lab" data-for="data" data-section="Data lab">
+      <div class="wrap grid">
+        <header class="section__head col-3"><p class="section__num">+</p><h2 class="section__title">Data lab</h2></header>
+        <div class="col-9">
+          <p class="section__intro">A small dashboard in the style of the Uptime Monitor's daily report. The numbers are <b>synthetic</b>, generated in your browser to show the layout. They are not real measurements.</p>
+          <div class="kpis" id="kpis"></div>
+          <figure class="chart">
+            <svg id="uptimeChart" viewBox="0 0 600 220" role="img" aria-label="Bar chart of synthetic daily availability over 30 days"></svg>
+            <figcaption>Daily availability, last 30 days (synthetic). Days below the 99% line are highlighted.</figcaption>
+          </figure>
+          <details class="chart__table"><summary>Show the data as a table</summary><table id="dataTable"></table></details>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--alt persona-only" id="design-lab" data-for="design" data-section="Style lab">
+      <div class="wrap grid">
+        <header class="section__head col-3"><p class="section__num">+</p><h2 class="section__title">Style lab</h2></header>
+        <div class="col-9">
+          <p class="section__intro">The same content in different design systems. Pick one and this whole page re-skins live. Reload to reset.</p>
+          <div class="style-picker" role="group" aria-label="Design style">
+            <span class="style-pair"><button type="button" data-style="swiss" aria-pressed="true">Swiss</button><button type="button" class="style-plus" data-style="swiss-plus" aria-pressed="false" aria-label="Swiss Edition: a complete redesign" title="Swiss Edition: a complete redesign">+</button></span>
+            <span class="style-pair"><button type="button" data-style="editorial" aria-pressed="false">Editorial</button><button type="button" class="style-plus" data-style="editorial-plus" aria-pressed="false" aria-label="Editorial Edition: a complete redesign" title="Editorial Edition: a complete redesign">+</button></span>
+            <span class="style-pair"><button type="button" data-style="brutalist" aria-pressed="false">Brutalist</button><button type="button" class="style-plus" data-style="brutalist-plus" aria-pressed="false" aria-label="Brutalist Edition: a complete redesign" title="Brutalist Edition: a complete redesign">+</button></span>
+            <span class="style-pair"><button type="button" data-style="renaissance" aria-pressed="false">Renaissance</button><button type="button" class="style-plus" data-style="renaissance-plus" aria-pressed="false" aria-label="Renaissance Edition: a complete redesign" title="Renaissance Edition: a complete redesign">+</button></span>
+            <span class="style-pair"><button type="button" data-style="bauhaus" aria-pressed="false">Bauhaus</button><button type="button" class="style-plus" data-style="bauhaus-plus" aria-pressed="false" aria-label="Bauhaus Edition: a complete redesign" title="Bauhaus Edition: a complete redesign">+</button></span>
+            <span class="style-pair"><button type="button" data-style="minimal" aria-pressed="false">Minimalism</button><button type="button" class="style-plus" data-style="minimal-plus" aria-pressed="false" aria-label="Minimalism Edition: a complete redesign" title="Minimalism Edition: a complete redesign">+</button></span>
+            <span class="style-pair"><button type="button" data-style="neural" aria-pressed="false">Neural</button><button type="button" class="style-plus" data-style="neural-plus" aria-pressed="false" aria-label="Neural Edition: a complete redesign" title="Neural Edition: a complete redesign">+</button></span>
+            <span class="style-pair"><button type="button" data-style="cosmos" aria-pressed="false">Cosmos</button><button type="button" class="style-plus" data-style="cosmos-plus" aria-pressed="false" aria-label="Cosmos Edition: a complete redesign" title="Cosmos Edition: a complete redesign">+</button></span>
+          </div>
+          <p class="style-note" id="styleNote"></p>
+          <div class="specimen">
+            <div class="specimen__type"><p class="specimen__big">Aa</p><p>Headline, body and caption, set from the active tokens.</p></div>
+            <ul class="specimen__swatches" aria-label="Colour tokens"><li class="sw-bg">bg</li><li class="sw-alt">alt</li><li class="sw-text">text</li><li class="sw-accent">accent</li></ul>
+            <div class="specimen__ui"><span class="btn btn--solid">Primary</span><span class="btn btn--line">Secondary</span><ul class="tags"><li>Tag</li><li>Tag</li></ul></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--alt persona-only" id="shop-lab" data-for="shop" data-section="Image lab">
+      <div class="wrap grid">
+        <header class="section__head col-3"><p class="section__num">+</p><h2 class="section__title">Image lab</h2></header>
+        <div class="col-9">
+          <p class="section__intro">How product images are placed so a page stays fast and does not jump around while loading: fixed dimensions, responsive sources, modern formats with a fallback, lazy loading and a blurred placeholder. The images are generated illustrations, not real products.</p>
+          <div class="metrics" id="imgMetrics" aria-live="polite"></div>
+          <!-- shop-lab:start -->
+          <div class="hero-img">
+                      <picture>
+                        <source media="(max-width: 600px)" type="image/webp" srcset="/img/shop/hero-m-400.webp 400w, /img/shop/hero-m-800.webp 800w" sizes="100vw" />
+                        <source media="(max-width: 600px)" srcset="/img/shop/hero-m-400.jpg 400w, /img/shop/hero-m-800.jpg 800w" sizes="100vw" />
+                        <source type="image/webp" srcset="/img/shop/hero-800.webp 800w, /img/shop/hero-1200.webp 1200w, /img/shop/hero-1600.webp 1600w" sizes="(min-width: 960px) 66vw, 100vw" />
+                        <img src="/img/shop/hero-1200.jpg" srcset="/img/shop/hero-800.jpg 800w, /img/shop/hero-1200.jpg 1200w, /img/shop/hero-1600.jpg 1600w" sizes="(min-width: 960px) 66vw, 100vw" width="1600" height="640" loading="lazy" decoding="async" alt="Illustration of a shop shelf with simple coloured items" />
+                      </picture>
+                    </div>
+                    <ul class="products">
+                      <li class="product"><figure>
+                        <div class="product__img" data-lqip="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABQODxIPDRQSEBIXFRQYHjIhHhwcHj0sLiQySUBMS0dARkVQWnNiUFVtVkVGZIhlbXd7gYKBTmCNl4x9lnN+gXz/2wBDARUXFx4aHjshITt8U0ZTfHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHz/wAARCAAMABADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDevr37HatNs34IG3OOtLZ3gurdZQpXI5Gc4ps0aTxlJVDIeoNLGixIEjG1VGAPSsLs7LR5bW1P/9k="><picture>
+                          <source type="image/webp" srcset="/img/shop/mug-400.webp 400w, /img/shop/mug-800.webp 800w, /img/shop/mug-1200.webp 1200w" sizes="(max-width: 600px) 100vw, (max-width: 960px) 50vw, 25vw" />
+                          <img src="/img/shop/mug-800.jpg" srcset="/img/shop/mug-400.jpg 400w, /img/shop/mug-800.jpg 800w, /img/shop/mug-1200.jpg 1200w" sizes="(max-width: 600px) 100vw, (max-width: 960px) 50vw, 25vw" width="1200" height="900" loading="lazy" decoding="async" alt="Illustration of a ceramic mug with steam" />
+                        </picture></div>
+                        <figcaption>Ceramic mug</figcaption>
+                      </figure></li>
+                      <li class="product"><figure>
+                        <div class="product__img" data-lqip="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABQODxIPDRQSEBIXFRQYHjIhHhwcHj0sLiQySUBMS0dARkVQWnNiUFVtVkVGZIhlbXd7gYKBTmCNl4x9lnN+gXz/2wBDARUXFx4aHjshITt8U0ZTfHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHz/wAARCAAMABADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDpGl2qW64psTyhSJtm4HqmcEfjUDqJEKtnB64JFKiiNQq5wPUk/wA63sZ3P//Z"><picture>
+                          <source type="image/webp" srcset="/img/shop/lamp-400.webp 400w, /img/shop/lamp-800.webp 800w, /img/shop/lamp-1200.webp 1200w" sizes="(max-width: 600px) 100vw, (max-width: 960px) 50vw, 25vw" />
+                          <img src="/img/shop/lamp-800.jpg" srcset="/img/shop/lamp-400.jpg 400w, /img/shop/lamp-800.jpg 800w, /img/shop/lamp-1200.jpg 1200w" sizes="(max-width: 600px) 100vw, (max-width: 960px) 50vw, 25vw" width="1200" height="900" loading="lazy" decoding="async" alt="Illustration of an adjustable desk lamp" />
+                        </picture></div>
+                        <figcaption>Desk lamp</figcaption>
+                      </figure></li>
+                      <li class="product"><figure>
+                        <div class="product__img" data-lqip="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABQODxIPDRQSEBIXFRQYHjIhHhwcHj0sLiQySUBMS0dARkVQWnNiUFVtVkVGZIhlbXd7gYKBTmCNl4x9lnN+gXz/2wBDARUXFx4aHjshITt8U0ZTfHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHz/wAARCAAMABADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDb1O8a0s2ljALZA596NMvGu7NZZAA2SOPaiaJJ4zHKodD2NEMSQRiOJQiDsKgyu7n/2Q=="><picture>
+                          <source type="image/webp" srcset="/img/shop/pack-400.webp 400w, /img/shop/pack-800.webp 800w, /img/shop/pack-1200.webp 1200w" sizes="(max-width: 600px) 100vw, (max-width: 960px) 50vw, 25vw" />
+                          <img src="/img/shop/pack-800.jpg" srcset="/img/shop/pack-400.jpg 400w, /img/shop/pack-800.jpg 800w, /img/shop/pack-1200.jpg 1200w" sizes="(max-width: 600px) 100vw, (max-width: 960px) 50vw, 25vw" width="1200" height="900" loading="lazy" decoding="async" alt="Illustration of a backpack with a front pocket" />
+                        </picture></div>
+                        <figcaption>Daypack</figcaption>
+                      </figure></li>
+                      <li class="product"><figure>
+                        <div class="product__img" data-lqip="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABQODxIPDRQSEBIXFRQYHjIhHhwcHj0sLiQySUBMS0dARkVQWnNiUFVtVkVGZIhlbXd7gYKBTmCNl4x9lnN+gXz/2wBDARUXFx4aHjshITt8U0ZTfHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHz/wAARCAAMABADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDeubry5IItxUzOVBAz0GaLa68ySeLcWMLhSSMdRmkYBsZ6jofShQFzjqep9a3shn//2Q=="><picture>
+                          <source type="image/webp" srcset="/img/shop/phones-400.webp 400w, /img/shop/phones-800.webp 800w, /img/shop/phones-1200.webp 1200w" sizes="(max-width: 600px) 100vw, (max-width: 960px) 50vw, 25vw" />
+                          <img src="/img/shop/phones-800.jpg" srcset="/img/shop/phones-400.jpg 400w, /img/shop/phones-800.jpg 800w, /img/shop/phones-1200.jpg 1200w" sizes="(max-width: 600px) 100vw, (max-width: 960px) 50vw, 25vw" width="1200" height="900" loading="lazy" decoding="async" alt="Illustration of over-ear headphones" />
+                        </picture></div>
+                        <figcaption>Headphones</figcaption>
+                      </figure></li>
+                      <li class="product"><figure>
+                        <div class="product__img" data-lqip="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABQODxIPDRQSEBIXFRQYHjIhHhwcHj0sLiQySUBMS0dARkVQWnNiUFVtVkVGZIhlbXd7gYKBTmCNl4x9lnN+gXz/2wBDARUXFx4aHjshITt8U0ZTfHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHz/wAARCAAMABADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDo72RltnKSCJuBvIziiykd7ZS8gkbkbwMZodFkQo4yp6ihEWNAiDCjoK5eZmtkf//Z"><picture>
+                          <source type="image/webp" srcset="/img/shop/plant-400.webp 400w, /img/shop/plant-800.webp 800w, /img/shop/plant-1200.webp 1200w" sizes="(max-width: 600px) 100vw, (max-width: 960px) 50vw, 25vw" />
+                          <img src="/img/shop/plant-800.jpg" srcset="/img/shop/plant-400.jpg 400w, /img/shop/plant-800.jpg 800w, /img/shop/plant-1200.jpg 1200w" sizes="(max-width: 600px) 100vw, (max-width: 960px) 50vw, 25vw" width="1200" height="900" loading="lazy" decoding="async" alt="Illustration of a potted plant" />
+                        </picture></div>
+                        <figcaption>Plant pot</figcaption>
+                      </figure></li>
+                      <li class="product"><figure>
+                        <div class="product__img" data-lqip="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABQODxIPDRQSEBIXFRQYHjIhHhwcHj0sLiQySUBMS0dARkVQWnNiUFVtVkVGZIhlbXd7gYKBTmCNl4x9lnN+gXz/2wBDARUXFx4aHjshITt8U0ZTfHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHz/wAARCAAMABADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDX1i/exsfOjYKd6qSU3YB9sik0a/kvrHzpSC29gCF25A6cU+4giuovKnQSISDtNFvBFbReXAgjTOdoqrCvof/Z"><picture>
+                          <source type="image/webp" srcset="/img/shop/book-400.webp 400w, /img/shop/book-800.webp 800w, /img/shop/book-1200.webp 1200w" sizes="(max-width: 600px) 100vw, (max-width: 960px) 50vw, 25vw" />
+                          <img src="/img/shop/book-800.jpg" srcset="/img/shop/book-400.jpg 400w, /img/shop/book-800.jpg 800w, /img/shop/book-1200.jpg 1200w" sizes="(max-width: 600px) 100vw, (max-width: 960px) 50vw, 25vw" width="1200" height="900" loading="lazy" decoding="async" alt="Illustration of a spiral notebook" />
+                        </picture></div>
+                        <figcaption>Notebook</figcaption>
+                      </figure></li>
+                    </ul>
+          <!-- shop-lab:end -->
+          <button type="button" class="btn btn--line" id="naiveToggle" aria-expanded="false">Compare with naive markup</button>
+          <div id="naiveBox" hidden></div>
+        </div>
+      </div>
+    </section>
+
     <section class="section section--alt" id="skills" data-section="Skills">
       <div class="wrap">
         <div class="grid">
@@ -409,6 +522,7 @@
             <li><span>Email</span><a href="mailto:kampolotomasva@gmail.com" data-copy>kampolotomasva@gmail.com</a></li>
             <li><span>Phone</span><a href="tel:+264818503687">+264 81 850 3687</a></li>
             <li><span>LinkedIn</span><a href="https://linkedin.com/in/kampolo-tomas-8453b129b" target="_blank" rel="noopener">kampolo-tomas</a></li>
+            <li><span>CV</span><a href="/cv/">CV and documents</a></li>
           </ul>
 
           <form class="form" name="contact" method="POST" action="/thanks.html" data-netlify="true" netlify-honeypot="bot-field">
@@ -431,7 +545,16 @@
       <span>© <span id="year">2026</span> Kampolo Tomas Vaino Amunyela</span>
       <span>Windhoek, Namibia</span>
       <span class="footer__hint">Psst — try the Konami code, or ask the assistant for something cool.</span>
-      <a href="swarm.html" class="footer__link" id="swarmBtn" hidden>How the swarm works</a>
+      <label class="persona-switch">View as <select id="personaSelect" aria-label="Choose a view of this site">
+          <option value="corporate">Corporate (default)</option>
+          <option value="bank">Classic</option>
+          <option value="data">Data</option>
+          <option value="design">Design</option>
+          <option value="shop">Shop</option>
+        </select></label>
+      <a href="/documents/" class="footer__link footer__link--quiet">Documents</a>
+      <button type="button" class="footer__link footer__link--quiet" id="editionBtn">Renaissance Edition</button>
+      <a href="/swarm.html" class="footer__link" id="swarmBtn" hidden>How the swarm works</a>
       <a href="#home" class="footer__top">Back to top ↑</a>
     </div>
   </footer>
@@ -459,12 +582,23 @@
     </header>
     <div class="chat__log" id="chatLog" aria-live="polite"></div>
     <div class="chat__chips" id="chatChips"></div>
+    <form class="chat__match" id="matchForm" hidden>
+      <label for="matchText">Paste a job advert</label>
+      <textarea id="matchText" rows="5" maxlength="3000" placeholder="Paste the role description here" required></textarea>
+      <div class="chat__match-row"><small>Sent to the AI to compare with Kampolo's profile. Please do not paste confidential text.</small><button type="submit">Compare</button></div>
+    </form>
     <form class="chat__form" id="chatForm" autocomplete="off">
       <input id="chatInput" type="text" maxlength="600" placeholder="Ask about projects, skills, availability…" aria-label="Your question" required />
       <button type="submit" id="chatSend">Send</button>
     </form>
   </section>
 
-  <script src="script.js" defer></script>
+  <script src="/personas.js"></script>
+  <script src="/track.js" defer></script>
+  <script src="/obs.js" defer></script>
+  <script src="/script.js" defer></script>
+  <script src="/studio.js" defer></script>
+  <script src="/edition.js" defer></script>
+  <script src="/editions-plus.js" defer></script>
 </body>
 </html>

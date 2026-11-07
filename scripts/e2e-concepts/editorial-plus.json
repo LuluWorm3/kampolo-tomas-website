@@ -1,0 +1,34 @@
+{
+ "home": {
+  "name": "cover: nameplate, halftone plate, issue line and contents links in reading order",
+  "js": "(function(){var a=[].slice.call(document.querySelectorAll('.ed-toc a'));var t=a.map(function(x){return document.querySelector(x.getAttribute('href'));});var ordered=t.every(function(n,i){return n&&(i===0||(t[i-1].compareDocumentPosition(n)&4));});return a.length>=6&&ordered&&parseFloat(getComputedStyle(document.querySelector('#home .hero__title')).fontSize)>=60&&!!document.querySelector('#home .ed-plate--cover .ed-plate__frame')&&getComputedStyle(document.querySelector('#home .hero__meta'),'::before').content.indexOf('Kampolo Issue')>-1&&document.querySelectorAll('#home .ed-lines li').length>=5&&!!document.querySelector('#home .btn--solid');})()"
+ },
+ "about": {
+  "name": "opener plate, running head, two columns, drop cap and fact box",
+  "js": "!!document.querySelector('.ed-opener[data-scene=\"about\"] .ed-plate__frame')&&document.querySelector('#about .ed-run').textContent.indexOf('About')>-1&&getComputedStyle(document.querySelector('#about .about__cols .col-6')).columnCount===(innerWidth<=720?'1':'2')&&!!document.querySelector('#about .ed-drop')&&getComputedStyle(document.querySelector('#about .facts')).borderTopStyle==='double'"
+ },
+ "experience": {
+  "name": "opener plate and a ledger with italic dates in the margin",
+  "js": "!!document.querySelector('.ed-opener[data-scene=\"experience\"] .ed-plate__frame')&&getComputedStyle(document.querySelector('#experience .job')).display==='grid'&&getComputedStyle(document.querySelector('#experience .job__date')).fontStyle==='italic'&&(innerWidth<=720||getComputedStyle(document.querySelector('#experience .job__date')).textAlign==='right')"
+ },
+ "projects": {
+  "name": "opener plate and feature kickers",
+  "js": "!!document.querySelector('.ed-opener[data-scene=\"projects\"] .ed-plate__frame')&&getComputedStyle(document.querySelector('#projects .project__idx'),'::before').content.indexOf('Feature')>-1"
+ },
+ "design-lab": {
+  "name": "typographic opener (a lab has no painting)",
+  "js": "document.getElementById('design-lab').previousElementSibling.classList.contains('ed-opener--type')&&!document.getElementById('design-lab').previousElementSibling.querySelector('.ed-plate')"
+ },
+ "skills": {
+  "name": "index with dot leaders and ornament levels",
+  "js": "getComputedStyle(document.querySelector('#skills .skill-list li'),'::before').borderBottomStyle==='dotted'&&getComputedStyle(document.querySelector('#skills .skill-list li'),'::after').content.indexOf('\u25cf')>-1"
+ },
+ "education": {
+  "name": "two columns of numbered notes",
+  "js": "getComputedStyle(document.querySelector('#education .edu')).columnCount===(innerWidth<=720?'1':'2')&&getComputedStyle(document.querySelector('#education .edu__item'),'::before').content.indexOf('Note')>-1"
+ },
+ "contact": {
+  "name": "colophon between double rules",
+  "js": "getComputedStyle(document.querySelector('#contact .contact__links')).borderTopStyle==='double'&&!!document.querySelector('.footer .ed-colo')"
+ }
+}

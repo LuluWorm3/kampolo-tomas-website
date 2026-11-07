@@ -1,0 +1,168 @@
+{
+ "swiss-plus": {
+  "experience": {
+   "name": "table rows with big years",
+   "js": "getComputedStyle(document.querySelector('#experience .job')).display==='grid' && parseFloat(getComputedStyle(document.querySelector('#experience .job__date')).fontSize)>=20"
+  },
+  "projects": {
+   "name": "red index numerals",
+   "js": "parseFloat(getComputedStyle(document.querySelector('#projects .project__idx')).fontSize)>=28"
+  },
+  "skills": {
+   "name": "full-width bars",
+   "js": "parseFloat(getComputedStyle(document.querySelector('#skills .skill-list li'), '::after').height)>=12 && parseFloat(getComputedStyle(document.querySelector('#skills .skill-list li'), '::after').width)>100"
+  },
+  "education": {
+   "name": "grid cells",
+   "js": "getComputedStyle(document.querySelector('#education .edu')).display==='grid'"
+  },
+  "contact": {
+   "name": "oversized links",
+   "js": "parseFloat(getComputedStyle(document.querySelector('#contact .contact__links a')).fontSize)>=24 && getComputedStyle(document.querySelector('#contact .contact__links a'), '::after').content.indexOf('\u2192')>-1"
+  }
+ },
+ "editorial-plus": {
+  "home": {
+   "name": "cover: nameplate, halftone plate, issue line and contents links in reading order",
+   "js": "(function(){var a=[].slice.call(document.querySelectorAll('.ed-toc a'));var t=a.map(function(x){return document.querySelector(x.getAttribute('href'));});var ordered=t.every(function(n,i){return n&&(i===0||(t[i-1].compareDocumentPosition(n)&4));});return a.length>=6&&ordered&&parseFloat(getComputedStyle(document.querySelector('#home .hero__title')).fontSize)>=60&&!!document.querySelector('#home .ed-plate--cover .ed-plate__frame')&&getComputedStyle(document.querySelector('#home .hero__meta'),'::before').content.indexOf('Kampolo Issue')>-1&&document.querySelectorAll('#home .ed-lines li').length>=5&&!!document.querySelector('#home .btn--solid');})()"
+  },
+  "about": {
+   "name": "opener plate, running head, two columns, drop cap and fact box",
+   "js": "!!document.querySelector('.ed-opener[data-scene=\"about\"] .ed-plate__frame')&&document.querySelector('#about .ed-run').textContent.indexOf('About')>-1&&getComputedStyle(document.querySelector('#about .about__cols .col-6')).columnCount===(innerWidth<=720?'1':'2')&&!!document.querySelector('#about .ed-drop')&&getComputedStyle(document.querySelector('#about .facts')).borderTopStyle==='double'"
+  },
+  "experience": {
+   "name": "opener plate and a ledger with italic dates in the margin",
+   "js": "!!document.querySelector('.ed-opener[data-scene=\"experience\"] .ed-plate__frame')&&getComputedStyle(document.querySelector('#experience .job')).display==='grid'&&getComputedStyle(document.querySelector('#experience .job__date')).fontStyle==='italic'&&(innerWidth<=720||getComputedStyle(document.querySelector('#experience .job__date')).textAlign==='right')"
+  },
+  "projects": {
+   "name": "opener plate and feature kickers",
+   "js": "!!document.querySelector('.ed-opener[data-scene=\"projects\"] .ed-plate__frame')&&getComputedStyle(document.querySelector('#projects .project__idx'),'::before').content.indexOf('Feature')>-1"
+  },
+  "design-lab": {
+   "name": "typographic opener (a lab has no painting)",
+   "js": "document.getElementById('design-lab').previousElementSibling.classList.contains('ed-opener--type')&&!document.getElementById('design-lab').previousElementSibling.querySelector('.ed-plate')"
+  },
+  "skills": {
+   "name": "index with dot leaders and ornament levels",
+   "js": "getComputedStyle(document.querySelector('#skills .skill-list li'),'::before').borderBottomStyle==='dotted'&&getComputedStyle(document.querySelector('#skills .skill-list li'),'::after').content.indexOf('\u25cf')>-1"
+  },
+  "education": {
+   "name": "two columns of numbered notes",
+   "js": "getComputedStyle(document.querySelector('#education .edu')).columnCount===(innerWidth<=720?'1':'2')&&getComputedStyle(document.querySelector('#education .edu__item'),'::before').content.indexOf('Note')>-1"
+  },
+  "contact": {
+   "name": "colophon between double rules",
+   "js": "getComputedStyle(document.querySelector('#contact .contact__links')).borderTopStyle==='double'&&!!document.querySelector('.footer .ed-colo')"
+  }
+ },
+ "brutalist-plus": {
+  "experience": {
+   "name": "log prompt bullets",
+   "js": "getComputedStyle(document.querySelector('#experience .job li'), '::before').content.indexOf('>')>-1"
+  },
+  "projects": {
+   "name": "directory listing",
+   "js": "getComputedStyle(document.querySelector('#projects .project__idx'), '::before').content.indexOf('drwx')>-1"
+  },
+  "skills": {
+   "name": "ascii bars",
+   "js": "getComputedStyle(document.querySelector('#skills .skill-list li'), '::after').content.indexOf('[#')>-1"
+  },
+  "education": {
+   "name": "windows in a grid",
+   "js": "getComputedStyle(document.querySelector('#education .edu')).display==='grid'"
+  },
+  "contact": {
+   "name": "shell prompt",
+   "js": "getComputedStyle(document.querySelector('#contact .contact__links a'), '::before').content.indexOf('$')>-1"
+  }
+ },
+ "bauhaus-plus": {
+  "experience": {
+   "name": "shape markers",
+   "js": "getComputedStyle(document.querySelector('#experience .job h3'), '::before').display==='inline-block' && parseFloat(getComputedStyle(document.querySelector('#experience .job h3'), '::before').width)>=10"
+  },
+  "projects": {
+   "name": "colour tiles",
+   "js": "getComputedStyle(document.querySelector('#projects .projects')).display==='grid' && getComputedStyle(document.querySelector('#projects .project')).backgroundColor!=='rgba(0, 0, 0, 0)'"
+  },
+  "skills": {
+   "name": "square meters",
+   "js": "parseFloat(getComputedStyle(document.querySelector('#skills .skill-list li'), '::after').width)===85"
+  },
+  "education": {
+   "name": "colour tiles",
+   "js": "getComputedStyle(document.querySelector('#education .edu')).display==='grid' && getComputedStyle(document.querySelector('#education .edu__item')).backgroundColor!=='rgba(0, 0, 0, 0)'"
+  },
+  "contact": {
+   "name": "poster with circle",
+   "js": "getComputedStyle(document.querySelector('#contact .contact__links')).display==='grid' && getComputedStyle(document.querySelector('#contact .contact__links li'), '::after').content!=='none'"
+  }
+ },
+ "minimal-plus": {
+  "experience": {
+   "name": "one line per job",
+   "js": "getComputedStyle(document.querySelector('#experience .job')).display==='grid' && getComputedStyle(document.querySelector('#experience .job__head')).display==='contents'"
+  },
+  "projects": {
+   "name": "names only",
+   "js": "getComputedStyle(document.querySelector('#projects .project__idx')).display==='none'"
+  },
+  "skills": {
+   "name": "quiet inline list",
+   "js": "getComputedStyle(document.querySelector('#skills .skill-list')).display==='flex' && getComputedStyle(document.querySelector('#skills .skill-list li'), '::after').display==='none'"
+  },
+  "education": {
+   "name": "muted dates",
+   "js": "getComputedStyle(document.querySelector('#education .edu__item')).display==='grid'"
+  },
+  "contact": {
+   "name": "drawn underline",
+   "js": "getComputedStyle(document.querySelector('#contact .contact__links a')).backgroundImage!=='none' && parseFloat(getComputedStyle(document.querySelector('#contact .contact__links li:first-child a')).fontSize)>=24"
+  }
+ },
+ "neural-plus": {
+  "experience": {
+   "name": "trunk and nodes",
+   "js": "getComputedStyle(document.querySelector('#experience .jobs'), '::before').content!=='none' && getComputedStyle(document.querySelector('#experience .job'), '::before').borderRadius==='50%'"
+  },
+  "projects": {
+   "name": "ported cards",
+   "js": "getComputedStyle(document.querySelector('#projects .project'), '::after').content!=='none' && getComputedStyle(document.querySelector('#projects .project'), '::after').borderRadius==='50%'"
+  },
+  "skills": {
+   "name": "glowing chips",
+   "js": "parseFloat(getComputedStyle(document.querySelector('#skills .skill-list li')).borderTopLeftRadius)>=100"
+  },
+  "education": {
+   "name": "ring markers",
+   "js": "getComputedStyle(document.querySelector('#education .edu__date'), '::before').content!=='none'"
+  },
+  "contact": {
+   "name": "endpoint card",
+   "js": "getComputedStyle(document.querySelector('#contact .contact__links'), '::before').content.indexOf('endpoint')>-1"
+  }
+ },
+ "cosmos-plus": {
+  "experience": {
+   "name": "orbit planets",
+   "js": "getComputedStyle(document.querySelector('#experience .job'), '::before').borderRadius==='50%' && getComputedStyle(document.querySelector('#experience .jobs'), '::before').content!=='none'"
+  },
+  "projects": {
+   "name": "ringed worlds",
+   "js": "getComputedStyle(document.querySelector('#projects .project__idx'), '::after').content!=='none'"
+  },
+  "skills": {
+   "name": "constellations",
+   "js": "document.querySelectorAll('#skills .px-const').length>0"
+  },
+  "education": {
+   "name": "moons",
+   "js": "getComputedStyle(document.querySelector('#education .edu__date'), '::before').content!=='none'"
+  },
+  "contact": {
+   "name": "signal rings",
+   "js": "getComputedStyle(document.querySelector('#contact .contact__links'), '::after').animationName==='cosmos-signal'"
+  }
+ }
+}

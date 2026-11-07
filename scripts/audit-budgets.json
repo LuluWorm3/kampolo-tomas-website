@@ -1,0 +1,9 @@
+{
+  "_note": "Limits for scripts/audit.mjs --check. Measured at 4x CPU throttle in headless Chrome with software rendering, so a real phone with a GPU should do better; the limits are set to catch regressions, not to describe a target device.",
+  "edition": { "frameP95Ms": 50, "entryKB": 60, "nodesLeftBehind": 12 },
+  "leak": { "heapGrowthMB": 0.5, "nodeGrowth": 2, "listenerGrowth": 2 },
+  "swarm": { "frameP95Ms": 34, "longTaskMs": 150 },
+  "idle": { "frameP95Ms": 34 },
+  "chat": { "frameP95Ms": 34 },
+  "load": { "scriptKB": 130 }
+}

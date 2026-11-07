@@ -1,0 +1,50 @@
+[
+  {
+    "name": "drafts are generated on load",
+    "js": "document.querySelectorAll('#sa-queue .sa-draft').length === 5"
+  },
+  {
+    "name": "default drafts pass the rules and can be approved",
+    "js": "[...document.querySelectorAll('#sa-queue .sa-draft')].every(function(li){ return !li.querySelector('.sa-block') && !li.querySelector('button').disabled; })"
+  },
+  {
+    "name": "an invented number is a blocker",
+    "js": "SocialLab.check('Only 50% off today, call 0811234567!', 'free coffee', 'facebook').blockers >= 2"
+  },
+  {
+    "name": "numbers from the brief are allowed",
+    "js": "SocialLab.check('Offer: 2 coffees for you. Pop in.', '2 coffees', 'facebook').blockers === 0"
+  },
+  {
+    "name": "absolute claims are blockers",
+    "js": "SocialLab.check('The best bread, guaranteed. Pop in.', '', 'facebook').blockers === 1"
+  },
+  {
+    "name": "approve is disabled while a blocker exists",
+    "js": "(function(){ var ta; var li = document.querySelector('#sa-queue .sa-draft'); li.querySelectorAll('button')[1].click(); ta = document.querySelector('#sa-queue textarea'); ta.value = 'Everything is 50% off, guaranteed!'; ta.dispatchEvent(new Event('input')); var disabled = document.querySelector('#sa-queue .sa-draft button').disabled; document.querySelector('#sa-queue .sa-draft button:nth-of-type(2)').click(); return disabled; })()"
+  },
+  {
+    "name": "downloads stay disabled until a post is approved",
+    "js": "(function(){ document.getElementById('sa-brief').dispatchEvent(new Event('submit', {cancelable:true})); return document.getElementById('sa-export-txt').disabled === true; })()"
+  },
+  {
+    "name": "approving a post enables the download",
+    "js": "(function(){ document.querySelector('#sa-queue .sa-draft button').click(); return document.getElementById('sa-export-txt').disabled === false; })()"
+  },
+  {
+    "name": "every evaluation row passes",
+    "js": "document.querySelectorAll('#sa-tests tbody tr').length >= 9 && document.querySelectorAll('#sa-tests tbody tr.sa-fail').length === 0"
+  },
+  {
+    "name": "the bot never quotes a price",
+    "js": "!/\\d|n\\$/i.test(SocialLab.step(SocialLab.newBot(), 'how much is a loaf').replies.join(' '))"
+  },
+  {
+    "name": "the flow graph highlights a node",
+    "js": "document.querySelectorAll('#sa-graph .sa-node.is-active').length === 1"
+  },
+  {
+    "name": "the lab script contains no network calls",
+    "js": "fetch('/labs/social-automation.js').then(function(r){return r.text();}).then(function(t){return !/fetch\\(|XMLHttpRequest|WebSocket|sendBeacon|EventSource/.test(t);})"
+  }
+]

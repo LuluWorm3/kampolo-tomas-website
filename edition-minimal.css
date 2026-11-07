@@ -1,0 +1,231 @@
+/* Minimalism Edition, "Less, but better" (the + beside Minimalism in the Style lab; style name minimal-plus). Lazy-loaded by editions-plus.js on first
+   entry, so visitors who never open it download nothing. Script: edition-minimal.js. Prefix rule: every class an edition adds starts with mn-.
+   The idea is progressive disclosure. Each chapter is one screen with one sentence; a density control (Essence, Summary, Full) decides how much else
+   is shown, and the rest opens in a calm sheet. Hidden text is display:none, never just faded. Paper and ink, light type, fades only.
+   Without the script only the tokens below apply (plus the plain page), so nothing depends on the classes to stay readable. */
+
+:root[data-style='minimal-plus'] { --glyph: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2024%2024%27%3E%3Ccircle%20cx%3D%2712%27%20cy%3D%2712%27%20r%3D%274.5%27%2F%3E%3C%2Fsvg%3E"); }
+
+/* ---------------------------------------------------------------- tokens: paper and ink */
+:root[data-style='minimal-plus'] {
+  --font: 'Inter', system-ui, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif;
+  --bg: #f8f7f3; --bg-alt: transparent; --text: #1b1b19; --muted: #5d5d57; --rule: #1b1b19; --hair: rgba(27, 27, 25, 0.18);
+  --accent: #1b1b19; --on-accent: #f8f7f3; --glass: #f8f7f3; --glow: transparent; color-scheme: light;
+  scrollbar-gutter: stable;
+}
+:root[data-style='minimal-plus'][data-theme='dark'] {
+  --bg: #101011; --text: #eae9e4; --muted: #a3a29c; --rule: #eae9e4; --hair: rgba(234, 233, 228, 0.2);
+  --accent: #eae9e4; --on-accent: #101011; --glass: #101011; color-scheme: dark;
+}
+@media (prefers-color-scheme: dark) {
+  :root[data-style='minimal-plus']:not([data-theme]) {
+    --bg: #101011; --text: #eae9e4; --muted: #a3a29c; --rule: #eae9e4; --hair: rgba(234, 233, 228, 0.2);
+    --accent: #eae9e4; --on-accent: #101011; --glass: #101011; color-scheme: dark;
+  }
+}
+:root[data-style='minimal-plus'] body { background: var(--bg); font-weight: 300; }
+:root[data-style='minimal-plus'] :focus-visible { outline: 2px solid var(--text); outline-offset: 3px; }
+
+/* ---------------------------------------------------------------- the quiet chrome */
+:root[data-style='minimal-plus'] .nav { position: fixed; left: 0; right: 0; top: 0; background: var(--bg); border-bottom: 1px solid var(--hair); }
+:root[data-style='minimal-plus'] .progress { display: none; }
+:root[data-style='minimal-plus'] .nav__brand { font-weight: 400; letter-spacing: -0.01em; }
+:root[data-style='minimal-plus'] .nav__links a { text-transform: none; letter-spacing: 0.02em; font-weight: 300; font-size: 0.9rem; }
+:root[data-style='minimal-plus'] .nav__links a:hover, :root[data-style='minimal-plus'] .nav__links a.active { color: var(--text); box-shadow: 0 1px 0 var(--text); }
+:root[data-style='minimal-plus'] .hud { border-color: var(--hair); font-weight: 400; }
+:root[data-style='minimal-plus'] .hud__fill, :root[data-style='minimal-plus'] .hud__bar i { background: var(--text); }
+:root[data-style='minimal-plus'] .footer { border-top: 1px solid var(--hair); scroll-snap-align: end; padding: 40px 0; font-weight: 300; }
+:root[data-style='minimal-plus'] .footer__link { font-weight: 400; }
+:root[data-style='minimal-plus'] :is(.px-hud__focus, .px-btn) { border-radius: 0; border-color: var(--hair); background: var(--bg); -webkit-backdrop-filter: none; backdrop-filter: none; }
+:root[data-style='minimal-plus'] .btn { border-width: 1px; border-radius: 0; font-weight: 400; }
+
+/* density control: three words, one of them underlined */
+.mn-density { position: fixed; top: 76px; right: 22px; z-index: 55; display: flex; background: var(--bg); border: 1px solid var(--hair); }
+.mn-density button { display: flex; align-items: baseline; gap: 7px; padding: 6px 12px; border: 0; background: none; color: var(--muted); font-size: 0.78rem; font-weight: 400; letter-spacing: 0.04em; transition: color 0.4s ease; }
+.mn-density button:hover { color: var(--text); }
+.mn-density button[aria-pressed='true'] { color: var(--text); box-shadow: inset 0 -1px 0 var(--text); }
+.mn-key { font-size: 0.66rem; color: var(--muted); }
+.mn-sr { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
+
+/* where you are: the caption bottom left, the dot rail with its hairline on the right */
+.mn-where { position: fixed; left: 24px; bottom: 22px; z-index: 40; margin: 0; font-size: 0.76rem; font-weight: 400; letter-spacing: 0.06em; color: var(--muted); }
+.mn-rail { position: fixed; right: 18px; top: 50%; transform: translateY(-50%); z-index: 54; }
+.mn-rail ol { position: relative; display: flex; flex-direction: column; list-style: none; }
+.mn-rail ol::before, .mn-rail ol::after { content: ''; position: absolute; left: 50%; top: 13px; bottom: 13px; width: 1px; margin-left: -0.5px; background: var(--hair); }
+.mn-rail ol::after { background: var(--text); transform-origin: 50% 0; transform: scaleY(var(--mn-p, 0)); transition: transform 1s ease; }
+.mn-rail a { position: relative; display: grid; place-items: center; width: 26px; height: 26px; }
+.mn-rail a::before { content: ''; position: relative; z-index: 2; width: 9px; height: 9px; border-radius: 50%; border: 1px solid var(--muted); background: var(--bg); transition: background 0.5s ease, border-color 0.5s ease; }
+.mn-rail a[aria-current='location']::before { background: var(--text); border-color: var(--text); }
+.mn-rail__name { position: absolute; right: 32px; top: 50%; transform: translateY(-50%); padding: 2px 8px; background: var(--bg); white-space: nowrap; font-size: 0.78rem; font-weight: 400; color: var(--muted); opacity: 0; pointer-events: none; transition: opacity 0.4s ease; }
+.mn-rail a:is(:hover, :focus-visible) .mn-rail__name { opacity: 1; }
+.mn-scrim { position: fixed; inset: 0; z-index: 70; background: color-mix(in srgb, var(--bg) 82%, transparent); opacity: 0; pointer-events: none; transition: opacity 0.4s ease; }
+.mn-sheet-open .mn-scrim { opacity: 1; pointer-events: auto; }
+.mn-sheet-open { overflow: hidden; }
+.mn-sheet-open .chat-fab { display: none; }
+
+/* snap scrolling: Essence snaps hard, Summary only near a chapter, Full not at all (and phones and reduced motion never) */
+@media (min-width: 721px) and (prefers-reduced-motion: no-preference) {
+  .mn-d-essence { scroll-snap-type: y mandatory; }
+  .mn-d-summary { scroll-snap-type: y proximity; }
+}
+.mn-d-essence, .mn-d-summary { scroll-padding-top: 0; }
+
+/* ---------------------------------------------------------------- chapters */
+.mn-ch { position: relative; display: flex; flex-direction: column; justify-content: center; min-height: 100svh; padding: 76px 0 48px; border: 0; background: transparent; opacity: 1; transform: none; transition: none; scroll-snap-align: start; }
+.mn-ch > .wrap { max-width: 74rem; padding: 0 clamp(24px, 9vw, 150px); }
+.mn-ch .grid { display: block; }
+.mn-ch .section__head { position: static; display: flex; align-items: baseline; gap: 14px; margin: 0 0 clamp(20px, 4vh, 40px); }
+.mn-ch .section__num { margin: 0; font-size: 0.8rem; font-weight: 400; letter-spacing: 0.14em; color: var(--muted); }
+.mn-ch .section__title { margin: 0; font-size: 1.05rem; font-weight: 400; letter-spacing: 0; line-height: 1.2; }
+
+/* what each density hides: the script marks the pieces, the density class decides (display:none, so it is gone for everyone) */
+.mn-d-essence .mn-ch:not(.mn-read) .mn-h1, .mn-d-summary .mn-ch:not(.mn-read) .mn-h2 { display: none; }
+.mn-gen, .mn-act, .mn-close { display: none; }
+.mn-ch:not(.mn-read) .mn-gen { display: block; }
+.mn-d-essence .mn-act, .mn-d-summary .mn-act { display: block; }
+
+/* the sentence */
+.mn-lead { margin: 0; max-width: 26em; color: var(--text); font-weight: 300; letter-spacing: -0.03em; line-height: 1.17; text-wrap: balance; }
+.mn-ch .mn-s1 { font-size: clamp(2.2rem, 6.2vw, 5.4rem); }
+.mn-ch .mn-s2 { font-size: clamp(1.8rem, 4.3vw, 3.7rem); }
+.mn-ch .mn-s3 { font-size: clamp(1.55rem, 3.3vw, 2.9rem); }
+.mn-ch .mn-lead { align-self: auto; }
+.mn-read .mn-lead { font-size: clamp(1.4rem, 2.5vw, 2rem); letter-spacing: -0.02em; line-height: 1.28; margin-bottom: clamp(28px, 5vh, 48px); }
+.mn-d-summary .mn-ch:not(.mn-read) .mn-lead { margin-bottom: clamp(28px, 5vh, 48px); }
+
+/* the Details button under the sentence */
+.mn-act { max-width: 74rem; width: 100%; margin: clamp(20px, 4vh, 40px) auto 0; padding: 0 clamp(24px, 9vw, 150px); }
+.mn-more { display: inline-flex; align-items: baseline; gap: 10px; padding: 4px 0; border: 0; border-bottom: 1px solid var(--hair); background: none; color: var(--text); font-size: 0.9rem; font-weight: 400; letter-spacing: 0.06em; transition: border-color 0.5s ease; }
+.mn-more::after { content: '+'; color: var(--muted); }
+.mn-more:hover { border-bottom-color: var(--text); }
+.mn-more[aria-expanded='true']::after { content: '\2013'; }
+
+/* ---------------------------------------------------------------- the pieces, wherever they are shown */
+.mn-ch .hero__meta { margin: 0 0 14px; font-size: 0.8rem; font-weight: 400; letter-spacing: 0.08em; text-transform: none; color: var(--muted); }
+.mn-ch .hero__title { margin: 0 0 18px; font-size: clamp(1.8rem, 3.4vw, 2.8rem); font-weight: 300; letter-spacing: -0.03em; line-height: 1.05; }
+.mn-ch .hero__role { margin: 0 0 clamp(20px, 4vh, 36px); padding: 0; border: 0; font-size: 1.1rem; font-weight: 400; letter-spacing: 0; line-height: 1.35; color: var(--muted); }
+.mn-ch .hero__lead { max-width: 26em; }
+.mn-ch .hero__status { margin-top: 28px; font-weight: 400; color: var(--muted); }
+.mn-ch .pulse { animation: none; background: var(--text); }
+.mn-ch .hero__actions { margin-top: 26px; }
+
+.mn-ch .about p:not(.mn-lead) { margin: 0 0 14px; color: var(--muted); font-weight: 300; max-width: 38em; }
+.mn-ch .about__cols .col-6 + .col-6 { margin-top: 24px; }
+.mn-ch .facts { margin-top: 8px; }
+.mn-ch .facts div { display: grid; grid-template-columns: 5.5rem 1fr; align-items: baseline; border-top: 1px solid var(--hair); padding: 14px 0; }
+.mn-ch .facts dt { font-size: 2rem; font-weight: 200; letter-spacing: -0.04em; color: var(--text); }
+.mn-ch .facts dd { color: var(--muted); font-size: 0.95rem; }
+
+.mn-ch .job { border: 0; border-top: 1px solid var(--hair); padding: 16px 0 18px; }
+.mn-ch .job__head { display: flex; justify-content: space-between; align-items: baseline; gap: 6px 24px; flex-wrap: wrap; }
+.mn-ch .job h3 { font-size: 1.15rem; font-weight: 400; letter-spacing: -0.015em; }
+.mn-ch .job__date { color: var(--muted); font-size: 0.85rem; font-weight: 400; letter-spacing: 0.04em; }
+.mn-ch .job__org { margin: 2px 0 0; color: var(--muted); font-weight: 300; }
+.mn-ch .job ul { margin-top: 12px; }
+.mn-ch .job li { border: 0; padding: 4px 0 4px 20px; color: var(--text); font-weight: 300; line-height: 1.5; }
+.mn-ch .job li::before { content: '\2013'; top: 4px; width: auto; height: auto; background: none; color: var(--muted); }
+
+.mn-ch .projects, .mn-ch .skills { margin-top: clamp(24px, 4vh, 40px); }
+.mn-ch .project { border: 0; border-top: 1px solid var(--hair); }
+.mn-ch .project:last-child { border-bottom: 1px solid var(--hair); }
+.mn-ch .project summary { grid-template-columns: 1fr auto; gap: 4px 24px; padding: 18px 0; transition: color 0.4s ease; }
+.mn-ch .project__idx, .mn-ch .project__plus { display: none; }
+.mn-ch .project__name { font-size: clamp(1.25rem, 2.4vw, 1.9rem); font-weight: 300; letter-spacing: -0.025em; }
+.mn-ch .project__meta { color: var(--muted); font-size: 0.8rem; font-weight: 400; text-transform: none; letter-spacing: 0.03em; }
+.mn-ch .project summary:hover .project__name { color: var(--text); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 6px; }
+.mn-ch .project__body { padding: 0 0 26px; max-width: 40rem; }
+.mn-ch .project__body p { color: var(--muted); font-weight: 300; }
+.mn-ch .project__body ul:not(.tags) li { border: 0; padding: 4px 0 4px 20px; font-weight: 300; }
+.mn-ch .project__body ul:not(.tags) li::before { content: '\2013'; top: 4px; width: auto; height: auto; background: none; color: var(--muted); }
+.mn-ch .tags li { border: 1px solid var(--hair); font-weight: 400; color: var(--muted); }
+
+.mn-ch .skills { display: flex; flex-wrap: wrap; gap: 8px 56px; }
+.mn-ch .skills__group { margin: 0; }
+.mn-ch .skills__group h3 { margin: 0; padding: 0; border: 0; font-size: 1.25rem; font-weight: 300; letter-spacing: -0.02em; text-transform: none; }
+.mn-read .skills { display: block; }
+.mn-read .skills__group { margin-bottom: 36px; }
+.mn-read .skills__group h3 { margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid var(--hair); font-size: 0.85rem; font-weight: 400; letter-spacing: 0.1em; color: var(--muted); text-transform: uppercase; }
+.mn-ch .skill-list { display: flex; flex-wrap: wrap; gap: 6px 26px; }
+.mn-ch .skill-list li { display: block; padding: 0; border: 0; font-size: 1.05rem; font-weight: 300; }
+.mn-ch .skill-list li::after { content: ' ' attr(data-level) '/5'; display: inline; width: auto; height: auto; background: none; -webkit-mask: none; mask: none; color: var(--muted); font-size: 0.72rem; font-weight: 400; letter-spacing: 0.04em; }
+
+.mn-ch .edu__item { display: grid; grid-template-columns: 9.5rem 1fr; gap: 2px 24px; border: 0; border-top: 1px solid var(--hair); padding: 16px 0 20px; }
+.mn-ch .edu__date { color: var(--muted); font-size: 0.85rem; font-weight: 400; letter-spacing: 0.04em; grid-row: auto; }
+.mn-ch .edu h3 { font-size: 1.15rem; font-weight: 400; letter-spacing: -0.015em; }
+.mn-ch .edu__item p:last-child { grid-column: 2; margin: 0; color: var(--muted); font-weight: 300; }
+
+.mn-ch .contact__links { margin-top: clamp(20px, 3vh, 32px); }
+.mn-ch .contact__links li { display: grid; grid-template-columns: 7rem 1fr; border: 0; border-top: 1px solid var(--hair); padding: 14px 0; }
+.mn-ch .contact__links li:last-child { border-bottom: 1px solid var(--hair); }
+.mn-ch .contact__links span { color: var(--muted); font-size: 0.8rem; font-weight: 400; letter-spacing: 0.08em; text-transform: none; }
+.mn-ch .contact__links a { font-size: clamp(1.1rem, 2.4vw, 1.6rem); font-weight: 300; letter-spacing: -0.02em; background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat; transition: background-size 0.6s ease; }
+.mn-ch .contact__links a:is(:hover, :focus-visible) { background-size: 100% 1px; color: var(--text); }
+.mn-ch .form { margin-top: 44px; max-width: 34rem; }
+.mn-ch .form__field span { font-size: 0.78rem; font-weight: 400; letter-spacing: 0.08em; text-transform: none; }
+.mn-ch .form input, .mn-ch .form textarea { padding: 10px 0; border: 0; border-bottom: 1px solid var(--muted); background: transparent; font-weight: 300; }
+.mn-ch .form input:focus, .mn-ch .form textarea:focus { border-bottom-color: var(--text); outline: 2px solid var(--text); outline-offset: 3px; }
+
+/* ---------------------------------------------------------------- Full: the page as it is, set as one reading column */
+.mn-d-full .mn-ch { display: block; min-height: 0; padding: clamp(80px, 17vh, 160px) 0 clamp(24px, 6vh, 64px); scroll-snap-align: none; }
+.mn-d-full .mn-ch.hero { display: flex; flex-direction: column; justify-content: center; min-height: 86svh; padding-top: 100px; }
+.mn-d-full .mn-ch > .wrap { max-width: 46rem; margin: 0 auto; padding: 0 24px; }
+.mn-d-full .mn-ch:not(.hero)::before { content: ''; position: absolute; top: 0; left: 50%; width: 1px; height: clamp(40px, 9vh, 96px); background: var(--hair); }
+.mn-d-full .footer { scroll-snap-align: none; }
+
+/* ---------------------------------------------------------------- the sheet: the chapter's own content, lifted */
+.mn-ch.mn-open > .wrap { position: fixed; left: 0; right: 0; bottom: 0; z-index: 75; width: auto; max-width: none; max-height: 86svh; overflow-y: auto; overscroll-behavior: contain; margin: 0; padding: 0 clamp(24px, 6vw, 96px) 12vh; background: var(--bg); border-top: 1px solid var(--muted); opacity: 1; animation: mn-appear 0.4s ease both; }
+.mn-ch.mn-open > .wrap > :not(.mn-close) { max-width: 46rem; margin-left: auto; margin-right: auto; }
+.mn-open .project { scroll-margin-top: 3.4rem; }
+.mn-ch.mn-open > .wrap > .mn-close { position: sticky; top: 0; z-index: 3; display: block; width: max-content; margin: 0 max(0px, calc((100% - 46rem) / 2)) 0 auto; padding: 14px 0 12px 16px; border: 0; background: var(--bg); font-size: 0.85rem; font-weight: 400; letter-spacing: 0.06em; color: var(--text); }
+.mn-close::after { content: ' \00d7'; color: var(--muted); }
+@keyframes mn-appear { from { opacity: 0; } to { opacity: 1; } }
+
+/* ---------------------------------------------------------------- fades: a chapter's content fades in the first time it is reached */
+.mn-fade > .wrap, .mn-fade > .mn-act { opacity: 0; transition: opacity 1s ease; }
+.mn-fade.mn-in > .wrap, .mn-fade.mn-in > .mn-act { opacity: 1; }
+.mn-where { transition: opacity 0.4s ease; }
+
+/* ---------------------------------------------------------------- chat, in the same quiet chrome */
+:root[data-style='minimal-plus'] .chat-fab { gap: 8px; padding: 10px 16px; background: var(--bg); color: var(--text); border: 1px solid var(--text); border-radius: 0; box-shadow: none; font-weight: 400; transition: background 0.4s ease, color 0.4s ease; }
+:root[data-style='minimal-plus'] .chat-fab:hover { background: var(--text); color: var(--bg); filter: none; }
+:root[data-style='minimal-plus'] .chat-fab span { background: transparent; color: inherit; }
+:root[data-style='minimal-plus'] .chat { border: 1px solid var(--hair); border-radius: 0; box-shadow: none; }
+:root[data-style='minimal-plus'] .chat__head { background: var(--bg); color: var(--text); border-bottom: 1px solid var(--hair); }
+:root[data-style='minimal-plus'] .chat__head strong { font-weight: 400; }
+:root[data-style='minimal-plus'] .chat__head span { color: var(--muted); opacity: 1; }
+:root[data-style='minimal-plus'] .msg { font-weight: 300; }
+:root[data-style='minimal-plus'] .msg--bot { border: 0; background: color-mix(in srgb, var(--text) 6%, transparent); }
+:root[data-style='minimal-plus'] .msg--user { background: transparent; color: var(--text); border: 1px solid var(--hair); }
+:root[data-style='minimal-plus'] .msg--err { border: 1px dashed var(--muted); color: var(--text); }
+:root[data-style='minimal-plus'] .chat__chips button { border: 1px solid var(--hair); color: var(--text); font-weight: 400; }
+:root[data-style='minimal-plus'] .chat__form { border-top: 1px solid var(--hair); }
+:root[data-style='minimal-plus'] .chat__form input:focus { box-shadow: inset 0 -1px 0 var(--text); }
+:root[data-style='minimal-plus'] .chat__form button { background: transparent; color: var(--text); font-weight: 400; text-decoration: underline; text-underline-offset: 4px; }
+
+/* ---------------------------------------------------------------- phones and reduced motion: one static column (no snap, no hairline animation, no fades) */
+@media (max-width: 720px) {
+  .mn-rail { display: none; }
+  .mn-density { top: 70px; right: 12px; }
+  .mn-density button { padding: 6px 9px; }
+  .mn-key { display: none; }
+  .mn-where { left: 16px; bottom: 26px; }
+  .mn-d-summary .mn-where, .mn-d-full .mn-where { display: none; }
+  .mn-ch { min-height: 70svh; padding: 96px 0 40px; }
+  .mn-ch > .wrap, .mn-act { padding: 0 20px; }
+  .mn-ch .mn-s1 { font-size: clamp(1.9rem, 9vw, 2.6rem); }
+  .mn-ch .mn-s2 { font-size: clamp(1.6rem, 7.4vw, 2.2rem); }
+  .mn-ch .mn-s3 { font-size: clamp(1.4rem, 6.4vw, 1.9rem); }
+  .mn-d-full .mn-ch > .wrap { padding: 0 20px; }
+  .mn-ch.mn-open > .wrap { padding: 0 20px 14vh; max-height: 90svh; }
+  .mn-ch .edu__item, .mn-ch .contact__links li { grid-template-columns: 1fr; }
+  .mn-ch .edu__item p:last-child { grid-column: 1; }
+  .mn-ch .project summary { grid-template-columns: 1fr; }
+  .mn-ch .project__meta { grid-column: 1; grid-row: 2; text-align: left; }
+  .mn-ch .skills { gap: 6px 32px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mn-fade > .wrap, .mn-fade > .mn-act { opacity: 1; transition: none; }
+  .mn-rail ol::after, .mn-rail a::before, .mn-rail__name, .mn-scrim, .mn-more, .mn-density button, .mn-where, .mn-ch .contact__links a, .mn-ch .project summary { transition: none; }
+  .mn-ch.mn-open > .wrap { animation: none; }
+  .mn-ch .contact__links a { background-size: 100% 1px; }
+}

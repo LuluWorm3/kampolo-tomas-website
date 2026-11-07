@@ -1,0 +1,30 @@
+{
+ "home": {
+  "name": "cover star, canvas drawn, flight readout",
+  "js": "(function(){var c=document.querySelector('.px-canvas'); var d=c.getContext('2d').getImageData(0,0,c.width,c.height).data; var n=0; for(var i=3;i<d.length;i+=4*97) if(d[i]>20) n++; var r=document.querySelector('.cs-readout'); return n>40 && c.getAttribute('aria-hidden')==='true' && document.getElementById('home').classList.contains('cs-k-star') && (innerWidth<=1000 || /TRAVELLED/.test(r.textContent)) && document.querySelectorAll('.cs-orrery__planet').length>=7;})()"
+ },
+ "about": {
+  "name": "home world beside a slate column",
+  "js": "document.getElementById('about').classList.contains('cs-k-world') && (innerWidth<=720 || document.querySelector('#about .about__lead').getBoundingClientRect().right < innerWidth*0.62) && getComputedStyle(document.querySelector('#about .about__lead'),'::before').content!=='none'"
+ },
+ "experience": {
+  "name": "ringed planet, slates on the far side",
+  "js": "document.getElementById('experience').classList.contains('cs-k-ringed') && (innerWidth<=720 || document.querySelector('#experience .job').getBoundingClientRect().left > innerWidth*0.3) && document.querySelectorAll('#experience .job').length>0"
+ },
+ "projects": {
+  "name": "one planet per project, each keyed by colour",
+  "js": "(function(){var ps=document.querySelectorAll('#projects .project'); var pl=document.querySelectorAll('#projects .project.cs-planet'); var cols=new Set([].map.call(pl,function(p){return getComputedStyle(p).borderLeftColor;})); return ps.length>0 && pl.length===ps.length && cols.size===Math.min(8,ps.length);})()"
+ },
+ "skills": {
+  "name": "a constellation through every skill group",
+  "js": "document.querySelectorAll('#skills .skills__group').length>0 && document.querySelectorAll('#skills .cs-const').length===document.querySelectorAll('#skills .skills__group').length"
+ },
+ "education": {
+  "name": "one moon per entry, slates on the far side",
+  "js": "(function(){var it=document.querySelectorAll('#education .edu__item'); return it.length>0 && document.querySelectorAll('#education .edu__item.cs-moon').length===it.length && document.getElementById('education').classList.contains('cs-k-moons') && (innerWidth<=720 || it[0].getBoundingClientRect().left > innerWidth*0.3);})()"
+ },
+ "contact": {
+  "name": "pulsar signal, links on a slate",
+  "js": "document.getElementById('contact').classList.contains('cs-k-pulsar') && getComputedStyle(document.querySelector('#contact .contact__links span'),'::before').content!=='none' && getComputedStyle(document.querySelector('#contact .contact__links')).position==='relative'"
+ }
+}

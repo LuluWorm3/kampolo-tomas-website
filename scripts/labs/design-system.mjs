@@ -1,0 +1,271 @@
+// Lab: design system gallery. The page reads the site's real tokens from /styles.css in the visitor's browser (labs/design-system.js).
+// Nothing here repeats a token value: the HTML only holds the structure, the script fills in what the browser resolved.
+export default {
+  slug: 'design-system',
+  field: 'design',
+  title: 'Design system gallery',
+  blurb: 'The tokens, type, components and accessibility checks behind this site, read live from its own stylesheet, with a contrast checker and a way to re-skin the same markup.',
+  personas: ['design'],
+  page() {
+        const demo = `
+      <noscript><p class="lab-note">This gallery reads the live stylesheet with JavaScript. The text around it still explains what it does.</p></noscript>
+
+      <section class="ds-block" aria-labelledby="ds-tokens-h">
+        <h3 id="ds-tokens-h">1 · Tokens, read live</h3>
+        <p class="lab-note">Each value is read from the page with <code>getComputedStyle(document.documentElement)</code> every time the theme or style changes. Nothing on this page holds a copy of it.</p>
+        <div class="lab-controls ds-theme">
+          <button type="button" id="ds-theme-btn">Switch to dark theme</button>
+          <span class="lab-note" id="ds-theme-note" role="status"></span>
+        </div>
+        <dl class="facts ds-facts" id="ds-facts">
+          <div><dt id="ds-fact-colours">–</dt><dd>colour tokens defined at <code>:root</code></dd></div>
+          <div><dt id="ds-fact-other">–</dt><dd>layout and type tokens</dd></div>
+          <div><dt id="ds-fact-pass">–</dt><dd>of the pairings below pass their WCAG AA target in the current theme</dd></div>
+        </dl>
+        <ul class="ds-swatches" id="ds-swatches" aria-label="Colour tokens"></ul>
+        <ul class="ds-other" id="ds-other" aria-label="Layout and type tokens"></ul>
+        <h4 class="ds-sub">Contrast of each pairing the site uses</h4>
+        <table class="lab-table ds-table" id="ds-pairs">
+          <caption>Text and border colours against the backgrounds they sit on. Targets: 4.5 to 1 for small text, 3 to 1 for borders that mark a control. The hairline is a decorative divider and is not graded.</caption>
+          <thead><tr><th scope="col">Sample</th><th scope="col">Used for</th><th scope="col">Pair</th><th scope="col" class="num">Ratio</th><th scope="col">Result</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </section>
+
+      <section class="ds-block" aria-labelledby="ds-type-h">
+        <h3 id="ds-type-h">2 · Type and spacing</h3>
+        <p class="lab-note">Each line uses the class the site itself uses. The grey line under it is the computed result, so a change in <code>styles.css</code> shows up here.</p>
+        <ul class="ds-type" id="ds-type">
+          <li data-probe=".hero__title"><div class="hero__title">Hero</div><p class="ds-spec lab-note"></p></li>
+          <li data-probe=".about__lead"><div class="about__lead">A lead sentence sets the tone of a section.</div><p class="ds-spec lab-note"></p></li>
+          <li data-probe=".section__title"><div class="section__title">Section title</div><p class="ds-spec lab-note"></p></li>
+          <li data-probe=".ds-body-sample"><div class="ds-body-sample">Body text inherits its size, line height and colour from the page, so a paragraph reads the same wherever it appears.</div><p class="ds-spec lab-note"></p></li>
+          <li data-probe=".section__num"><div><span class="section__num">01 · Label</span></div><p class="ds-spec lab-note"></p></li>
+        </ul>
+        <h4 class="ds-sub">Spacing: one gap, one maximum width, twelve columns</h4>
+        <div class="ds-space">
+          <div class="ds-gapbar" id="ds-gapbar" aria-hidden="true"></div>
+          <div class="ds-maxbar" aria-hidden="true"></div>
+          <p class="lab-note" id="ds-gap-note"></p>
+        </div>
+        <div class="ds-grid grid" aria-hidden="true"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span><span>11</span><span>12</span></div>
+        <div class="ds-grid grid" aria-hidden="true"><span class="col-3">col-3</span><span class="col-9">col-9</span></div>
+        <div class="ds-grid grid" aria-hidden="true"><span class="col-4">col-4</span><span class="col-4">col-4</span><span class="col-4">col-4</span></div>
+        <div class="ds-grid grid" aria-hidden="true"><span class="col-6">col-6</span><span class="col-6">col-6</span></div>
+        <p class="lab-note">The grid is the site's <code>.grid</code> with its <code>.col-*</code> classes. Below 960px wide every column takes the full row, which is why these rows stack on a phone.</p>
+      </section>
+
+      <section class="ds-block" aria-labelledby="ds-comp-h">
+        <h3 id="ds-comp-h">3 · Components, with the site's own classes</h3>
+        <p class="lab-note">Sample text is placeholder content about each component. The grey line is read from the rendered element; a value that equals a token is tagged with its name, which shows the component takes its colour from the token and not from a copy.</p>
+
+        <div class="ds-comp" data-probe=".btn--solid" data-props="background-color,color,border-top-color,border-top-width,padding-left,font-size">
+          <p class="ds-name">Buttons · <code>.btn .btn--solid</code> and <code>.btn--line</code></p>
+          <div class="ds-comp__sample ds-row">
+            <button type="button" class="btn btn--solid" data-demo-action>Solid button</button>
+            <button type="button" class="btn btn--line" data-demo-action>Line button</button>
+            <a class="btn btn--line" href="#ds-comp-h">Link styled as a button</a>
+          </div>
+          <p class="ds-spec lab-note"></p>
+          <p class="lab-note" id="ds-btn-note" role="status">Hover or tab to a button to see its states. These two do nothing when pressed.</p>
+        </div>
+
+        <div class="ds-comp" data-probe=".tags li" data-props="border-top-color,border-top-width,font-size,padding-left">
+          <p class="ds-name">Tags · <code>.tags li</code></p>
+          <div class="ds-comp__sample"><ul class="tags ds-tags"><li>Sample tag</li><li>Another tag</li><li>Third tag</li></ul></div>
+          <p class="ds-spec lab-note"></p>
+        </div>
+
+        <div class="ds-comp" data-probe=".facts dt" data-props="color,font-size,font-weight,line-height">
+          <p class="ds-name">Facts · <code>.facts</code></p>
+          <div class="ds-comp__sample"><dl class="facts"><div><dt>3</dt><dd>A figure in the accent colour, with a muted caption.</dd></div><div><dt>12</dt><dd>The caption wraps and keeps its column.</dd></div></dl></div>
+          <p class="ds-spec lab-note"></p>
+        </div>
+
+        <div class="ds-comp" data-probe=".ds-real .job" data-props="border-top-color,border-top-width,padding-top">
+          <p class="ds-name">Entry · <code>.job</code></p>
+          <div class="ds-comp__sample ds-real">
+            <article class="job">
+              <div class="job__head"><h3>Sample role title</h3><span class="job__date">Sample dates</span></div>
+              <div class="job__org">Sample organisation</div>
+              <ul>
+                <li>The heading and date share a row and wrap when there is no room.</li>
+                <li>Each bullet gets a hairline above it and an accent dash before it.</li>
+              </ul>
+            </article>
+          </div>
+          <p class="ds-spec lab-note"></p>
+        </div>
+
+        <div class="ds-comp" data-probe=".ds-real .project summary" data-props="padding-top,column-gap">
+          <p class="ds-name">Disclosure · <code>details.project</code> (native, keyboard operable)</p>
+          <div class="ds-comp__sample ds-real">
+            <div class="projects ds-projects">
+              <details class="project">
+                <summary>
+                  <span class="project__idx">01</span>
+                  <span class="project__name">Sample project</span>
+                  <span class="project__meta">Placeholder · Year</span>
+                  <span class="project__plus" aria-hidden="true"></span>
+                </summary>
+                <div class="project__body">
+                  <p>This is a real <code>&lt;details&gt;</code> element. Enter or Space on the heading opens it, with no script involved.</p>
+                  <ul><li>The plus turns into a minus using only CSS.</li><li>The body is hidden from tab order and from screen readers until it is open.</li></ul>
+                  <ul class="tags"><li>details</li><li>summary</li><li>CSS only</li></ul>
+                </div>
+              </details>
+            </div>
+          </div>
+          <p class="ds-spec lab-note"></p>
+        </div>
+
+        <div class="ds-comp" data-probe=".skill-list li" data-props="border-bottom-color,font-size,padding-top">
+          <p class="ds-name">Level bars · <code>.skill-list li[data-level]</code></p>
+          <div class="ds-comp__sample">
+            <ul class="skill-list ds-levels">
+              <li data-level="1">Sample entry, level 1<span class="ds-vh"> of 5</span></li>
+              <li data-level="3">Sample entry, level 3<span class="ds-vh"> of 5</span></li>
+              <li data-level="5">Sample entry, level 5<span class="ds-vh"> of 5</span></li>
+            </ul>
+          </div>
+          <p class="ds-spec lab-note"></p>
+        </div>
+
+        <div class="ds-comp" data-probe=".ds-real .form input" data-props="border-top-color,border-top-width,padding-left,font-size,color">
+          <p class="ds-name">Form fields · <code>.form .form__field</code></p>
+          <div class="ds-comp__sample ds-real">
+            <form class="form" id="ds-form" aria-describedby="ds-form-note">
+              <div class="grid">
+                <label class="form__field col-6"><span>Sample name</span><input type="text" name="sample-name" required autocomplete="off" /></label>
+                <label class="form__field col-6"><span>Sample email</span><input type="email" name="sample-email" required autocomplete="off" /></label>
+              </div>
+              <label class="form__field"><span>Sample message</span><textarea name="sample-message" rows="3" required></textarea></label>
+              <button type="submit" class="btn btn--solid">Check the form</button>
+            </form>
+            <p class="lab-note" id="ds-form-note" role="status">Fields use the browser's own validation. Nothing is sent: this form has no action and makes no request.</p>
+          </div>
+          <p class="ds-spec lab-note"></p>
+        </div>
+      </section>
+
+      <section class="ds-block" aria-labelledby="ds-a11y-h">
+        <h3 id="ds-a11y-h">4 · Accessibility checks that run on this page</h3>
+
+        <div class="ds-comp" aria-labelledby="ds-cc-h">
+          <h4 class="ds-sub" id="ds-cc-h">Contrast checker</h4>
+          <p class="lab-note">Enter any two CSS colours: hex, <code>rgb()</code>, <code>hsl()</code>, <code>oklch()</code>, a colour name, or a token such as <code>var(--accent)</code>. A colour with transparency is blended onto the one behind it, and the background onto the page background.</p>
+          <div class="form ds-cc">
+            <label class="form__field ds-cc__field"><span>Text colour</span><span class="ds-cc__row"><input type="text" id="ds-fg" value="var(--accent)" autocomplete="off" spellcheck="false" /><i class="ds-cc__chip" id="ds-fg-chip" aria-hidden="true"></i></span></label>
+            <label class="form__field ds-cc__field"><span>Background colour</span><span class="ds-cc__row"><input type="text" id="ds-bg" value="var(--bg)" autocomplete="off" spellcheck="false" /><i class="ds-cc__chip" id="ds-bg-chip" aria-hidden="true"></i></span></label>
+            <div class="lab-controls ds-cc__tools">
+              <button type="button" id="ds-swap">Swap colours</button>
+              <label class="ds-cc__pick"><span>Load a pairing from the tokens</span><select id="ds-pick"></select></label>
+            </div>
+          </div>
+          <div class="ds-cc__preview" id="ds-preview">
+            <span class="ds-cc__small">Small text, 16px: the quick brown fox.</span>
+            <span class="ds-cc__large">Large text, 24px</span>
+          </div>
+          <p class="ds-cc__summary" id="ds-cc-summary" role="status" aria-atomic="true"></p>
+          <table class="lab-table ds-table ds-cc__table" id="ds-cc-table">
+            <caption class="ds-vh">Result against each WCAG 2 level</caption>
+            <thead><tr><th scope="col">Level</th><th scope="col">Needs</th><th scope="col">Result</th></tr></thead>
+            <tbody></tbody>
+          </table>
+          <p class="lab-note">Large text is 24px or bigger, or 18.66px or bigger in bold. Ratios follow the WCAG 2 formula and are not rounded up across a threshold: 4.499 shows as 4.49, not 4.5.</p>
+        </div>
+
+        <div class="ds-comp" aria-labelledby="ds-kb-h">
+          <h4 class="ds-sub" id="ds-kb-h">Keyboard walk-through</h4>
+          <p class="lab-note">Press Tab to move through these controls. The ring is the site's global <code>:focus-visible</code> rule. The line under them reads the style of whatever has focus, and measures it against the page background.</p>
+          <div class="ds-row ds-focus" id="ds-focus">
+            <a class="btn btn--solid" href="#ds-kb-h">A link</a>
+            <button type="button" class="btn btn--line">A button</button>
+            <div class="form ds-focus__form"><label class="form__field"><span>A form field</span><input type="text" autocomplete="off" /></label></div>
+            <details class="ds-focus__details"><summary>A disclosure</summary><p class="lab-note">Open by keyboard with Enter or Space.</p></details>
+          </div>
+          <p class="lab-note" id="ds-focus-read" role="status">Focus a control above to read its indicator.</p>
+          <div class="lab-controls">
+            <button type="button" id="ds-order-btn" aria-expanded="false" aria-controls="ds-order">List the tab order of this page</button>
+          </div>
+          <div id="ds-order-wrap" hidden>
+            <p class="lab-note" id="ds-order-count"></p>
+            <ol class="ds-order" id="ds-order" aria-label="Tab order of this page, built from the DOM"></ol>
+          </div>
+        </div>
+
+        <div class="ds-comp ds-rm" id="ds-rm" aria-labelledby="ds-rm-h">
+          <h4 class="ds-sub" id="ds-rm-h">Reduced motion</h4>
+          <p class="lab-note">The stylesheet asks <code>matchMedia('(prefers-reduced-motion: reduce)')</code>. The result below is that live value. Nothing on this page moves until you press the button, and when reduced motion is on the move becomes an instant change.</p>
+          <dl class="ds-rm__read">
+            <div><dt>prefers-reduced-motion</dt><dd id="ds-rm-media">–</dd></div>
+            <div><dt>html scroll-behavior</dt><dd id="ds-rm-scroll">–</dd></div>
+            <div><dt>This demo's transition-duration</dt><dd id="ds-rm-dur">–</dd></div>
+          </dl>
+          <div class="ds-rm__track" aria-hidden="true"><i class="ds-rm__dot" id="ds-rm-dot"></i></div>
+          <div class="lab-controls">
+            <button type="button" id="ds-rm-play">Move the dot</button>
+            <button type="button" id="ds-rm-calm" aria-pressed="false">Preview the calm variant</button>
+          </div>
+          <p class="lab-note" id="ds-rm-note" role="status"></p>
+        </div>
+      </section>
+
+      <section class="ds-block" aria-labelledby="ds-skin-h">
+        <h3 id="ds-skin-h">5 · Same content, eight systems</h3>
+        <p>The site is written once. Its look comes from the tokens above plus a few rules per style, switched by one attribute on the <code>html</code> element. The Style lab on the Design view offers eight styles (Swiss, Editorial, Brutalist, Renaissance, Bauhaus, Minimalism, Neural and Cosmos), and each also opens as a full redesign, the + editions.</p>
+        <p><a class="inline-link" href="/design/#design-lab">Open the Style lab on the Design view</a> to re-skin the whole site and open the + editions.</p>
+        <p class="lab-note">Below, the same attribute is set on this page only, so everything here, the gallery included, changes with the same markup. The choice is not saved: reload, or use Reset.</p>
+        <div class="lab-controls ds-skins" id="ds-skins" role="group" aria-label="Style for this page">
+          <button type="button" data-skin="swiss" aria-pressed="true">Swiss</button>
+          <button type="button" data-skin="editorial" aria-pressed="false">Editorial</button>
+          <button type="button" data-skin="brutalist" aria-pressed="false">Brutalist</button>
+          <button type="button" data-skin="renaissance" aria-pressed="false">Renaissance</button>
+          <button type="button" data-skin="bauhaus" aria-pressed="false">Bauhaus</button>
+          <button type="button" data-skin="minimal" aria-pressed="false">Minimalism</button>
+          <button type="button" data-skin="neural" aria-pressed="false">Neural</button>
+          <button type="button" data-skin="cosmos" aria-pressed="false">Cosmos</button>
+          <button type="button" id="ds-skin-reset">Reset</button>
+        </div>
+        <p class="lab-note" id="ds-skin-note" role="status">Style: Swiss, the default.</p>
+        <div class="lab-controls">
+          <button type="button" id="ds-audit-btn">Check the pairings in all eight styles</button>
+        </div>
+        <table class="lab-table ds-table ds-audit" id="ds-audit" hidden>
+          <caption>Light and dark are fixed by each style, so each style is checked once, as it renders. The page is returned to its current style afterwards.</caption>
+          <thead><tr><th scope="col">Style</th><th scope="col" class="num">Pairings passing</th><th scope="col">Below target</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </section>`;
+
+    return {
+      situation: ('A user interface that grows without shared rules drifts. The same grey turns up in four slightly different values, buttons differ from page to page, and dark mode gets bolted on late and breaks. The usual fix is plain: define colour, type and spacing once as tokens, build every component only from those tokens, and test the result. This site is built that way, from one stylesheet, and this lab reads that stylesheet live in your browser instead of showing a picture of it.'),
+      look: [
+        'Switch the theme and watch the contrast table recompute. Every number comes from the colours the browser has just resolved.',
+        'Type two colours into the contrast checker. Try <code>#777</code> on <code>#fff</code> (it fails the small-text target) and then <code>#767676</code> on <code>#fff</code> (it just passes).',
+        'In the last section, apply a different style to this page, then run the check across all eight and see which pairings fall below their target.',
+      ],
+      demo,
+      built: `
+        <p>Dependency-free HTML, CSS and one vanilla script, <code>labs/design-system.js</code>. The page loads the site's own <code>/styles.css</code> and reuses its classes, so what you see is the site's real components and not a lookalike.</p>
+        <ul class="ds-points">
+          <li><b>Tokens:</b> found by scanning <code>document.styleSheets</code> for custom properties declared on <code>:root</code>, then read with <code>getComputedStyle</code>, so adding a token to <code>styles.css</code> adds a swatch here. Colours are resolved to sRGB through a 1 by 1 canvas, which accepts any CSS colour syntax.</li>
+          <li><b>Contrast:</b> the WCAG 2 relative luminance formula. The pass flag uses the exact ratio, never the rounded one.</li>
+          <li><b>Component specs:</b> each grey line under a component is read from the rendered element, and a value equal to a token is labelled with the token's name.</li>
+          <li><b>Styles:</b> the plain styles in <code>styles.css</code> are applied by setting <code>data-style</code> on <code>html</code>. This page sets it only in memory. The + editions are separate scripts and are not loaded here.</li>
+          <li><b>Content security policy:</b> no inline styles or scripts. Dynamic colours are set through the CSS object model.</li>
+        </ul>
+        <p>Trade-off: the gallery needs a few small rules of its own (<code>labs/design-system.css</code>) for the swatch grid and the checker layout, plus one override so the page's generic heading style does not change the sample <code>.job</code> heading.</p>`,
+      limits: `
+        <ul>
+          <li><b>Real:</b> the tokens, classes, computed values and every contrast ratio. They come from this site's stylesheet in your browser at the moment you view it.</li>
+          <li><b>Sample:</b> the words inside the components are placeholders written for this page. They describe the component and say nothing about any job, project or skill.</li>
+          <li><b>Scope:</b> the checker implements WCAG 2.x contrast only. It does not check colour-vision differences, text spacing, target size or screen-reader output, and a passing ratio does not make a page accessible.</li>
+          <li><b>Not tested yet:</b> Firefox, Safari and real phones. Screen readers have not been run against this page.</li>
+          <li>The skill-level bars in the real <code>.skill-list</code> are drawn with CSS only, so their level is not available to a screen reader unless text is added, as the sample here does with hidden text.</li>
+        </ul>`,
+      scripts: ['/labs/design-system.js'],
+      css: ['/labs/design-system.css'],
+    };
+  },
+};

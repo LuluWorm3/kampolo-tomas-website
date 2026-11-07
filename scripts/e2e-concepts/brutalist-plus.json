@@ -1,0 +1,30 @@
+{
+ "home": {
+  "name": "cover window plus a terminal window after it",
+  "js": "!!document.querySelector('#home > .br-bar .br-b--close') && !!document.querySelector('#home + .br-term-win .br-term__in') && getComputedStyle(document.getElementById('home')).boxShadow !== 'none'"
+ },
+ "about": {
+  "name": "properties box",
+  "js": "getComputedStyle(document.querySelector('#about .facts'),'::before').content.indexOf('PROPERTIES')>-1 && !!document.querySelector('#about > .br-bar')"
+ },
+ "experience": {
+  "name": "git log --graph lanes",
+  "js": "document.querySelectorAll('#experience .br-gl__node').length===document.querySelectorAll('#experience .job').length && document.querySelector('#experience .br-gl__rail').textContent.indexOf('| |')>-1 && document.querySelector('#experience .br-cmd').textContent.indexOf('git log --graph')>-1"
+ },
+ "projects": {
+  "name": "directory listing",
+  "js": "document.querySelector('#projects .br-cmd').textContent.indexOf('ls -l projects/')>-1 && document.querySelector('#projects .br-cmd__out').textContent==='total '+document.querySelectorAll('#projects details.project').length && getComputedStyle(document.querySelector('#projects .project__idx'),'::before').content.indexOf('drwx')>-1"
+ },
+ "skills": {
+  "name": "process monitor with ASCII bars from data-level",
+  "js": "[].every.call(document.querySelectorAll('#skills .skill-list li'),function(li){var m=li.querySelector('.br-meter'),lv=+li.dataset.level;return !!m && m.textContent.indexOf('['+'#'.repeat(lv)+'-'.repeat(5-lv)+'] '+lv+'/5')===0;}) && document.querySelector('#skills .br-cmd').textContent.indexOf('top')>-1"
+ },
+ "education": {
+  "name": "lettered drive cells",
+  "js": "getComputedStyle(document.querySelector('#education .edu')).display==='grid' && getComputedStyle(document.querySelector('#education .edu__date'),'::before').counterIncrement.indexOf('br-d')>-1 && getComputedStyle(document.querySelector('#education .edu__date')).backgroundColor===getComputedStyle(document.querySelector('#education .edu__item')).borderTopColor"
+ },
+ "contact": {
+  "name": "shell prompt with the real links",
+  "js": "getComputedStyle(document.querySelector('#contact .contact__links li span'),'::before').content.indexOf('open')>-1 && document.querySelectorAll('#contact .contact__links a[href]').length>=3 && getComputedStyle(document.querySelector('#contact .contact__links')).backgroundColor!==getComputedStyle(document.getElementById('contact')).backgroundColor"
+ }
+}

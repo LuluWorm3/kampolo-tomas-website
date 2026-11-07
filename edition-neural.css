@@ -1,0 +1,286 @@
+/* Neural Edition: "Console", an AI lab's site (the + beside Neural in the Style lab; style name neural-plus). Lazy-loaded by editions-plus.js on first
+   entry, so visitors who never open it download nothing. Script: edition-neural.js. The shared controls (.px-hud, .px-btn), the Pause rule and the chat
+   launcher/title glyph rules live in editions-plus.css; this file holds the light and dark tokens, the console look and the section layouts.
+   Prefix rule: every class and attribute the script adds starts with nn-. Animations run only under prefers-reduced-motion: no-preference. */
+
+/* ---------- Tokens ---------- */
+:root[data-style='neural-plus'] {
+  --font: 'Inter', system-ui, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif;
+  --nn-mono: ui-monospace, 'Cascadia Mono', 'SFMono-Regular', Consolas, monospace;
+  --bg: #f3f5fb; --bg-alt: transparent; --text: #0f1330; --muted: #434a78; --rule: #3b2fe0; --hair: rgba(59, 47, 224, 0.22);
+  --accent: #3b2fe0; --on-accent: #ffffff; --glass: rgba(255, 255, 255, 0.78); --glow: rgba(59, 47, 224, 0.16);
+  --nn-panel: rgba(255, 255, 255, 0.82); --nn-bar: rgba(59, 47, 224, 0.07); --nn-line: #6b72a8; --nn-teal: #00695b; --nn-key: #5a3fd1; --nn-warm: #b45309;
+  --px-a: #3b2fe0; --px-b: #00917c; --px-c: #8a5cff; --px-ink: #0f1330; --px-dark: 0; color-scheme: light;
+}
+:root[data-style='neural-plus'][data-theme='dark'] {
+  --bg: #060811; --text: #e6e9ff; --muted: #a0a8de; --rule: #8f84ff; --hair: rgba(143, 132, 255, 0.28);
+  --accent: #8f84ff; --on-accent: #060811; --glass: rgba(14, 17, 42, 0.66); --glow: rgba(143, 132, 255, 0.26);
+  --nn-panel: rgba(9, 11, 28, 0.8); --nn-bar: rgba(143, 132, 255, 0.1); --nn-line: #7a82c4; --nn-teal: #36e0c4; --nn-key: #b69cff; --nn-warm: #ffb454;
+  --px-a: #8f84ff; --px-b: #36e0c4; --px-c: #b69cff; --px-ink: #e6e9ff; --px-dark: 1; color-scheme: dark;
+}
+@media (prefers-color-scheme: dark) {
+  :root[data-style='neural-plus']:not([data-theme]) {
+    --bg: #060811; --text: #e6e9ff; --muted: #a0a8de; --rule: #8f84ff; --hair: rgba(143, 132, 255, 0.28);
+    --accent: #8f84ff; --on-accent: #060811; --glass: rgba(14, 17, 42, 0.66); --glow: rgba(143, 132, 255, 0.26);
+    --nn-panel: rgba(9, 11, 28, 0.8); --nn-bar: rgba(143, 132, 255, 0.1); --nn-line: #7a82c4; --nn-teal: #36e0c4; --nn-key: #b69cff; --nn-warm: #ffb454;
+    --px-a: #8f84ff; --px-b: #36e0c4; --px-c: #b69cff; --px-ink: #e6e9ff; --px-dark: 1; color-scheme: dark;
+  }
+}
+
+/* ---------- Page ---------- */
+:root[data-style='neural-plus'] body { background: var(--bg); }
+:root[data-style='neural-plus'] :is(.nav, .hero, main, .footer) { position: relative; z-index: 1; }
+:root[data-style='neural-plus'] .nav { position: sticky; z-index: 50; border-bottom: 1px solid var(--hair); }
+/* The glass sits on a pseudo-element: backdrop-filter on the bar itself would make it the containing block of the fixed phone menu, which then widens the page. */
+:root[data-style='neural-plus'] .nav::before { content: ''; position: absolute; inset: 0; z-index: -1; background: var(--glass); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); pointer-events: none; }
+:root[data-style='neural-plus'] :is(.hero, .section, .section--alt) { background: transparent; border-color: var(--hair); }
+:root[data-style='neural-plus'] h1, :root[data-style='neural-plus'] h2, :root[data-style='neural-plus'] h3 { letter-spacing: -0.035em; }
+:root[data-style='neural-plus'] .btn { border-radius: 8px; font-family: var(--nn-mono); font-size: 0.86rem; letter-spacing: 0; }
+:root[data-style='neural-plus'] .btn--solid { background: linear-gradient(100deg, var(--px-a), color-mix(in srgb, var(--px-b) 78%, #000)); border-color: transparent; color: var(--on-accent); }
+:root[data-style='neural-plus'] .section { padding: 72px 0; }
+:root[data-style='neural-plus'] .section__num { font-family: var(--nn-mono); font-size: 0.78rem; letter-spacing: 0.08em; color: var(--nn-teal); }
+:root[data-style='neural-plus'] .section__title { font-size: clamp(1.8rem, 3.4vw, 2.7rem); }
+:root[data-style='neural-plus'] .section__intro { color: var(--muted); }
+/* A tag on every chapter: its layer number, its kind and how many nodes the page lists in it. The one in view lights up. */
+:root[data-style='neural-plus'] .nn-layer { margin: 0 0 14px; font: 0.7rem/1.4 var(--nn-mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+:root[data-style='neural-plus'] .nn-layer b { display: inline-block; padding: 2px 7px; margin-right: 2px; border: 1px solid var(--hair); border-radius: 5px; color: var(--muted); font-weight: 600; }
+:root[data-style='neural-plus'] [data-nn-on='1'] .nn-layer b { border-color: var(--nn-teal); color: var(--nn-teal); background: var(--nn-bar); }
+/* The graph passes behind paragraphs, so loose text gets a soft halo in the page colour. */
+:root[data-style='neural-plus'] :is(.hero__meta, .hero__status, .section__intro, .about__lead, .about__cols p, .contact__lead, .nn-layer, .section__title, .job__date, .job__org, .job h3, .job li) { text-shadow: 0 0 8px var(--bg), 0 0 3px var(--bg), 0 0 14px var(--bg); }
+
+/* ---------- Home: a prompt box ---------- */
+:root[data-style='neural-plus'] .hero { padding: 64px 0 80px; border-bottom: 1px solid var(--hair); }
+:root[data-style='neural-plus'] .hero__meta { font-family: var(--nn-mono); color: var(--nn-teal); letter-spacing: 0.04em; margin-bottom: 18px; }
+:root[data-style='neural-plus'] .hero__title {
+  font-size: clamp(3.2rem, 9.5vw, 7.6rem); line-height: 0.95; letter-spacing: -0.05em; font-weight: 800; margin-bottom: 34px;
+  background: linear-gradient(100deg, var(--text) 10%, var(--px-a) 55%, var(--px-b) 95%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent;
+}
+:root[data-style='neural-plus'] .hero__row { display: block; max-width: 58rem; border: 1px solid var(--hair); border-radius: 12px; background: var(--nn-panel); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); box-shadow: 0 0 40px var(--glow); overflow: hidden; }
+:root[data-style='neural-plus'] .nn-bar { display: flex; align-items: center; gap: 12px; padding: 9px 14px; border-bottom: 1px solid var(--hair); background: var(--nn-bar); font: 0.7rem/1.2 var(--nn-mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+:root[data-style='neural-plus'] .nn-bar__dots { width: 46px; height: 10px; background: radial-gradient(circle at 5px 5px, var(--nn-line) 0 4px, transparent 4.5px), radial-gradient(circle at 23px 5px, var(--nn-line) 0 4px, transparent 4.5px), radial-gradient(circle at 41px 5px, var(--nn-line) 0 4px, transparent 4.5px); opacity: 0.7; }
+:root[data-style='neural-plus'] .nn-bar__s { margin-left: auto; color: var(--nn-teal); }
+:root[data-style='neural-plus'] .nn-bar__s::before { content: ''; display: inline-block; width: 7px; height: 7px; margin-right: 7px; border-radius: 50%; background: var(--nn-teal); }
+:root[data-style='neural-plus'] :is(.hero__role, .nn-prompt__q) { white-space: pre-line; margin: 0; padding: 20px 24px 0; border: 0; font-size: clamp(1.2rem, 2.5vw, 1.75rem); font-weight: 700; letter-spacing: -0.03em; line-height: 1.15; color: var(--text); }
+:root[data-style='neural-plus'] :is(.hero__role::before, .nn-prompt__q .nn-prompt__ghost::before, .nn-prompt__q .nn-prompt__live::before) { content: '>'; margin-right: 0.6em; font-family: var(--nn-mono); font-weight: 500; color: var(--nn-teal); }
+:root[data-style='neural-plus'] .hero__row > .col-7 { padding: 10px 24px 24px; }
+:root[data-style='neural-plus'] :is(.hero__lead, .nn-prompt__a) { margin: 0; font-size: 1.06rem; line-height: 1.55; color: var(--text); max-width: 40em; }
+/* The typed copy: a hidden full-text twin holds the height so nothing jumps while the live layer fills in. */
+:root[data-style='neural-plus'] .nn-prompt { display: none; }
+:root[data-style='neural-plus'] [data-nn-live='1'] .nn-prompt { display: block; padding-bottom: 14px; }
+:root[data-style='neural-plus'] .nn-prompt__a { padding: 10px 24px 0; }
+:root[data-style='neural-plus'] .nn-prompt__q, :root[data-style='neural-plus'] .nn-prompt__a { position: relative; }
+:root[data-style='neural-plus'] .nn-prompt__ghost { display: block; visibility: hidden; }
+:root[data-style='neural-plus'] .nn-prompt__live { position: absolute; left: 24px; right: 24px; }
+:root[data-style='neural-plus'] .nn-prompt__q .nn-prompt__live { top: 20px; }
+:root[data-style='neural-plus'] .nn-prompt__a .nn-prompt__live { top: 10px; }
+:root[data-style='neural-plus'] [data-nn-live='1'] :is(.hero__role, .hero__lead) { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; border: 0; }
+:root[data-style='neural-plus'] .nn-caret { display: inline-block; width: 0.55em; height: 1em; margin-left: 2px; vertical-align: -0.12em; background: var(--nn-teal); }
+:root[data-style='neural-plus'] .hero__status { margin-top: 18px; font-family: var(--nn-mono); font-size: 0.8rem; }
+:root[data-style='neural-plus'] .hero__actions { margin-top: 20px; }
+
+/* ---------- The layers rail ---------- */
+:root[data-style='neural-plus'] .nn-rail { position: fixed; right: 8px; top: 50%; transform: translateY(-50%); z-index: 55; }
+:root[data-style='neural-plus'] .nn-rail ol { list-style: none; margin: 0; padding: 6px; display: grid; gap: 1px; border: 1px solid var(--hair); border-radius: 10px; background: var(--glass); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); }
+:root[data-style='neural-plus'] .nn-rail a { display: grid; grid-template-columns: auto 1fr; align-items: center; column-gap: 8px; row-gap: 3px; padding: 5px 6px; border-radius: 6px; font: 0.66rem/1 var(--nn-mono); letter-spacing: 0.04em; color: var(--muted); text-decoration: none; }
+:root[data-style='neural-plus'] .nn-rail a:hover { color: var(--text); background: var(--nn-bar); }
+:root[data-style='neural-plus'] .nn-rail a[aria-current] { color: var(--text); }
+:root[data-style='neural-plus'] .nn-rail a[aria-current] .nn-rail__n { color: var(--nn-teal); }
+:root[data-style='neural-plus'] .nn-rail__t { display: none; text-transform: lowercase; }
+:root[data-style='neural-plus'] .nn-rail__bar { grid-column: 1 / -1; display: block; width: 100%; min-width: 36px; height: 3px; border-radius: 2px; background: var(--hair); overflow: hidden; }
+:root[data-style='neural-plus'] .nn-rail__bar b { display: block; width: 100%; height: 100%; background: linear-gradient(90deg, var(--px-a), var(--px-b)); transform-origin: left center; transform: scaleX(var(--nn-a, 0)); }
+:root[data-style='neural-plus'] .nn-rail:hover .nn-rail__t, :root[data-style='neural-plus'] .nn-rail:focus-within .nn-rail__t { display: inline; }
+:root[data-style='neural-plus'] .nn-rail:hover ol, :root[data-style='neural-plus'] .nn-rail:focus-within ol { background: var(--nn-panel); }
+@media (min-width: 1600px) {
+  :root[data-style='neural-plus'] .nn-rail { right: 16px; }
+  :root[data-style='neural-plus'] .nn-rail__t { display: inline; }
+}
+/* Between a phone and a wide desktop the rail lies along the bottom edge, left of the chat button, bars only. */
+@media (max-width: 1359px) {
+  :root[data-style='neural-plus'] .nn-rail { right: auto; left: 12px; top: auto; bottom: 12px; transform: none; max-width: calc(100vw - 250px); }
+  :root[data-style='neural-plus'] .nn-rail ol { display: flex; gap: 2px; padding: 4px; }
+  :root[data-style='neural-plus'] .nn-rail a { grid-template-columns: 1fr; padding: 4px 5px; }
+  :root[data-style='neural-plus'] .nn-rail__bar { min-width: 26px; }
+  :root[data-style='neural-plus'] .nn-rail:hover .nn-rail__t, :root[data-style='neural-plus'] .nn-rail:focus-within .nn-rail__t { display: none; }
+}
+@media (max-width: 720px) {
+  :root[data-style='neural-plus'] .nn-rail { display: none; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  :root[data-style='neural-plus'] .nn-rail__bar b { transition: transform 0.25s ease-out; }
+}
+
+/* ---------- About: input panel and parameters ---------- */
+:root[data-style='neural-plus'] .about__lead { font-size: clamp(1.4rem, 3vw, 2.15rem); }
+:root[data-style='neural-plus'] .about__cols { margin-top: 8px; row-gap: 20px; }
+:root[data-style='neural-plus'] .about__cols > .col-6:first-child { border-left: 2px solid var(--nn-teal); padding-left: 20px; }
+:root[data-style='neural-plus'] .facts { display: grid; align-content: start; border: 1px solid var(--hair); border-radius: 12px; background: var(--nn-panel); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); box-shadow: 0 0 28px var(--glow); overflow: hidden; }
+:root[data-style='neural-plus'] .facts::before { content: 'parameters'; display: block; padding: 9px 16px; border-bottom: 1px solid var(--hair); background: var(--nn-bar); font: 0.7rem/1.2 var(--nn-mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+:root[data-style='neural-plus'] .facts div { border-top: 0; border-bottom: 1px solid var(--hair); padding: 14px 16px; }
+:root[data-style='neural-plus'] .facts div:last-child { border-bottom: 0; }
+:root[data-style='neural-plus'] .facts dt { background: linear-gradient(100deg, var(--px-a), var(--px-b)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent; }
+
+/* ---------- Experience: a node timeline ---------- */
+:root[data-style='neural-plus'] .jobs { position: relative; }
+:root[data-style='neural-plus'] .jobs::before { content: ''; position: absolute; left: calc(9.5rem + 20px); top: 10px; bottom: 10px; width: 2px; margin-left: -1px; background: linear-gradient(var(--px-a), var(--px-b)); opacity: 0.55; }
+:root[data-style='neural-plus'] .job { position: relative; display: grid; grid-template-columns: 9.5rem 1fr; column-gap: 40px; align-content: start; margin: 0; padding: 0 0 40px; border: 0; background: none; box-shadow: none; -webkit-backdrop-filter: none; backdrop-filter: none; }
+:root[data-style='neural-plus'] .job:last-child { padding-bottom: 0; }
+:root[data-style='neural-plus'] .job__head { display: contents; }
+:root[data-style='neural-plus'] .job__date { grid-column: 1; grid-row: 1 / span 3; text-align: right; padding-top: 6px; font: 600 0.78rem/1.35 var(--nn-mono); letter-spacing: 0.03em; color: var(--nn-teal); white-space: normal; }
+:root[data-style='neural-plus'] .job h3 { grid-column: 2; font-size: clamp(1.15rem, 2vw, 1.5rem); }
+:root[data-style='neural-plus'] .job__org { grid-column: 2; margin: 4px 0 12px; color: var(--muted); font-family: var(--nn-mono); font-size: 0.84rem; }
+:root[data-style='neural-plus'] .job ul { grid-column: 2; }
+:root[data-style='neural-plus'] .job li { color: var(--text); }
+:root[data-style='neural-plus'] .job::before { content: ''; position: absolute; left: calc(9.5rem + 20px); top: 7px; width: 14px; height: 14px; margin-left: -7px; border-radius: 50%; background: var(--bg); border: 3px solid var(--px-a); box-shadow: 0 0 14px var(--px-a); z-index: 1; }
+:root[data-style='neural-plus'] .nn-now::before { background: var(--nn-teal); border-color: var(--nn-teal); box-shadow: 0 0 16px var(--px-b); }
+@media (prefers-reduced-motion: no-preference) {
+  :root[data-style='neural-plus'] .nn-now::before { animation: nn-ring 2.4s ease-out infinite; }
+  :root[data-style='neural-plus'] .jobs::after { content: ''; position: absolute; left: calc(9.5rem + 20px); top: 10px; width: 6px; height: 6px; margin-left: -3px; border-radius: 50%; background: var(--px-b); box-shadow: 0 0 10px var(--px-b); animation: nn-run 5.5s linear infinite; }
+}
+@keyframes nn-ring { 0% { box-shadow: 0 0 0 0 var(--px-b); } 100% { box-shadow: 0 0 0 14px transparent; } }
+@keyframes nn-run { 0% { top: 10px; opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { top: calc(100% - 16px); opacity: 0; } }
+
+/* ---------- Projects: model cards ---------- */
+:root[data-style='neural-plus'] .projects { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: start; margin-top: 40px; }
+:root[data-style='neural-plus'] .project { position: relative; margin: 0; padding: 0; border: 1px solid var(--hair); border-radius: 12px; background: var(--nn-panel); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); box-shadow: 0 0 24px var(--glow); overflow: hidden; }
+:root[data-style='neural-plus'] .project:last-child { border-bottom: 1px solid var(--hair); }
+:root[data-style='neural-plus'] .project[open] { grid-column: 1 / -1; border-color: var(--nn-teal); }
+:root[data-style='neural-plus'] .project summary { grid-template-columns: auto 1fr auto; grid-template-areas: 'idx name plus' 'meta meta meta'; gap: 12px 12px; align-items: center; padding: 16px 18px 0; }
+:root[data-style='neural-plus'] .project__idx { grid-area: idx; padding: 2px 8px; border: 1px solid var(--hair); border-radius: 5px; background: var(--nn-bar); font-family: var(--nn-mono); font-size: 0.74rem; color: var(--nn-teal); }
+:root[data-style='neural-plus'] .project__idx::before { content: 'm'; }
+:root[data-style='neural-plus'] .project__name { grid-area: name; font-size: clamp(1.05rem, 1.7vw, 1.3rem); }
+:root[data-style='neural-plus'] .project__plus { grid-area: plus; }
+:root[data-style='neural-plus'] .project__meta { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; }
+:root[data-style='neural-plus'] .nn-meta { grid-area: meta; display: grid; margin: 4px -18px 0; border-top: 1px solid var(--hair); }
+:root[data-style='neural-plus'] .nn-meta__row { display: grid; grid-template-columns: 5.5rem 1fr; gap: 12px; padding: 8px 18px; border-bottom: 1px solid var(--hair); font: 0.78rem/1.3 var(--nn-mono); }
+:root[data-style='neural-plus'] .nn-meta__row:last-child { border-bottom: 0; }
+:root[data-style='neural-plus'] .nn-meta__k { color: var(--muted); text-transform: lowercase; }
+:root[data-style='neural-plus'] .nn-meta__v { color: var(--text); }
+:root[data-style='neural-plus'] .nn-meta__v--live { color: var(--nn-teal); }
+:root[data-style='neural-plus'] .nn-meta__v--live::before { content: ''; display: inline-block; width: 7px; height: 7px; margin-right: 7px; border-radius: 50%; background: var(--nn-teal); }
+:root[data-style='neural-plus'] .project__body { max-width: none; padding: 18px 18px 22px; border-top: 1px solid var(--hair); }
+:root[data-style='neural-plus'] .project__body p { color: var(--text); }
+:root[data-style='neural-plus'] .project__body ul:not(.tags) li { color: var(--text); }
+:root[data-style='neural-plus'] .tags li { border-radius: 6px; border-color: var(--hair); font-family: var(--nn-mono); font-weight: 500; }
+:root[data-style='neural-plus'] .project summary:hover .project__name { color: var(--nn-teal); }
+
+/* ---------- Skills: an embedding map, or the plain list ---------- */
+:root[data-style='neural-plus'] .nn-skills { margin-top: 36px; }
+:root[data-style='neural-plus'] .nn-skills__tools { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 20px; margin-bottom: 14px; }
+:root[data-style='neural-plus'] .nn-skills__axes { margin: 0; font: 0.72rem/1.3 var(--nn-mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+:root[data-style='neural-plus'] .nn-view { display: inline-flex; border: 1px solid var(--nn-line); border-radius: 8px; overflow: hidden; background: var(--nn-panel); }
+:root[data-style='neural-plus'] .nn-view button { padding: 7px 16px; border: 0; background: transparent; color: var(--text); font: 600 0.8rem var(--nn-mono); cursor: pointer; }
+:root[data-style='neural-plus'] .nn-view button + button { border-left: 1px solid var(--nn-line); }
+:root[data-style='neural-plus'] .nn-view button[aria-pressed='true'] { background: var(--accent); color: var(--on-accent); }
+:root[data-style='neural-plus'] .nn-view button:not([aria-pressed='true']):hover { background: var(--nn-bar); }
+:root[data-style='neural-plus'] .nn-map { margin: 0; border: 1px solid var(--hair); border-radius: 12px; background: var(--nn-panel); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); box-shadow: 0 0 28px var(--glow); overflow: hidden; }
+:root[data-style='neural-plus'] .nn-map__svg { display: block; width: 100%; height: auto; }
+:root[data-style='neural-plus'] .nn-map__cap { padding: 10px 16px 12px; border-top: 1px solid var(--hair); color: var(--muted); font-size: 0.82rem; }
+:root[data-style='neural-plus'] .nn-g0 { --c: var(--px-a); } :root[data-style='neural-plus'] .nn-g1 { --c: var(--px-b); } :root[data-style='neural-plus'] .nn-g2 { --c: var(--nn-warm); }
+:root[data-style='neural-plus'] .nn-grid { stroke: var(--hair); stroke-width: 1; opacity: 0.55; }
+:root[data-style='neural-plus'] .nn-halo { fill: var(--c); fill-opacity: 0.07; stroke: var(--c); stroke-opacity: 0.45; stroke-dasharray: 3 6; }
+:root[data-style='neural-plus'] .nn-cname { fill: var(--muted); font: 600 12px var(--nn-mono); letter-spacing: 0.1em; text-transform: uppercase; }
+:root[data-style='neural-plus'] .nn-edge { stroke: var(--c); stroke-opacity: 0.4; stroke-width: 1; }
+:root[data-style='neural-plus'] .nn-pt { outline: none; cursor: default; }
+:root[data-style='neural-plus'] .nn-pt__dot { fill: var(--c); fill-opacity: 0.88; stroke: var(--bg); stroke-width: 1.5; }
+:root[data-style='neural-plus'] .nn-pt__ring { fill: none; stroke: var(--text); stroke-width: 1.6; opacity: 0; }
+:root[data-style='neural-plus'] .nn-pt:hover .nn-pt__ring, :root[data-style='neural-plus'] .nn-pt:focus .nn-pt__ring, :root[data-style='neural-plus'] .nn-pt.nn-hot .nn-pt__ring { opacity: 1; }
+:root[data-style='neural-plus'] .nn-lbl { fill: var(--text); stroke: var(--bg); stroke-width: 4px; paint-order: stroke; stroke-linejoin: round; font: 600 13px var(--nn-mono); opacity: 0; pointer-events: none; }
+:root[data-style='neural-plus'] .nn-lbl.nn-show { opacity: 1; }
+:root[data-style='neural-plus'] [data-nn-view='map'] .skills { display: none; }
+:root[data-style='neural-plus'] [data-nn-view='list'] .nn-map { display: none; }
+:root[data-style='neural-plus'] [data-nn-view='list'] .skills { margin-top: 0; }
+:root[data-style='neural-plus'] .skills__group { padding: 0 20px 14px; border: 1px solid var(--hair); border-radius: 12px; background: var(--nn-panel); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); box-shadow: 0 0 24px var(--glow); }
+:root[data-style='neural-plus'] .skills__group h3 { margin: 0 -20px 6px; padding: 10px 20px; border-bottom: 1px solid var(--hair); background: var(--nn-bar); font-family: var(--nn-mono); letter-spacing: 0.08em; }
+:root[data-style='neural-plus'] .skill-list li { padding: 9px 0; font-size: 0.93rem; }
+:root[data-style='neural-plus'] .skill-list li::after { border-radius: 2px; }
+
+/* ---------- Education: checkpoints joined by wires ---------- */
+:root[data-style='neural-plus'] .edu { display: grid; grid-template-columns: 1fr 1fr; gap: 24px 28px; position: relative; }
+:root[data-style='neural-plus'] .edu__item { position: relative; display: block; margin: 0; padding: 26px 24px 22px; border: 1px solid var(--hair); border-radius: 12px; background: var(--nn-panel); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); box-shadow: 0 0 24px var(--glow); }
+:root[data-style='neural-plus'] .edu__item::before { content: ''; position: absolute; left: 22px; top: -8px; width: 14px; height: 14px; border-radius: 50%; border: 3px solid var(--px-b); background: var(--bg); box-shadow: 0 0 12px var(--px-b); }
+:root[data-style='neural-plus'] .edu__item:nth-child(odd)::after { content: ''; position: absolute; left: 100%; top: -1px; width: 28px; height: 2px; background: linear-gradient(90deg, var(--px-a), var(--px-b)); opacity: 0.6; }
+:root[data-style='neural-plus'] .edu__date { margin: 0 0 8px; font: 600 0.78rem var(--nn-mono); letter-spacing: 0.04em; color: var(--nn-teal); }
+:root[data-style='neural-plus'] .edu__date::before { content: none; }
+:root[data-style='neural-plus'] .edu__item p:last-child { color: var(--muted); }
+
+/* ---------- Contact: an API request and its response ---------- */
+:root[data-style='neural-plus'] .nn-req { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px; margin-top: 8px; padding: 12px 22px; border: 1px solid var(--hair); border-bottom: 0; border-radius: 12px 12px 0 0; background: var(--nn-bar); font: 0.82rem/1.3 var(--nn-mono); color: var(--muted); }
+:root[data-style='neural-plus'] .nn-req__verb { padding: 2px 8px; border-radius: 5px; background: var(--nn-teal); color: var(--bg); font-weight: 700; }
+:root[data-style='neural-plus'] .nn-req__path { color: var(--text); font-weight: 600; }
+:root[data-style='neural-plus'] .nn-req__ok { margin-left: auto; color: var(--nn-teal); font-weight: 600; }
+:root[data-style='neural-plus'] .contact__links { display: block; margin: 0; padding: 14px 22px 18px; border: 1px solid var(--hair); border-radius: 0 0 12px 12px; background: var(--nn-panel); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); box-shadow: 0 0 28px var(--glow); font-family: var(--nn-mono); color: var(--muted); }
+:root[data-style='neural-plus'] .contact__links::before { content: '{'; display: block; }
+:root[data-style='neural-plus'] .contact__links::after { content: '}'; display: block; }
+:root[data-style='neural-plus'] .contact__links li { display: block; margin: 0; padding: 5px 0 5px 1.6rem; border: 0; background: none; box-shadow: none; -webkit-backdrop-filter: none; backdrop-filter: none; font-size: clamp(0.92rem, 1.6vw, 1.12rem); overflow-wrap: anywhere; }
+:root[data-style='neural-plus'] .contact__links li:not(:last-child)::after { content: ','; }
+:root[data-style='neural-plus'] .contact__links li span { display: inline; font-size: inherit; letter-spacing: 0; text-transform: lowercase; color: var(--nn-key); }
+:root[data-style='neural-plus'] .contact__links li span::before { content: '"'; }
+:root[data-style='neural-plus'] .contact__links li span::after { content: '": '; }
+:root[data-style='neural-plus'] .contact__links a { font-size: inherit; font-weight: 600; letter-spacing: 0; color: var(--nn-teal); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+:root[data-style='neural-plus'] .contact__links a::before, :root[data-style='neural-plus'] .contact__links a::after { content: '"'; }
+:root[data-style='neural-plus'] .contact__links a:hover { color: var(--accent); }
+:root[data-style='neural-plus'] .form { max-width: none; margin-top: 36px; padding: 22px; border: 1px solid var(--hair); border-radius: 12px; background: var(--nn-panel); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); }
+:root[data-style='neural-plus'] .form input, :root[data-style='neural-plus'] .form textarea { border: 1px solid var(--nn-line); border-radius: 8px; background: var(--bg); font-family: var(--nn-mono); font-size: 0.92rem; }
+:root[data-style='neural-plus'] .form input:focus, :root[data-style='neural-plus'] .form textarea:focus { border-color: var(--accent); outline: 2px solid var(--accent); outline-offset: 1px; }
+:root[data-style='neural-plus'] .form__field span { font-family: var(--nn-mono); }
+
+/* ---------- Focus ---------- */
+:root[data-style='neural-plus'] :is(a, button, summary, [tabindex]):focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+:root[data-style='neural-plus'] .nn-pt:focus-visible { outline: none; }
+
+/* ---------- Chat: a console panel ---------- */
+:root[data-style='neural-plus'] .chat { background: color-mix(in srgb, var(--bg) 94%, transparent); -webkit-backdrop-filter: blur(18px); backdrop-filter: blur(18px); border: 1px solid var(--nn-line); border-radius: 10px; overflow: hidden; box-shadow: 0 0 36px var(--glow), 0 24px 60px rgba(0, 0, 0, 0.35); font-family: var(--nn-mono); }
+:root[data-style='neural-plus'] .chat__head { background: var(--nn-bar); color: var(--text); border-bottom: 1px solid var(--hair); padding: 12px 14px; }
+:root[data-style='neural-plus'] .chat__head strong { font-size: 0.86rem; letter-spacing: 0; }
+:root[data-style='neural-plus'] .chat__head span { text-transform: uppercase; letter-spacing: 0.06em; color: var(--nn-teal); opacity: 1; }
+:root[data-style='neural-plus'] .chat__head button:hover { color: var(--accent); }
+:root[data-style='neural-plus'] .msg { border-radius: 6px; font-size: 0.83rem; }
+:root[data-style='neural-plus'] .msg--bot { background: var(--nn-panel); border: 1px solid var(--hair); border-left: 3px solid var(--nn-teal); }
+:root[data-style='neural-plus'] .msg--user { border-radius: 6px; }
+:root[data-style='neural-plus'] .msg--err { border-radius: 6px; }
+:root[data-style='neural-plus'] .chat__chips button { border: 1px solid var(--nn-line); border-radius: 6px; color: var(--text); background: transparent; font-family: var(--nn-mono); }
+:root[data-style='neural-plus'] .chat__chips button:hover { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+:root[data-style='neural-plus'] .chat__form { border-top: 1px solid var(--hair); align-items: center; padding: 6px; }
+:root[data-style='neural-plus'] .chat__form::before { content: '>'; padding: 0 2px 0 10px; color: var(--nn-teal); font-weight: 700; }
+:root[data-style='neural-plus'] .chat__form input { background: transparent; border-radius: 6px; font-family: var(--nn-mono); }
+:root[data-style='neural-plus'] .chat__form input:focus { box-shadow: inset 0 0 0 1px var(--accent); }
+:root[data-style='neural-plus'] .chat__form button { height: 38px; padding: 0 16px; border-radius: 6px; background: var(--accent); color: var(--on-accent); font-family: var(--nn-mono); }
+:root[data-style='neural-plus'] .chat__match textarea { background: transparent; border: 1px solid var(--nn-line); border-radius: 6px; font-family: var(--nn-mono); }
+:root[data-style='neural-plus'] .chat__match button { border-radius: 6px; background: var(--accent); color: var(--on-accent); }
+:root[data-style='neural-plus'] .chat-fab { border-radius: 10px; border-color: transparent; box-shadow: 0 0 28px var(--glow); font-family: var(--nn-mono); }
+:root[data-style='neural-plus'] .chat-fab span { border-radius: 6px; }
+/* The violet-to-teal gradient on the user message, the send button and the launcher */
+:root[data-style='neural-plus'] .msg--user, :root[data-style='neural-plus'] .chat__form button, :root[data-style='neural-plus'] .chat-fab { background: linear-gradient(100deg, var(--px-a), color-mix(in srgb, var(--px-b) 78%, #000)); color: var(--on-accent); }
+:root[data-style='neural-plus'] .chat-fab span { color: var(--px-a); }
+:root[data-style='neural-plus'] { --glyph: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2024%2024%27%3E%3Ccircle%20cx%3D%277%27%20cy%3D%2712%27%20r%3D%274%27%2F%3E%3Ccircle%20cx%3D%2719%27%20cy%3D%275.5%27%20r%3D%272.6%27%2F%3E%3Ccircle%20cx%3D%2719%27%20cy%3D%2718.5%27%20r%3D%272.6%27%2F%3E%3Cpath%20d%3D%27M10%2010L17.5%206.5M10%2014l7.5%203.5%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.8%27%20fill%3D%27none%27%2F%3E%3C%2Fsvg%3E"); }
+:root[data-style='neural-plus'] .chat__head strong::before { color: var(--nn-teal); }
+
+/* ---------- Caret blink (motion only) ---------- */
+@media (prefers-reduced-motion: no-preference) {
+  :root[data-style='neural-plus'] .nn-caret { animation: nn-blink 1s steps(2, start) infinite; }
+}
+@keyframes nn-blink { to { visibility: hidden; } }
+
+/* ---------- Narrow screens: one column, nothing pinned ---------- */
+@media (max-width: 960px) {
+  :root[data-style='neural-plus'] .projects, :root[data-style='neural-plus'] .edu { grid-template-columns: 1fr; }
+  :root[data-style='neural-plus'] .edu__item:nth-child(odd)::after { content: none; }
+}
+@media (max-width: 720px) {
+  :root[data-style='neural-plus'] .hero { padding: 40px 0 56px; }
+  :root[data-style='neural-plus'] .hero__row > .col-7 { padding: 8px 16px 18px; }
+  :root[data-style='neural-plus'] .hero__role { padding: 16px 16px 0; }
+  :root[data-style='neural-plus'] .section { padding: 52px 0; }
+  :root[data-style='neural-plus'] .about__cols > .col-6:first-child { padding-left: 14px; }
+  :root[data-style='neural-plus'] .jobs::before { left: 11px; }
+  :root[data-style='neural-plus'] .job { grid-template-columns: 1fr; padding-left: 36px; padding-bottom: 32px; }
+  :root[data-style='neural-plus'] .job::before { left: 11px; }
+  :root[data-style='neural-plus'] .job__date { grid-column: 1; grid-row: auto; text-align: left; padding-top: 0; margin-bottom: 4px; }
+  :root[data-style='neural-plus'] .job h3, :root[data-style='neural-plus'] .job__org, :root[data-style='neural-plus'] .job ul { grid-column: 1; }
+  :root[data-style='neural-plus'] .nn-meta__row { grid-template-columns: 4.5rem 1fr; }
+  :root[data-style='neural-plus'] .contact__links { padding: 12px 14px 16px; }
+  :root[data-style='neural-plus'] .contact__links li { padding-left: 1rem; }
+  :root[data-style='neural-plus'] .nn-req { padding: 10px 14px; }
+  :root[data-style='neural-plus'] .nn-req__h { display: none; }
+  :root[data-style='neural-plus'] .form { padding: 16px; }
+}

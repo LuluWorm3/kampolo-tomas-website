@@ -14,3 +14,12 @@ Thumbs.db
 
 # Logs
 *.log
+
+# Secrets
+.env
+.env.*
+
+# Private source images (never published)
+scripts/private/
+.local-store/
+netlify/functions/node_modules/

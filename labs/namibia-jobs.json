@@ -1,0 +1,481 @@
+{
+ "national": "Namibia",
+ "regions": [
+  "//Kharas",
+  "Erongo",
+  "Hardap",
+  "Kavango East",
+  "Kavango West",
+  "Khomas",
+  "Kunene",
+  "Ohangwena",
+  "Omaheke",
+  "Omusati",
+  "Oshana",
+  "Oshikoto",
+  "Otjozondjupa",
+  "Zambezi"
+ ],
+ "series": [
+  {
+   "id": "2023-overall-19th-icls",
+   "year": 2023,
+   "measure": "overall",
+   "definition": "19th-icls",
+   "publication": "2023 Population and Housing Census Labour Force Report (Namibia Statistics Agency)",
+   "table": "Table 5.1",
+   "page_printed": "39",
+   "page_pdf": "51",
+   "source_url": "https://nsa.org.na/wp-content/uploads/2025/01/2023-PHC-Labourforce-Report.pdf",
+   "retrieved": "2026-11-07",
+   "values": {
+    "Namibia": {
+     "value": 36.9,
+     "unemployed": 320442,
+     "labour_force": 867247
+    },
+    "//Kharas": {
+     "value": 29.7,
+     "unemployed": 14246,
+     "labour_force": 48044
+    },
+    "Erongo": {
+     "value": 32,
+     "unemployed": 34107,
+     "labour_force": 106518
+    },
+    "Hardap": {
+     "value": 32.1,
+     "unemployed": 11484,
+     "labour_force": 35748
+    },
+    "Kavango East": {
+     "value": 52,
+     "unemployed": 21761,
+     "labour_force": 41860
+    },
+    "Kavango West": {
+     "value": 52.8,
+     "unemployed": 8750,
+     "labour_force": 16571
+    },
+    "Khomas": {
+     "value": 34.4,
+     "unemployed": 77423,
+     "labour_force": 225223
+    },
+    "Kunene": {
+     "value": 36.6,
+     "unemployed": 8919,
+     "labour_force": 24343
+    },
+    "Ohangwena": {
+     "value": 47.2,
+     "unemployed": 26002,
+     "labour_force": 55052
+    },
+    "Omaheke": {
+     "value": 30.3,
+     "unemployed": 9531,
+     "labour_force": 31436
+    },
+    "Omusati": {
+     "value": 41.1,
+     "unemployed": 22532,
+     "labour_force": 54829
+    },
+    "Oshana": {
+     "value": 41.6,
+     "unemployed": 27207,
+     "labour_force": 65430
+    },
+    "Oshikoto": {
+     "value": 38.4,
+     "unemployed": 20808,
+     "labour_force": 54166
+    },
+    "Otjozondjupa": {
+     "value": 31.2,
+     "unemployed": 23931,
+     "labour_force": 76583
+    },
+    "Zambezi": {
+     "value": 43.7,
+     "unemployed": 13741,
+     "labour_force": 31444
+    }
+   },
+   "source": "Population and Housing Census 2023",
+   "measure_text": "all people 15 and over",
+   "definition_text": "19th ICLS (searched for work and available)"
+  },
+  {
+   "id": "2023-youth-19th-icls",
+   "year": 2023,
+   "measure": "youth",
+   "definition": "19th-icls",
+   "publication": "2023 Population and Housing Census Labour Force Report (Namibia Statistics Agency)",
+   "table": "Table 6.7",
+   "page_printed": "51",
+   "page_pdf": "63",
+   "source_url": "https://nsa.org.na/wp-content/uploads/2025/01/2023-PHC-Labourforce-Report.pdf",
+   "retrieved": "2026-11-07",
+   "values": {
+    "Namibia": {
+     "value": 44.4,
+     "unemployed": 202144,
+     "labour_force": 455030
+    },
+    "//Kharas": {
+     "value": 37.9,
+     "unemployed": 9136,
+     "labour_force": 24133
+    },
+    "Erongo": {
+     "value": 40.7,
+     "unemployed": 21431,
+     "labour_force": 52640
+    },
+    "Hardap": {
+     "value": 40.2,
+     "unemployed": 7030,
+     "labour_force": 17486
+    },
+    "Kavango East": {
+     "value": 60.4,
+     "unemployed": 13955,
+     "labour_force": 23114
+    },
+    "Kavango West": {
+     "value": 58.1,
+     "unemployed": 5547,
+     "labour_force": 9548
+    },
+    "Khomas": {
+     "value": 44.2,
+     "unemployed": 50958,
+     "labour_force": 115196
+    },
+    "Kunene": {
+     "value": 43.2,
+     "unemployed": 5605,
+     "labour_force": 12965
+    },
+    "Ohangwena": {
+     "value": 51.2,
+     "unemployed": 15977,
+     "labour_force": 31178
+    },
+    "Omaheke": {
+     "value": 35.5,
+     "unemployed": 6097,
+     "labour_force": 17153
+    },
+    "Omusati": {
+     "value": 43.5,
+     "unemployed": 12981,
+     "labour_force": 29848
+    },
+    "Oshana": {
+     "value": 49.4,
+     "unemployed": 16974,
+     "labour_force": 34374
+    },
+    "Oshikoto": {
+     "value": 42.3,
+     "unemployed": 12806,
+     "labour_force": 30264
+    },
+    "Otjozondjupa": {
+     "value": 37.6,
+     "unemployed": 15096,
+     "labour_force": 40174
+    },
+    "Zambezi": {
+     "value": 50.4,
+     "unemployed": 8551,
+     "labour_force": 16957
+    }
+   },
+   "source": "Population and Housing Census 2023",
+   "measure_text": "youth aged 15 to 34",
+   "definition_text": "19th ICLS (searched for work and available)"
+  },
+  {
+   "id": "2018-overall-broad",
+   "year": 2018,
+   "measure": "overall",
+   "definition": "broad",
+   "publication": "The Namibia Labour Force Survey 2018 Report (Namibia Statistics Agency)",
+   "table": "Table 5.3",
+   "page_printed": "63",
+   "page_pdf": "63",
+   "source_url": "https://microdata.nsanamibia.com/index.php/catalog/3/download/25",
+   "retrieved": "2026-11-07",
+   "values": {
+    "Namibia": {
+     "value": 33.4,
+     "unemployed": 364411,
+     "labour_force": 1090153
+    },
+    "//Kharas": {
+     "value": 32.2,
+     "unemployed": 14685,
+     "labour_force": 45585
+    },
+    "Erongo": {
+     "value": 29.7,
+     "unemployed": 33474,
+     "labour_force": 112800
+    },
+    "Hardap": {
+     "value": 34.5,
+     "unemployed": 14060,
+     "labour_force": 40769
+    },
+    "Kavango East": {
+     "value": 48.2,
+     "unemployed": 27382,
+     "labour_force": 56799
+    },
+    "Kavango West": {
+     "value": 33,
+     "unemployed": 10396,
+     "labour_force": 31459
+    },
+    "Khomas": {
+     "value": 31.5,
+     "unemployed": 75936,
+     "labour_force": 241321
+    },
+    "Kunene": {
+     "value": 41.6,
+     "unemployed": 17703,
+     "labour_force": 42549
+    },
+    "Ohangwena": {
+     "value": 33.3,
+     "unemployed": 30652,
+     "labour_force": 91955
+    },
+    "Omaheke": {
+     "value": 38.7,
+     "unemployed": 12995,
+     "labour_force": 33571
+    },
+    "Omusati": {
+     "value": 24,
+     "unemployed": 24411,
+     "labour_force": 101786
+    },
+    "Oshana": {
+     "value": 32.5,
+     "unemployed": 29535,
+     "labour_force": 90757
+    },
+    "Oshikoto": {
+     "value": 36.2,
+     "unemployed": 30641,
+     "labour_force": 84719
+    },
+    "Otjozondjupa": {
+     "value": 36.1,
+     "unemployed": 26865,
+     "labour_force": 74481
+    },
+    "Zambezi": {
+     "value": 37.68,
+     "unemployed": 15675,
+     "labour_force": 41600
+    }
+   },
+   "source": "Labour Force Survey 2018",
+   "measure_text": "all people 15 and over",
+   "definition_text": "broad (searching for work not required)"
+  },
+  {
+   "id": "2018-overall-strict",
+   "year": 2018,
+   "measure": "overall",
+   "definition": "strict",
+   "publication": "The Namibia Labour Force Survey 2018 Report (Namibia Statistics Agency)",
+   "table": "Table A.2",
+   "page_printed": "75",
+   "page_pdf": "75",
+   "source_url": "https://microdata.nsanamibia.com/index.php/catalog/3/download/25",
+   "retrieved": "2026-11-07",
+   "values": {
+    "Namibia": {
+     "value": 19.8,
+     "unemployed": 179292,
+     "labour_force": 905034
+    },
+    "//Kharas": {
+     "value": 22.1,
+     "unemployed": 8790,
+     "labour_force": 39689
+    },
+    "Erongo": {
+     "value": 23.4,
+     "unemployed": 24187,
+     "labour_force": 103513
+    },
+    "Hardap": {
+     "value": 18.9,
+     "unemployed": 6219,
+     "labour_force": 32927
+    },
+    "Kavango East": {
+     "value": 26.1,
+     "unemployed": 10385,
+     "labour_force": 39803
+    },
+    "Kavango West": {
+     "value": 13.9,
+     "unemployed": 3399,
+     "labour_force": 24463
+    },
+    "Khomas": {
+     "value": 24.2,
+     "unemployed": 52731,
+     "labour_force": 218115
+    },
+    "Kunene": {
+     "value": 21,
+     "unemployed": 6617,
+     "labour_force": 31463
+    },
+    "Ohangwena": {
+     "value": 12.2,
+     "unemployed": 8510,
+     "labour_force": 69813
+    },
+    "Omaheke": {
+     "value": 22.8,
+     "unemployed": 6091,
+     "labour_force": 26666
+    },
+    "Omusati": {
+     "value": 8.9,
+     "unemployed": 7530,
+     "labour_force": 84905
+    },
+    "Oshana": {
+     "value": 17.3,
+     "unemployed": 12852,
+     "labour_force": 74075
+    },
+    "Oshikoto": {
+     "value": 18.8,
+     "unemployed": 12528,
+     "labour_force": 66606
+    },
+    "Otjozondjupa": {
+     "value": 21.6,
+     "unemployed": 13152,
+     "labour_force": 60768
+    },
+    "Zambezi": {
+     "value": 19.5,
+     "unemployed": 6299,
+     "labour_force": 32224
+    }
+   },
+   "source": "Labour Force Survey 2018",
+   "measure_text": "all people 15 and over",
+   "definition_text": "strict (searched for work and available)"
+  },
+  {
+   "id": "2018-youth-broad",
+   "year": 2018,
+   "measure": "youth",
+   "definition": "broad",
+   "publication": "The Namibia Labour Force Survey 2018 Report (Namibia Statistics Agency)",
+   "table": "Table 6.5",
+   "page_printed": "71",
+   "page_pdf": "71",
+   "source_url": "https://microdata.nsanamibia.com/index.php/catalog/3/download/25",
+   "retrieved": "2026-11-07",
+   "values": {
+    "Namibia": {
+     "value": 46.1,
+     "unemployed": 265770,
+     "labour_force": 576623
+    },
+    "//Kharas": {
+     "value": 44.7,
+     "unemployed": 10117,
+     "labour_force": 22645
+    },
+    "Erongo": {
+     "value": 36.8,
+     "unemployed": 20800,
+     "labour_force": 56571
+    },
+    "Hardap": {
+     "value": 41.9,
+     "unemployed": 8820,
+     "labour_force": 21060
+    },
+    "Kavango East": {
+     "value": 62.5,
+     "unemployed": 21362,
+     "labour_force": 34163
+    },
+    "Kavango West": {
+     "value": 46.8,
+     "unemployed": 8035,
+     "labour_force": 17173
+    },
+    "Khomas": {
+     "value": 43,
+     "unemployed": 57524,
+     "labour_force": 133710
+    },
+    "Kunene": {
+     "value": 53,
+     "unemployed": 12777,
+     "labour_force": 24105
+    },
+    "Ohangwena": {
+     "value": 51.4,
+     "unemployed": 24561,
+     "labour_force": 47788
+    },
+    "Omaheke": {
+     "value": 46.6,
+     "unemployed": 8012,
+     "labour_force": 17188
+    },
+    "Omusati": {
+     "value": 39.7,
+     "unemployed": 19187,
+     "labour_force": 48270
+    },
+    "Oshana": {
+     "value": 47.2,
+     "unemployed": 22294,
+     "labour_force": 47262
+    },
+    "Oshikoto": {
+     "value": 50.2,
+     "unemployed": 22439,
+     "labour_force": 44738
+    },
+    "Otjozondjupa": {
+     "value": 47.4,
+     "unemployed": 19007,
+     "labour_force": 40126
+    },
+    "Zambezi": {
+     "value": 49.7,
+     "unemployed": 10835,
+     "labour_force": 21824
+    }
+   },
+   "source": "Labour Force Survey 2018",
+   "measure_text": "youth aged 15 to 34",
+   "definition_text": "broad (searching for work not required)"
+  }
+ ]
+}

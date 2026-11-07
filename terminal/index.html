@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Terminal. — Kampolo Tomas</title>
+  <meta name="description" content="The site as a command line. Type help." />
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="canonical" href="https://kampolo-tomas-website.netlify.app/terminal/" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <meta property="og:title" content="Terminal. — Kampolo Tomas" />
+  <meta property="og:description" content="The site as a command line. Type help." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://kampolo-tomas-website.netlify.app/terminal/" />
+  <meta property="og:image" content="https://kampolo-tomas-website.netlify.app/og-image.png" />
+  <script>
+    (function () {
+      try { var t = localStorage.getItem('theme'); if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t); } catch (e) {}
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/styles.css" />
+
+</head>
+<body>
+  <div class="wrap doc__top">
+    <a href="/">← Back to the site</a>
+    <span class="section__num">Hidden page</span>
+  </div>
+
+  <header class="doc__hero">
+    <div class="wrap">
+      <p class="section__num">Hidden page</p>
+      <h1>Terminal.</h1>
+      <p>The site as a command line. Type help.</p>
+    </div>
+  </header>
+  <main>
+    <div class="wrap term-wrap">
+      <div class="term" id="term" role="application" aria-label="Terminal">
+        <div id="termOut" aria-live="polite"></div>
+        <form id="termForm" class="term__form"><label for="termIn" class="term__prompt">kampolo@portfolio:~$</label><input id="termIn" autocomplete="off" spellcheck="false" autocapitalize="off" /></form>
+      </div>
+      <p class="term__hint">Keyboard only. Up and down arrows recall commands, Tab completes. Nothing you type leaves your browser.</p>
+    </div>
+    <script src="/terminal.js" defer></script>
+  </main>
+  <footer class="footer">
+    <div class="wrap footer__inner">
+      <span>Kampolo Tomas · Windhoek, Namibia</span>
+      <a href="mailto:kampolotomasva@gmail.com" class="footer__top">kampolotomasva@gmail.com</a>
+    </div>
+  </footer>
+  <script src="/track.js" defer></script>
+  <script src="/obs.js" defer></script>
+
+</body>
+</html>

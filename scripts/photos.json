@@ -1,0 +1,341 @@
+{
+  "_note": "Source list for the Shop lab (/lab/shop/). Run: node scripts/fetch-photos.mjs  (checks each photo's licence on Wikimedia Commons and writes the verified credit back into this file), then python scripts/build-lab-shop-images.py. Prices, sizes and regions are SAMPLE data. Only CC0, public domain, CC BY and CC BY-SA photos are accepted; anything else is rejected and reported.",
+  "shop": {
+    "currency": "N$",
+    "vat": {
+      "rate": 0.15,
+      "source": "Namibia Revenue Agency (NamRA), General Tax Information brochure: standard VAT rate of 15% levied on most taxable activities",
+      "url": "https://www.namra.org.na/documents/cms/uploaded/information-brochure--general-tax-information--66d64f0d7f.pdf",
+      "checked": "2026-11-07"
+    },
+    "freeDeliveryFrom": 800,
+    "zones": [
+      {
+        "id": "windhoek",
+        "name": "Windhoek and surrounds",
+        "fee": 45,
+        "days": "1 to 2 working days",
+        "regions": [
+          "Khomas"
+        ]
+      },
+      {
+        "id": "central",
+        "name": "Central and coast",
+        "fee": 95,
+        "days": "2 to 4 working days",
+        "regions": [
+          "Erongo",
+          "Otjozondjupa",
+          "Omaheke"
+        ]
+      },
+      {
+        "id": "south",
+        "name": "South",
+        "fee": 120,
+        "days": "3 to 5 working days",
+        "regions": [
+          "Hardap",
+          "Karas"
+        ]
+      },
+      {
+        "id": "north",
+        "name": "North and east",
+        "fee": 140,
+        "days": "3 to 6 working days",
+        "regions": [
+          "Oshana",
+          "Ohangwena",
+          "Omusati",
+          "Oshikoto",
+          "Kavango East",
+          "Kavango West",
+          "Zambezi",
+          "Kunene"
+        ]
+      }
+    ]
+  },
+  "hero": {
+    "id": "hero",
+    "ref": "Market Scene Oshakati Namibia.jpg",
+    "alt": "A market stall with woven baskets of dried goods and spices on a trestle table",
+    "focus": [
+      0.5,
+      0.55
+    ],
+    "credit": {
+      "title": "Market Scene Oshakati Namibia",
+      "author": "Pemba.mpimaji",
+      "licence": "CC BY-SA 4.0",
+      "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "page": "https://commons.wikimedia.org/wiki/File:Market_Scene_Oshakati_Namibia.jpg",
+      "source": "Wikimedia Commons",
+      "retrieved": "2026-11-07"
+    }
+  },
+  "products": [
+    {
+      "id": "basket-bowl",
+      "ref": "Palm leaves basket weaved by hand used in Aawambo homesteads.jpg",
+      "category": "Crafts",
+      "name": "Palm-leaf bowl basket",
+      "blurb": "A hand-coiled palm-leaf bowl with a dark star pattern. Sample listing.",
+      "alt": "A coiled palm-leaf bowl with a dark star pattern lying on pale sand",
+      "variantLabel": "Size",
+      "variants": [
+        {
+          "name": "Small, 24 cm",
+          "price": 140
+        },
+        {
+          "name": "Medium, 32 cm",
+          "price": 220
+        },
+        {
+          "name": "Large, 40 cm",
+          "price": 340
+        }
+      ],
+      "focus": [
+        0.5,
+        0.5
+      ],
+      "credit": {
+        "title": "Palm leaves basket weaved by hand used in Aawambo homesteads",
+        "author": "Martin Hipangwa",
+        "licence": "CC BY-SA 4.0",
+        "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "page": "https://commons.wikimedia.org/wiki/File:Palm_leaves_basket_weaved_by_hand_used_in_Aawambo_homesteads.jpg",
+        "source": "Wikimedia Commons",
+        "retrieved": "2026-11-07"
+      }
+    },
+    {
+      "id": "palm-trays",
+      "ref": "Oshiwambo palm leave baskets.jpg",
+      "category": "Homeware",
+      "name": "Flat palm-leaf trays",
+      "blurb": "Wide coiled trays for bread, fruit or drying grain. Sample listing.",
+      "alt": "A stack of wide, flat, coiled palm-leaf trays on sand",
+      "variantLabel": "Set",
+      "variants": [
+        {
+          "name": "Set of 2",
+          "price": 260
+        },
+        {
+          "name": "Set of 4",
+          "price": 480
+        }
+      ],
+      "focus": [
+        0.5,
+        0.5
+      ],
+      "credit": {
+        "title": "Oshiwambo palm leave baskets",
+        "author": "Martin Hipangwa",
+        "licence": "CC BY-SA 4.0",
+        "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "page": "https://commons.wikimedia.org/wiki/File:Oshiwambo_palm_leave_baskets.jpg",
+        "source": "Wikimedia Commons",
+        "retrieved": "2026-11-07"
+      }
+    },
+    {
+      "id": "clay-bowls",
+      "ref": "Pottery in Namibia1.jpg",
+      "category": "Homeware",
+      "name": "Decorated clay bowls",
+      "blurb": "Fired clay bowls with an incised and burnished pattern. Sample listing.",
+      "alt": "Round orange clay bowls with a geometric pattern on a patterned cloth",
+      "variantLabel": "Size",
+      "variants": [
+        {
+          "name": "Small, 12 cm",
+          "price": 120
+        },
+        {
+          "name": "Large, 22 cm",
+          "price": 260
+        }
+      ],
+      "focus": [
+        0.5,
+        0.5
+      ],
+      "credit": {
+        "title": "Pottery in Namibia1",
+        "author": "Pemba.mpimaji",
+        "licence": "CC BY-SA 4.0",
+        "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "page": "https://commons.wikimedia.org/wiki/File:Pottery_in_Namibia1.jpg",
+        "source": "Wikimedia Commons",
+        "retrieved": "2026-11-07"
+      }
+    },
+    {
+      "id": "cloth-dolls",
+      "ref": "Handmade dolls.JPG",
+      "category": "Clothing and textiles",
+      "name": "Patchwork cloth doll",
+      "blurb": "A doll in a layered patchwork dress sewn from printed cotton. Sample listing.",
+      "alt": "Three handmade dolls in bright patchwork dresses of printed cotton",
+      "variantLabel": "Height",
+      "variants": [
+        {
+          "name": "20 cm",
+          "price": 150
+        },
+        {
+          "name": "30 cm",
+          "price": 240
+        }
+      ],
+      "focus": [
+        0.5,
+        0.5
+      ],
+      "credit": {
+        "title": "Handmade dolls",
+        "author": "Fidelisblue",
+        "licence": "CC BY-SA 4.0",
+        "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "page": "https://commons.wikimedia.org/wiki/File:Handmade_dolls.JPG",
+        "source": "Wikimedia Commons",
+        "retrieved": "2026-11-07"
+      }
+    },
+    {
+      "id": "wool-yarn",
+      "ref": "Namibia 2017-06 (100) Knäuel aus Swakarawolle.jpg",
+      "category": "Clothing and textiles",
+      "name": "Hand-dyed wool yarn",
+      "blurb": "Balls of hand-dyed wool yarn in blue, green, yellow and pink. Sample listing.",
+      "alt": "A pile of balls of dyed wool yarn in blue, green, yellow and pink",
+      "variantLabel": "Weight",
+      "variants": [
+        {
+          "name": "100 g",
+          "price": 85
+        },
+        {
+          "name": "250 g",
+          "price": 190
+        }
+      ],
+      "focus": [
+        0.5,
+        0.5
+      ],
+      "credit": {
+        "title": "Namibia 2017-06 (100) Knäuel aus Swakarawolle",
+        "author": "Kürschner",
+        "licence": "Public domain",
+        "licenceUrl": "",
+        "page": "https://commons.wikimedia.org/wiki/File:Namibia_2017-06_(100)_Kn%C3%A4uel_aus_Swakarawolle.jpg",
+        "source": "Wikimedia Commons",
+        "retrieved": "2026-11-07"
+      }
+    },
+    {
+      "id": "wood-chameleon",
+      "ref": "Woody carving of the Bush Control and Biomass Utilisation Project in Namibia.jpg",
+      "category": "Crafts",
+      "name": "Carved wooden chameleon",
+      "blurb": "A chameleon carved from a single piece of wood. Sample listing.",
+      "alt": "A wooden chameleon carving gripping a block, on a wooden table",
+      "variantLabel": "Size",
+      "variants": [
+        {
+          "name": "Small, 12 cm",
+          "price": 180
+        },
+        {
+          "name": "Large, 22 cm",
+          "price": 320
+        }
+      ],
+      "focus": [
+        0.5,
+        0.36
+      ],
+      "credit": {
+        "title": "Woody carving of the Bush Control and Biomass Utilisation Project in Namibia",
+        "author": "Tim Brunauer on behalf of Deutsche Gesellschaft für Internationale Zusammenarbeit (GIZ)",
+        "licence": "CC BY-SA 4.0",
+        "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "page": "https://commons.wikimedia.org/wiki/File:Woody_carving_of_the_Bush_Control_and_Biomass_Utilisation_Project_in_Namibia.jpg",
+        "source": "Wikimedia Commons",
+        "retrieved": "2026-11-07"
+      }
+    },
+    {
+      "id": "dried-fruit",
+      "ref": "Dried fruits Jackal berries and Berchemia discolor from Northen Namibia displayed in the Oshiwambo palm basket.jpg",
+      "category": "Food",
+      "name": "Dried wild fruit",
+      "blurb": "Dried wild fruit sold in a woven basket at the market. Sample listing.",
+      "alt": "Dried wild fruit in bags inside a woven palm-leaf basket",
+      "variantLabel": "Weight",
+      "variants": [
+        {
+          "name": "250 g",
+          "price": 70
+        },
+        {
+          "name": "500 g",
+          "price": 125
+        }
+      ],
+      "focus": [
+        0.5,
+        0.5
+      ],
+      "credit": {
+        "title": "Dried fruits Jackal berries and Berchemia discolor from Northen Namibia displayed in the Oshiwambo palm basket",
+        "author": "Martin Hipangwa",
+        "licence": "CC BY-SA 4.0",
+        "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "page": "https://commons.wikimedia.org/wiki/File:Dried_fruits_Jackal_berries_and_Berchemia_discolor_from_Northen_Namibia_displayed_in_the_Oshiwambo_palm_basket.jpg",
+        "source": "Wikimedia Commons",
+        "retrieved": "2026-11-07"
+      }
+    },
+    {
+      "id": "dried-bream",
+      "ref": "Zambezi Bream air dried.jpg",
+      "category": "Food",
+      "name": "Air-dried bream",
+      "blurb": "River bream dried in the air on a rack. Sample listing.",
+      "alt": "Rows of small dried fish laid out on a bamboo rack",
+      "variantLabel": "Weight",
+      "variants": [
+        {
+          "name": "250 g",
+          "price": 85
+        },
+        {
+          "name": "500 g",
+          "price": 150
+        }
+      ],
+      "focus": [
+        0.5,
+        0.5
+      ],
+      "credit": {
+        "title": "Zambezi Bream air dried",
+        "author": "Namibaxab",
+        "licence": "CC BY-SA 4.0",
+        "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "page": "https://commons.wikimedia.org/wiki/File:Zambezi_Bream_air_dried.jpg",
+        "source": "Wikimedia Commons",
+        "retrieved": "2026-11-07"
+      }
+    }
+  ]
+}

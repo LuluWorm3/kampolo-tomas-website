@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Namibia jobs map — Kampolo Tomas</title>
+  <meta name="description" content="Unemployment across Namibia's 14 regions as a radar chart, ranked dots, a slope chart and a tile map, transcribed from the Namibia Statistics Agency's own reports." />
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="canonical" href="https://kampolo-tomas-website.netlify.app/lab/namibia-jobs/" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <meta property="og:title" content="Namibia jobs map — Kampolo Tomas" />
+  <meta property="og:description" content="Unemployment across Namibia's 14 regions as a radar chart, ranked dots, a slope chart and a tile map, transcribed from the Namibia Statistics Agency's own reports." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://kampolo-tomas-website.netlify.app/lab/namibia-jobs/" />
+  <meta property="og:image" content="https://kampolo-tomas-website.netlify.app/og-image.png" />
+  <script>
+    (function () {
+      try { var t = localStorage.getItem('theme'); if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t); } catch (e) {}
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/styles.css" />
+  <link rel="stylesheet" href="/labs/lab.css" />
+  <link rel="stylesheet" href="/labs/namibia-jobs.css" />
+</head>
+<body>
+  <div class="wrap doc__top">
+    <a href="/">← Back to the site</a>
+    <span class="section__num">Lab · Data</span>
+  </div>
+
+  <header class="doc__hero">
+    <div class="wrap">
+      <p class="section__num">Lab · Data</p>
+      <h1>Namibia jobs map</h1>
+      <p>Unemployment across Namibia's 14 regions as a radar chart, ranked dots, a slope chart and a tile map, transcribed from the Namibia Statistics Agency's own reports.</p>
+    </div>
+  </header>
+  <main>
+    <section class="doc__block">
+      <div class="wrap grid">
+        <header class="section__head col-3"><p class="section__num">01</p><h2 class="section__title">The situation</h2></header>
+        <div class="col-9"><p>Unemployment in Namibia is high, and it is far from even. In the 2023 census, 52.8% of the labour force in Kavango West was without work, against 29.7% in //Kharas; the national rate was 36.9%. Young people (15 to 34) had it harder still, at 44.4% nationally. The tempting next step is to set 2023 beside the 2018 Labour Force Survey and call the gap a trend. But the two count unemployment differently: the 2018 headline rate also counts people who were available for work but had not looked for it, while the census counts only people who searched and were available, and the Statistics Agency itself warns that survey and census results cannot be directly compared. This lab puts the published regional numbers side by side, keeps each definition visible, and lets you choose which comparisons to look at.</p></div>
+      </div>
+    </section>
+    <section class="doc__block">
+      <div class="wrap grid">
+        <header class="section__head col-3"><p class="section__num">02</p><h2 class="section__title">What to look at</h2></header>
+        <div class="col-9"><ol class="lab-look"><li>Start on the radar with the two 2023 series switched on (both from the census, same definition). The youth shape sits outside the all-ages shape on every one of the 14 axes. Hover a spoke, or tab to the chart and use the arrow keys, to read exact values, counts and the table and page they came from.</li><li>Switch on a 2018 series. A note appears saying what that comparison can and cannot tell you. Then try the slope chart, which sets 2018 and 2023 side by side without calling the difference a change.</li><li>Open the tile map and the ranked dots to see the same numbers as geography and as a ranking, then open &ldquo;Show the data as a table&rdquo; for every figure with its source row.</li></ol></div>
+      </div>
+    </section>
+    <section class="doc__block">
+      <div class="wrap grid">
+        <header class="section__head col-3"><p class="section__num">03</p><h2 class="section__title">The demo</h2></header>
+        <div class="col-9"><div class="lab-demo" id="lab-demo">
+      <p><span class="lab-badge">Not an official statistic</span> <span class="lab-note">Figures transcribed from the Namibia Statistics Agency (NSA) reports named under &ldquo;Limits and sources&rdquo;. Shares are percentages of the labour force.</span></p>
+      <div class="nj-app" id="nj-app" data-src="/labs/namibia-jobs.json">
+        <p class="lab-note nj-loading">Loading the chart. It needs JavaScript; the table below has every figure without it.</p>
+      </div>
+      <div class="nj-defs">
+        <h3>What changed between 2018 and 2023</h3>
+        <dl>
+          <dt>Broad (2018 survey, headline)</dt><dd>Counts people who are not in employment and are available for work, without requiring that they actively looked for work in the past week.</dd>
+          <dt>Strict (2018 survey, Annex A)</dt><dd>Counts only people who searched for work and were available. The 2018 report gives this for international comparison.</dd>
+          <dt>19th ICLS (2023 census)</dt><dd>Counts people who were not employed, carried out job search activities and were available to take a job.</dd>
+        </dl>
+      </div>
+      <details class="nj-table" id="nj-table">
+        <summary>Show the data as a table</summary>
+        <div class="nj-scroll">
+          <table class="lab-table">
+            <caption>Unemployment rate (%) by region, every series</caption>
+            <thead><tr><th scope="col">Region</th><th scope="col" class="num">2023 all 15+ (census, 19th ICLS)</th><th scope="col" class="num">2023 youth 15 to 34 (census, 19th ICLS)</th><th scope="col" class="num">2018 all 15+ (broad)</th><th scope="col" class="num">2018 all 15+ (strict)</th><th scope="col" class="num">2018 youth 15 to 34 (broad)</th></tr></thead>
+            <tbody>
+          <tr><th scope="row">Namibia</th><td class="num">36.9</td><td class="num">44.4</td><td class="num">33.4</td><td class="num">19.8</td><td class="num">46.1</td></tr>
+          <tr><th scope="row">//Kharas</th><td class="num">29.7</td><td class="num">37.9</td><td class="num">32.2</td><td class="num">22.1</td><td class="num">44.7</td></tr>
+          <tr><th scope="row">Erongo</th><td class="num">32.0</td><td class="num">40.7</td><td class="num">29.7</td><td class="num">23.4</td><td class="num">36.8</td></tr>
+          <tr><th scope="row">Hardap</th><td class="num">32.1</td><td class="num">40.2</td><td class="num">34.5</td><td class="num">18.9</td><td class="num">41.9</td></tr>
+          <tr><th scope="row">Kavango East</th><td class="num">52.0</td><td class="num">60.4</td><td class="num">48.2</td><td class="num">26.1</td><td class="num">62.5</td></tr>
+          <tr><th scope="row">Kavango West</th><td class="num">52.8</td><td class="num">58.1</td><td class="num">33.0</td><td class="num">13.9</td><td class="num">46.8</td></tr>
+          <tr><th scope="row">Khomas</th><td class="num">34.4</td><td class="num">44.2</td><td class="num">31.5</td><td class="num">24.2</td><td class="num">43.0</td></tr>
+          <tr><th scope="row">Kunene</th><td class="num">36.6</td><td class="num">43.2</td><td class="num">41.6</td><td class="num">21.0</td><td class="num">53.0</td></tr>
+          <tr><th scope="row">Ohangwena</th><td class="num">47.2</td><td class="num">51.2</td><td class="num">33.3</td><td class="num">12.2</td><td class="num">51.4</td></tr>
+          <tr><th scope="row">Omaheke</th><td class="num">30.3</td><td class="num">35.5</td><td class="num">38.7</td><td class="num">22.8</td><td class="num">46.6</td></tr>
+          <tr><th scope="row">Omusati</th><td class="num">41.1</td><td class="num">43.5</td><td class="num">24.0</td><td class="num">8.9</td><td class="num">39.7</td></tr>
+          <tr><th scope="row">Oshana</th><td class="num">41.6</td><td class="num">49.4</td><td class="num">32.5</td><td class="num">17.3</td><td class="num">47.2</td></tr>
+          <tr><th scope="row">Oshikoto</th><td class="num">38.4</td><td class="num">42.3</td><td class="num">36.2</td><td class="num">18.8</td><td class="num">50.2</td></tr>
+          <tr><th scope="row">Otjozondjupa</th><td class="num">31.2</td><td class="num">37.6</td><td class="num">36.1</td><td class="num">21.6</td><td class="num">47.4</td></tr>
+          <tr><th scope="row">Zambezi</th><td class="num">43.7</td><td class="num">50.4</td><td class="num">37.7</td><td class="num">19.5</td><td class="num">49.7</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="nj-scroll">
+          <table class="lab-table">
+            <caption>Source row for each series</caption>
+            <thead><tr><th scope="col">Series</th><th scope="col">Publication</th><th scope="col">Table</th><th scope="col" class="num">Page</th><th scope="col">Retrieved</th></tr></thead>
+            <tbody>
+          <tr><th scope="row">2023 all 15+ (census, 19th ICLS)</th><td>2023 Population and Housing Census Labour Force Report (Namibia Statistics Agency)</td><td>Table 5.1</td><td class="num">39 (PDF 51)</td><td>2026-11-07</td></tr>
+          <tr><th scope="row">2023 youth 15 to 34 (census, 19th ICLS)</th><td>2023 Population and Housing Census Labour Force Report (Namibia Statistics Agency)</td><td>Table 6.7</td><td class="num">51 (PDF 63)</td><td>2026-11-07</td></tr>
+          <tr><th scope="row">2018 all 15+ (broad)</th><td>The Namibia Labour Force Survey 2018 Report (Namibia Statistics Agency)</td><td>Table 5.3</td><td class="num">63 (PDF 63)</td><td>2026-11-07</td></tr>
+          <tr><th scope="row">2018 all 15+ (strict)</th><td>The Namibia Labour Force Survey 2018 Report (Namibia Statistics Agency)</td><td>Table A.2</td><td class="num">75 (PDF 75)</td><td>2026-11-07</td></tr>
+          <tr><th scope="row">2018 youth 15 to 34 (broad)</th><td>The Namibia Labour Force Survey 2018 Report (Namibia Statistics Agency)</td><td>Table 6.5</td><td class="num">71 (PDF 71)</td><td>2026-11-07</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="lab-note">Counts of unemployed people and labour force sit in the JSON the charts read, <a class="inline-link" href="/labs/namibia-jobs.json">labs/namibia-jobs.json</a>.</p>
+      </details></div></div>
+      </div>
+    </section>
+    <section class="doc__block">
+      <div class="wrap grid">
+        <header class="section__head col-3"><p class="section__num">04</p><h2 class="section__title">How it is built</h2></header>
+        <div class="col-9">
+      <p>The data starts as a CSV, <code>scripts/lab-data/namibia-labour.csv</code>: 75 rows, one per region (and one for Namibia) per series, each carrying the publication, table number, printed and PDF page, the PDF address and the date it was retrieved. The numbers were transcribed from the tables in the two NSA PDFs, then every count was checked against the page its row cites.</p>
+      <p>A validator, <code>scripts/lab-data/build-namibia.mjs</code>, runs on every site build. It rejects blank cells, unknown regions, a missing region in any series, duplicates, and any rate that does not match unemployed divided by labour force to within rounding. It caught a deliberately mistyped Omusati figure in testing. If it passes, it writes the JSON the page loads; if not, the build stops.</p>
+      <p>The charts are hand-written SVG drawn by one vanilla JavaScript file, with no chart or map library and no request to anything but this site. All four views use the same fixed scale (0 to 70%) or the same fixed colour bins, so a small shape means a small rate rather than an auto-zoomed axis. Each series has its own colour, line pattern and marker shape, so colour is never the only cue. The tile map places one square per region roughly where it sits on the map; positions are approximate and areas are not to scale.</p>
+      <p>Accessibility: the table above is the full equivalent of every chart and works without JavaScript; the chart regions can be reached by keyboard (arrow keys, Home and End) and announce their values; controls are real buttons with pressed state; nothing animates when the system asks for reduced motion; and it fits a 390 pixel wide screen without sideways scrolling.</p></div>
+      </div>
+    </section>
+    <section class="doc__block">
+      <div class="wrap grid">
+        <header class="section__head col-3"><p class="section__num">05</p><h2 class="section__title">Limits and sources</h2></header>
+        <div class="col-9"><div class="lab-limits">
+      <p><strong>Not an official statistic.</strong> This is a personal proof of concept that redraws published numbers. For decisions, use the NSA publications.</p>
+      <p>Sources (primary documents only; no press report is used, because press coverage of the same numbers disagrees with itself and with the reports):</p>
+      <ul>
+        <li><em>The Namibia Labour Force Survey 2018 Report</em>, Namibia Statistics Agency, from its <a class="inline-link" href="https://microdata.nsanamibia.com/index.php/catalog/3/download/25" rel="noopener">microdata archive</a>. Broad rate by region: Table 5.3, page 63. Strict rate by region: Annex A, Table A.2, page 75. Youth (15 to 34) rate by region: Table 6.5, page 71. Retrieved 2026-11-07.</li>
+        <li><em>2023 Population and Housing Census Labour Force Report</em>, Namibia Statistics Agency, from <a class="inline-link" href="https://nsa.org.na/wp-content/uploads/2025/01/2023-PHC-Labourforce-Report.pdf" rel="noopener">nsa.org.na</a>. Rate by region: Table 5.1, printed page 39 (PDF page 51). Youth (15 to 34) rate by region: Table 6.7, printed page 51 (PDF page 63). The caution that survey and census results cannot be directly compared is on printed page 3 (PDF page 15); the 2018 and 2023 national rates appear side by side in Figure 5.1, printed page 38. Retrieved 2026-11-07.</li>
+      </ul>
+      <p>What the data does and does not support:</p>
+      <ul>
+        <li>The 2018 survey and the 2023 census differ in definition, instrument and coverage. Every 2018 against 2023 view is labelled as a side-by-side, not a measured change. The two 2023 series are the only pair that shares source and definition.</li>
+        <li>The 2023 report contradicts itself on youth: its summary text (PDF page 11) says 44.1% for 2023, while its own Table 6.7 and Table 0.1 say 44.4%, which is what 202,144 divided by 455,030 gives. The lab uses the table. Press reports quote both numbers.</li>
+        <li>The 2018 report gives a strict youth rate by region only for ages 15 to 24 (Annex B, Table B.3), a different age band, so it is left out. No strict-definition youth series is shown.</li>
+        <li>The 2018 survey is a sample, and its regional estimates carry sampling error (the report prints precision measures in Annex D). The charts do not draw error bars, so small gaps between regions should not be over-read.</li>
+        <li>Names and numbering: the 2018 report writes <em>!Karas</em> where the 2023 report writes <em>//Kharas</em>; the lab uses the second. The 2018 contents list calls the regional table 5.2, while the table in the body is numbered 5.3; the lab cites the body. 2018 Zambezi is printed as 37.68 and shown as 37.7.</li>
+        <li>Rates are shares of the labour force, not of the whole population, and nothing here covers wages, informal work or people outside the labour force.</li>
+      </ul></div></div>
+      </div>
+    </section>
+    <section class="doc__block">
+      <div class="wrap grid">
+        <header class="section__head col-3"><p class="section__num">06</p><h2 class="section__title">Elsewhere</h2></header>
+        <div class="col-9"><p><a class="inline-link" href="/data/">Back to the Data view</a> · <a class="inline-link" href="/lab/">All labs</a></p></div>
+      </div>
+    </section>
+  </main>
+  <footer class="footer">
+    <div class="wrap footer__inner">
+      <span>Kampolo Tomas · Windhoek, Namibia</span>
+      <a href="mailto:kampolotomasva@gmail.com" class="footer__top">kampolotomasva@gmail.com</a>
+    </div>
+  </footer>
+  <script src="/track.js" defer></script>
+  <script src="/obs.js" defer></script>
+  <script src="/labs/namibia-jobs.js" defer></script>
+</body>
+</html>

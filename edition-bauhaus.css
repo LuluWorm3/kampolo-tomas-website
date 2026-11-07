@@ -1,0 +1,262 @@
+/* Bauhaus Edition: "Werkstatt" (the + beside Bauhaus in the Style lab; style name bauhaus-plus). Lazy-loaded by editions-plus.js on first entry, so visitors
+   who never open it download nothing. Script: edition-bauhaus.js. The shared controls (.px-hud, .px-btn), the Pause rule and the chat launcher/title glyph
+   rules live in editions-plus.css. Prefix rule: every class and attribute an edition adds starts with its own prefix (bh-).
+   Layout: in stage mode (wide screens, motion allowed) a fixed drafting board sits on the left and the chapters scroll on the right; in static mode
+   (phones, reduced motion) there is one column and every chapter opens with its finished pictogram. Primary colours are the same in both themes
+   (white or ink text is fixed per colour); only the ground, the paper and the ink flip. */
+
+:root[data-style='bauhaus-plus'] { --glyph: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2024%2024%27%3E%3Ccircle%20cx%3D%276.5%27%20cy%3D%277%27%20r%3D%274%27%2F%3E%3Cpath%20d%3D%27M14%203h7v7h-7z%27%2F%3E%3Cpath%20d%3D%27M12%2013l5%208H7z%27%2F%3E%3C%2Fsvg%3E"); }
+
+/* ===== tokens ===== */
+:root[data-style='bauhaus-plus'] {
+  --font: 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --bh-display: 'Arial Black', 'Helvetica Neue', Arial, sans-serif;
+  --bh-red: #c8201a; --bh-blue: #1f4fa3; --bh-yellow: #f2b705; --bh-night: #141414;
+  --bh-pr: #e23b2e; --bh-pb: #3f78e0; --bh-py: #f2b705; --bh-pk: #efe7d4; --bh-px: rgba(239, 231, 212, 0.28);
+  --bh-ground: #efe7d4; --bh-paper: #f8f3e6; --bh-ink: #141414; --bh-soft: #3b382f; --bh-line: #141414;
+  --bh-redt: #c8201a; --bh-bluet: #1f4fa3; --bh-focus: #1f4fa3;
+  --bh-S: min(34vw, calc(100vh - 190px), 520px);
+  --bg: var(--bh-ground); --bg-alt: transparent; --text: var(--bh-ink); --muted: var(--bh-soft); --rule: var(--bh-ink); --hair: rgba(20, 20, 20, 0.28);
+  --accent: var(--bh-redt); --on-accent: #ffffff; --glass: var(--bh-paper); --glow: transparent; color-scheme: light;
+}
+:root[data-style='bauhaus-plus'][data-theme='dark'] {
+  --bh-night: #0b0d11; --bh-ground: #13161c; --bh-paper: #1b1f27; --bh-ink: #efe7d4; --bh-soft: #cbc4b0; --bh-line: #efe7d4;
+  --bh-redt: #ff6f63; --bh-bluet: #86adff; --bh-focus: #f7c21a;
+  --bg: var(--bh-ground); --text: var(--bh-ink); --muted: var(--bh-soft); --rule: var(--bh-ink); --hair: rgba(239, 231, 212, 0.28);
+  --accent: var(--bh-redt); --on-accent: #13161c; color-scheme: dark;
+}
+@media (prefers-color-scheme: dark) {
+  :root[data-style='bauhaus-plus']:not([data-theme]) {
+    --bh-night: #0b0d11; --bh-ground: #13161c; --bh-paper: #1b1f27; --bh-ink: #efe7d4; --bh-soft: #cbc4b0; --bh-line: #efe7d4;
+    --bh-redt: #ff6f63; --bh-bluet: #86adff; --bh-focus: #f7c21a;
+    --bg: var(--bh-ground); --text: var(--bh-ink); --muted: var(--bh-soft); --rule: var(--bh-ink); --hair: rgba(239, 231, 212, 0.28);
+    --accent: var(--bh-redt); --on-accent: #13161c; color-scheme: dark;
+  }
+}
+:root[data-style='bauhaus-plus'] body { background: var(--bg); }
+:root[data-style='bauhaus-plus'] :is(.hero, main, .footer) { position: relative; z-index: 1; overflow-x: clip; }
+:root[data-style='bauhaus-plus'] :focus-visible { outline: 3px solid var(--bh-focus); outline-offset: 3px; }
+.bh-sr { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
+/* ===== chrome: nav, buttons ===== */
+:root[data-style='bauhaus-plus'] .nav { border-bottom: 4px solid var(--bh-line); background: var(--bg); }
+:root[data-style='bauhaus-plus'] .nav__brand { font: 900 1.05rem var(--bh-display); text-transform: uppercase; letter-spacing: -0.02em; }
+:root[data-style='bauhaus-plus'] .nav__links a { font-weight: 800; color: var(--text); padding: 4px 8px; }
+:root[data-style='bauhaus-plus'] .nav__links a:hover, :root[data-style='bauhaus-plus'] .nav__links a.active { background: var(--bh-yellow); color: #141414; box-shadow: none; }
+:root[data-style='bauhaus-plus'] :is(.hud, .theme-toggle) { border: 3px solid var(--bh-line); border-radius: 0; }
+:root[data-style='bauhaus-plus'] .btn { border: 3px solid var(--bh-line); border-radius: 0; font: 900 0.82rem var(--bh-display); text-transform: uppercase; letter-spacing: 0.04em; box-shadow: 5px 5px 0 var(--rule); transition: transform 0.15s, box-shadow 0.15s; }
+:root[data-style='bauhaus-plus'] .btn:hover { transform: translate(2px, 2px); box-shadow: 3px 3px 0 var(--rule); }
+:root[data-style='bauhaus-plus'] .btn--solid { background: var(--bh-red); color: #fff; border-color: var(--bh-line); }
+:root[data-style='bauhaus-plus'] .btn--solid:hover { background: var(--bh-red); color: #fff; border-color: var(--bh-line); }
+:root[data-style='bauhaus-plus'] .btn--line { background: var(--bh-paper); color: var(--bh-ink); }
+:root[data-style='bauhaus-plus'] .btn--line:hover { background: var(--bh-yellow); color: #141414; }
+:root[data-style='bauhaus-plus'] :is(.hud, .theme-toggle):hover { background: var(--bh-yellow); color: #141414; }
+:root[data-style='bauhaus-plus'] .px-hud { left: auto; right: 14px; top: auto; bottom: 84px; transform: none; }
+:root[data-style='bauhaus-plus'] :is(.px-hud__focus, .px-btn) { border: 3px solid var(--bh-line); border-radius: 0; background: var(--bh-paper); color: var(--bh-ink); -webkit-backdrop-filter: none; backdrop-filter: none; }
+:root[data-style='bauhaus-plus'] .px-btn:hover { background: var(--bh-yellow); border-color: var(--bh-line); color: #141414; }
+:root[data-style='bauhaus-plus'] .px-btn[aria-pressed='true'] { background: var(--bh-red); border-color: var(--bh-line); color: #fff; }
+
+@media (min-width: 961px) and (max-width: 1200px) {
+  :root[data-style='bauhaus-plus'] .nav__links { gap: 6px; }
+  :root[data-style='bauhaus-plus'] .nav__links a { padding: 4px 6px; letter-spacing: 0.03em; font-size: 0.76rem; }
+  :root[data-style='bauhaus-plus'] .hud__xp { display: none; }
+}
+@media (min-width: 721px) and (max-width: 1200px) {
+  :root[data-bh-mode='stage'][data-style='bauhaus-plus'] .section__num { font-size: 0.62rem; letter-spacing: 0.06em; padding: 4px 6px; max-width: 5.2rem; white-space: normal; line-height: 1.2; margin-left: -14px; }
+}
+
+/* ===== the drafting board (stage mode) ===== */
+.bh-stage { position: fixed; left: 24px; top: 84px; z-index: 20; width: var(--bh-S); padding: 10px; background: var(--bh-paper); color: var(--bh-ink); border: 3px solid var(--bh-line); box-shadow: 10px 10px 0 var(--bh-yellow); }
+.bh-stage__cap { margin: 0 0 8px; font: 800 0.7rem/1.35 var(--font); letter-spacing: 0.1em; text-transform: uppercase; }
+.bh-stage__cap b { color: var(--bh-redt); font-weight: 900; }
+.bh-stage__hint { margin: 8px 0 0; font-size: 0.72rem; line-height: 1.35; color: var(--bh-soft); }
+.bh-board { position: relative; aspect-ratio: 1; overflow: hidden; border: 3px solid var(--bh-line);
+  background: linear-gradient(rgba(239, 231, 212, 0.1) 1px, transparent 1px) 0 0 / 10% 10%, linear-gradient(90deg, rgba(239, 231, 212, 0.1) 1px, transparent 1px) 0 0 / 10% 10%, var(--bh-night); }
+.bh-piece { position: absolute; left: 0; top: 0; width: 9%; height: 9%; margin: 0; padding: 0; border: 0; background: none; color: inherit; cursor: pointer;
+  transition: left 0.3s ease-out, top 0.3s ease-out, width 0.3s ease-out, height 0.3s ease-out, transform 0.3s ease-out, opacity 0.3s; }
+.bh-piece::after { content: ''; position: absolute; inset: -8px; }
+.bh-piece:focus-visible { outline: 3px solid #ffffff; outline-offset: 3px; z-index: 5; }
+.bh-piece:hover .bh-shape { filter: brightness(1.15); }
+.bh-shape { position: absolute; inset: 0; display: block; background: var(--bh-fill, var(--bh-px)); transition: background-color 0.3s; }
+.bh-piece--c .bh-shape { border-radius: 50%; }
+.bh-piece--t .bh-shape { clip-path: polygon(50% 0, 100% 100%, 0 100%); }
+.bh-piece[data-bh-c='r'] { --bh-fill: var(--bh-pr); }
+.bh-piece[data-bh-c='b'] { --bh-fill: var(--bh-pb); }
+.bh-piece[data-bh-c='y'] { --bh-fill: var(--bh-py); }
+.bh-piece[data-bh-c='k'] { --bh-fill: var(--bh-pk); }
+@media (prefers-reduced-motion: no-preference) {
+  .bh-pop .bh-shape { animation: bh-pop 0.55s cubic-bezier(0.3, 1.4, 0.5, 1); }
+}
+@keyframes bh-pop { 0% { transform: rotate(0) scale(1); } 45% { transform: rotate(180deg) scale(1.25); } 100% { transform: rotate(360deg) scale(1); } }
+
+/* The chapters sit to the right of the board. */
+:root[data-bh-mode='stage'][data-style='bauhaus-plus'] :is(.hero, .section) > .wrap, :root[data-bh-mode='stage'][data-style='bauhaus-plus'] .footer > .wrap { width: auto; max-width: 1100px; margin: 0 0 0 calc(var(--bh-S) + 76px); padding: 0 64px 0 0; }
+
+/* ===== the cover ===== */
+:root[data-style='bauhaus-plus'] .hero { --bh-cut: clamp(28px, 4.6vw, 72px); padding: 56px 0 calc(72px + var(--bh-cut)); border: 0; background: transparent; }
+:root[data-style='bauhaus-plus'] .hero__meta { font-weight: 800; letter-spacing: 0.14em; color: var(--text); }
+:root[data-style='bauhaus-plus'] .hero__title { font: 900 clamp(2.6rem, 8vw, 8.4rem)/0.9 var(--bh-display); text-transform: uppercase; letter-spacing: -0.035em; margin: 5.2rem 0 3.4rem; transform: rotate(-8deg); transform-origin: left bottom; }
+:root[data-style='bauhaus-plus'] .hero__role { font-family: var(--bh-display); font-weight: 900; text-transform: uppercase; letter-spacing: -0.02em; border-top: 8px solid var(--bh-red); }
+:root[data-style='bauhaus-plus'] .hero__lead { color: var(--text); font-weight: 500; }
+:root[data-style='bauhaus-plus'] .hero__status { color: var(--text); font-weight: 700; }
+.bh-curr { margin-top: 56px; }
+.bh-curr__list { display: grid; grid-template-columns: repeat(auto-fit, minmax(104px, 1fr)); gap: 22px 18px; }
+.bh-curr__link { display: flex; flex-direction: column; gap: 4px; color: var(--text); }
+.bh-curr__tile { display: block; aspect-ratio: 1; background: var(--bh-night); border: 3px solid var(--bh-line); box-shadow: 6px 6px 0 var(--bh-red); transition: transform 0.15s, box-shadow 0.15s; }
+.bh-curr__item:nth-child(3n + 2) .bh-curr__tile { box-shadow: 6px 6px 0 var(--bh-blue); }
+.bh-curr__item:nth-child(3n) .bh-curr__tile { box-shadow: 6px 6px 0 var(--bh-yellow); }
+.bh-curr__link:hover .bh-curr__tile { transform: translate(-3px, -3px); box-shadow: 9px 9px 0 var(--bh-yellow); }
+.bh-curr__svg, .bh-plate__svg { display: block; width: 100%; height: auto; }
+.bh-curr__n { margin-top: 8px; font: 900 0.72rem var(--bh-display); letter-spacing: 0.14em; color: var(--bh-redt); }
+.bh-curr__t { font: 900 0.8rem var(--bh-display); text-transform: uppercase; letter-spacing: 0.02em; }
+.bh-f--r { fill: var(--bh-pr); } .bh-f--b { fill: var(--bh-pb); } .bh-f--y { fill: var(--bh-py); } .bh-f--k { fill: var(--bh-pk); } .bh-f--x { fill: var(--bh-px); }
+.bh-plate { margin: 0 0 20px; width: 112px; background: var(--bh-night); border: 3px solid var(--bh-line); box-shadow: 6px 6px 0 var(--bh-red); }
+.bh-hero .bh-plate { width: 168px; margin-bottom: 28px; }
+
+/* ===== chapters: a lettered chip, a diagonal edge, a colour band ===== */
+:root[data-style='bauhaus-plus'] main > .section { --bh-cut: clamp(28px, 4.6vw, 72px); position: relative; margin-top: calc(var(--bh-cut) * -1); padding: calc(72px + var(--bh-cut)) 0 72px; border: 0; background: transparent; clip-path: polygon(0 var(--bh-cut), 100% 0, 100% 100%, 0 100%); }
+:root[data-style='bauhaus-plus'] main > .section:nth-of-type(even) { clip-path: polygon(0 0, 100% var(--bh-cut), 100% 100%, 0 100%); }
+:root[data-style='bauhaus-plus'] .section__head { display: flex; flex-direction: column; align-items: flex-start; gap: 18px; }
+:root[data-style='bauhaus-plus'] .section__num { display: inline-block; margin: 0; padding: 6px 12px; background: var(--bh-chip, var(--bh-red)); color: var(--bh-on-chip, #fff); font: 900 0.78rem/1 var(--bh-display); letter-spacing: 0.14em; text-transform: uppercase; transform: rotate(-8deg); transform-origin: left bottom; white-space: nowrap; box-shadow: 4px 4px 0 var(--bh-chip-sh, #141414); }
+:root[data-style='bauhaus-plus'] .section__num::before { content: 'Werkstatt '; }
+:root[data-style='bauhaus-plus'] .section__title { margin: 0; font: 900 clamp(2.4rem, 7vw, 4.6rem)/0.92 var(--bh-display); text-transform: uppercase; letter-spacing: -0.03em; }
+:root[data-style='bauhaus-plus'] .section__intro { color: var(--muted); font-weight: 500; }
+:root[data-style='bauhaus-plus'] #experience, :root[data-style='bauhaus-plus'] .footer { background: var(--bh-yellow); --bg: var(--bh-yellow); --text: #141414; --muted: #262626; --rule: #141414; --hair: rgba(20, 20, 20, 0.35); --accent: #141414; --bh-focus: #141414; color: #141414; --bh-chip: #141414; --bh-on-chip: #efe7d4; --bh-chip-sh: var(--bh-red); }
+:root[data-style='bauhaus-plus'] #projects { background: var(--bh-blue); --bg: var(--bh-blue); --text: #ffffff; --muted: #e8eefb; --rule: #ffffff; --hair: rgba(255, 255, 255, 0.4); color: #ffffff; --accent: var(--bh-yellow); --bh-focus: var(--bh-yellow); --bh-chip: var(--bh-yellow); --bh-on-chip: #141414; }
+:root[data-style='bauhaus-plus'] #education { background: var(--bh-red); --bg: var(--bh-red); --text: #ffffff; --muted: #ffffff; --rule: #ffffff; --hair: rgba(255, 255, 255, 0.45); color: #ffffff; --accent: #ffffff; --bh-focus: #ffffff; --bh-chip: var(--bh-yellow); --bh-on-chip: #141414; }
+:root[data-style='bauhaus-plus'] #contact { background: var(--bh-night); --bg: var(--bh-night); --text: #efe7d4; --muted: #d6cfbb; --rule: #efe7d4; --hair: rgba(239, 231, 212, 0.35); color: #efe7d4; --accent: var(--bh-yellow); --bh-focus: var(--bh-yellow); --bh-chip: var(--bh-yellow); --bh-on-chip: #141414; --bh-chip-sh: var(--bh-red); }
+:root[data-style='bauhaus-plus'] #projects .section__num { --bh-chip-sh: #141414; }
+:root[data-style='bauhaus-plus'] #education .section__num { --bh-chip-sh: #141414; }
+/* Side heads set the title upright on its side (stage mode); Projects and Skills, whose head sits above the content, set it on a -8 degree baseline. */
+:root[data-bh-mode='stage'][data-style='bauhaus-plus'] :is(#about, #experience, #education, #contact, #design-lab, #data-lab, #shop-lab) > .wrap > .section__head { grid-column: 1 / span 2; }
+:root[data-bh-mode='stage'][data-style='bauhaus-plus'] :is(#about, #experience, #education, #contact, #design-lab, #data-lab, #shop-lab) > .wrap > .col-9 { grid-column: 3 / -1; }
+:root[data-bh-mode='stage'][data-style='bauhaus-plus'] :is(#about, #experience, #education, #contact, #design-lab, #data-lab, #shop-lab) .section__num { white-space: normal; max-width: 6.4rem; line-height: 1.25; }
+:root[data-bh-mode='stage'][data-style='bauhaus-plus'] :is(#about, #experience, #education, #contact, #design-lab, #data-lab, #shop-lab) .section__title { writing-mode: vertical-rl; transform: rotate(180deg); font-size: clamp(2.2rem, min(5vw, 7.4vh), 4.6rem); }
+:root[data-style='bauhaus-plus'] :is(#projects, #skills) .section__title { font-size: clamp(2.6rem, 6.4vw, 6rem); transform: rotate(-8deg); transform-origin: left bottom; margin: 0.5em 0 0.2em; }
+:root[data-bh-mode='stage'][data-style='bauhaus-plus'] :is(#projects, #skills) > .wrap > .grid > .section__head { grid-column: 1 / -1; }
+:root[data-bh-mode='stage'][data-style='bauhaus-plus'] :is(#projects, #skills) > .wrap > .grid > .section__intro { grid-column: 5 / -1; }
+
+/* Cards (a job, a project, a course, a skill group) are paper with a hard shadow; they carry their own colours inside the bands. */
+:root[data-style='bauhaus-plus'] :is(.job, .project, .edu__item, .skills__group) { --bg: var(--bh-paper); --text: var(--bh-ink); --muted: var(--bh-soft); --rule: var(--bh-line); --hair: color-mix(in srgb, var(--bh-ink) 25%, transparent); --accent: var(--bh-redt); background: var(--bh-paper); color: var(--bh-ink); border: 3px solid var(--bh-line); box-shadow: 8px 8px 0 #141414; }
+
+/* About: circle in square */
+:root[data-style='bauhaus-plus'] .about__lead { max-width: 22em; padding: 26px 28px; background: var(--bh-blue); color: #ffffff; border: 3px solid var(--bh-line); box-shadow: 10px 10px 0 var(--bh-yellow); font: 900 clamp(1.3rem, 2.6vw, 2.1rem)/1.14 var(--bh-display); letter-spacing: -0.02em; }
+:root[data-style='bauhaus-plus'] .facts dt { display: grid; place-items: center; width: 4.6rem; height: 4.6rem; border-radius: 50%; background: var(--bh-red); color: #ffffff; font: 900 1.6rem var(--bh-display); letter-spacing: -0.04em; }
+:root[data-style='bauhaus-plus'] .facts div { grid-template-columns: 6rem 1fr; border-top: 3px solid var(--bh-line); }
+:root[data-style='bauhaus-plus'] .facts div:nth-child(2) dt { border-radius: 0; background: var(--bh-blue); }
+:root[data-style='bauhaus-plus'] .facts div:nth-child(3) dt { border-radius: 0; background: var(--bh-yellow); color: #141414; clip-path: polygon(50% 0, 100% 100%, 0 100%); padding-top: 1rem; }
+
+/* Experience: stairs of squares */
+:root[data-style='bauhaus-plus'] .jobs { counter-reset: bh-step; }
+:root[data-style='bauhaus-plus'] .job { position: relative; counter-increment: bh-step; margin-bottom: 36px; padding: 24px 26px 28px 40px; }
+:root[data-style='bauhaus-plus'] .job::before { content: counter(bh-step); position: absolute; left: -3px; top: -3px; display: grid; place-items: center; width: 2.6rem; height: 2.6rem; background: var(--bh-blue); color: #fff; font: 900 1.2rem var(--bh-display); }
+:root[data-style='bauhaus-plus'] .job:nth-child(2)::before { background: var(--bh-red); }
+:root[data-style='bauhaus-plus'] .job:nth-child(3)::before { background: #141414; color: #efe7d4; }
+:root[data-style='bauhaus-plus'] .job:nth-child(2) { margin-left: clamp(0px, 4.5vw, 64px); }
+:root[data-style='bauhaus-plus'] .job:nth-child(3) { margin-left: clamp(0px, 9vw, 128px); }
+:root[data-style='bauhaus-plus'] .job h3 { font: 900 1.25rem/1.15 var(--bh-display); text-transform: uppercase; letter-spacing: -0.02em; padding-left: 1.2rem; }
+:root[data-style='bauhaus-plus'] .job__date { color: var(--bh-redt); font-weight: 800; }
+:root[data-style='bauhaus-plus'] .job__org { padding-left: 1.2rem; }
+
+/* Projects: stacked blocks of different widths */
+:root[data-style='bauhaus-plus'] #projectList { display: grid; grid-template-columns: repeat(12, 1fr); gap: 28px 24px; align-items: start; }
+:root[data-style='bauhaus-plus'] .project { grid-column: span 6; margin: 0; border-width: 3px; }
+:root[data-style='bauhaus-plus'] .project:nth-child(8n + 1), :root[data-style='bauhaus-plus'] .project:nth-child(8n + 4) { grid-column: span 7; }
+:root[data-style='bauhaus-plus'] .project:nth-child(8n + 2), :root[data-style='bauhaus-plus'] .project:nth-child(8n + 3) { grid-column: span 5; }
+:root[data-style='bauhaus-plus'] .project:nth-child(8n + 4) { margin-top: 28px; }
+:root[data-style='bauhaus-plus'] .project:last-child { border-bottom: 3px solid var(--bh-line); }
+:root[data-style='bauhaus-plus'] .project:nth-child(3n + 1) { --bg: var(--bh-red); --text: #ffffff; --muted: #ffffff; --rule: #ffffff; --hair: rgba(255, 255, 255, 0.5); --accent: #ffffff; background: var(--bh-red); color: #ffffff; }
+:root[data-style='bauhaus-plus'] .project:nth-child(3n + 2) { --bg: var(--bh-yellow); --text: #141414; --muted: #262626; --rule: #141414; --hair: rgba(20, 20, 20, 0.4); --accent: #141414; background: var(--bh-yellow); color: #141414; }
+:root[data-style='bauhaus-plus'] .project summary { grid-template-columns: auto 1fr 1.5rem; grid-template-areas: 'idx name plus' 'meta meta meta'; gap: 6px 14px; padding: 18px 20px; align-items: center; }
+:root[data-style='bauhaus-plus'] .project__idx { grid-area: idx; display: grid; place-items: center; width: 2.4rem; height: 2.4rem; background: var(--text); color: var(--bg); font: 900 0.85rem var(--bh-display); }
+:root[data-style='bauhaus-plus'] .project__name { grid-area: name; font: 900 clamp(1rem, 1.7vw, 1.3rem)/1.1 var(--bh-display); text-transform: uppercase; letter-spacing: -0.02em; }
+:root[data-style='bauhaus-plus'] .project__meta { grid-area: meta; text-align: left; color: var(--muted); font-weight: 700; }
+:root[data-style='bauhaus-plus'] .project__plus { grid-area: plus; }
+:root[data-style='bauhaus-plus'] .project__body { padding: 0 20px 24px; }
+:root[data-style='bauhaus-plus'] .project summary:hover .project__name { color: inherit; text-decoration: underline; text-underline-offset: 4px; }
+:root[data-style='bauhaus-plus'] .project .tags li { border-color: currentColor; }
+
+/* Skills: squares as a chart */
+:root[data-style='bauhaus-plus'] .skills__group { --c: var(--bh-redt); padding: 20px 22px 14px; }
+:root[data-style='bauhaus-plus'] .skills__group:nth-child(1) { box-shadow: 8px 8px 0 var(--bh-red); }
+:root[data-style='bauhaus-plus'] .skills__group:nth-child(2) { --c: var(--bh-bluet); box-shadow: 8px 8px 0 var(--bh-blue); }
+:root[data-style='bauhaus-plus'] .skills__group:nth-child(3) { --c: var(--bh-ink); box-shadow: 8px 8px 0 var(--bh-yellow); }
+:root[data-style='bauhaus-plus'] .skills__group h3 { display: flex; align-items: center; gap: 10px; font: 900 0.9rem var(--bh-display); letter-spacing: 0.06em; border-bottom: 3px solid var(--bh-line); }
+:root[data-style='bauhaus-plus'] .skills__group h3::before { content: ''; flex: none; width: 1rem; height: 1rem; background: var(--bh-red); border-radius: 50%; }
+:root[data-style='bauhaus-plus'] .skills__group:nth-child(2) h3::before { background: var(--bh-blue); border-radius: 0; }
+:root[data-style='bauhaus-plus'] .skills__group:nth-child(3) h3::before { background: var(--bh-yellow); border-radius: 0; clip-path: polygon(50% 0, 100% 100%, 0 100%); }
+:root[data-style='bauhaus-plus'] .skill-list li::after { width: 71px; height: 11px; background: linear-gradient(90deg, var(--c) calc(var(--l, 0) * 15px), var(--hair) 0); -webkit-mask: repeating-linear-gradient(90deg, #000 0 11px, transparent 11px 15px); mask: repeating-linear-gradient(90deg, #000 0 11px, transparent 11px 15px); }
+:root[data-style='bauhaus-plus'] .legend i { height: 10px; width: 10px; }
+:root[data-style='bauhaus-plus'] .legend i:nth-child(-n+3) { background: var(--bh-redt); }
+
+/* Education: a rising triangle of cards, each wider than the one above */
+:root[data-style='bauhaus-plus'] .edu { display: flex; flex-direction: column; gap: 22px; }
+:root[data-style='bauhaus-plus'] .edu__item { grid-template-columns: 1fr; margin: 0 auto; padding: 20px 24px 24px; }
+:root[data-style='bauhaus-plus'] .edu__item:nth-child(1) { width: 64%; }
+:root[data-style='bauhaus-plus'] .edu__item:nth-child(2) { width: 76%; }
+:root[data-style='bauhaus-plus'] .edu__item:nth-child(3) { width: 88%; }
+:root[data-style='bauhaus-plus'] .edu__item:nth-child(4) { width: 100%; }
+:root[data-style='bauhaus-plus'] .edu__date { grid-row: auto; display: inline-block; justify-self: start; padding: 4px 10px; background: var(--bh-yellow); color: #141414; font: 900 0.9rem var(--bh-display); letter-spacing: -0.01em; }
+:root[data-style='bauhaus-plus'] .edu h3 { font: 900 1.15rem/1.15 var(--bh-display); text-transform: uppercase; letter-spacing: -0.02em; }
+
+/* Contact: night poster, every link a line with a circle on it */
+:root[data-style='bauhaus-plus'] #contact .about__lead { padding: 0; background: none; border: 0; box-shadow: none; color: var(--text); font-size: clamp(1.4rem, 3vw, 2.4rem); text-transform: uppercase; max-width: 20em; }
+:root[data-style='bauhaus-plus'] .contact__links { margin-top: 40px; }
+:root[data-style='bauhaus-plus'] .contact__links li { position: relative; grid-template-columns: 1fr; gap: 4px; padding: 26px 0 22px 38px; border-top: 4px solid var(--rule); transition: background-color 0.15s; }
+:root[data-style='bauhaus-plus'] .contact__links li:last-child { border-bottom: 0; }
+:root[data-style='bauhaus-plus'] .contact__links li::before { content: ''; position: absolute; left: 0; top: -14px; width: 24px; height: 24px; border-radius: 50%; background: var(--bh-red); }
+:root[data-style='bauhaus-plus'] .contact__links li:nth-child(2)::before { background: var(--bh-blue); }
+:root[data-style='bauhaus-plus'] .contact__links li:nth-child(3)::before { background: var(--bh-yellow); }
+:root[data-style='bauhaus-plus'] .contact__links span { color: var(--muted); font-weight: 800; }
+:root[data-style='bauhaus-plus'] .contact__links a { font: 900 clamp(1.2rem, 2.6vw, 2rem)/1.1 var(--bh-display); letter-spacing: -0.03em; }
+:root[data-style='bauhaus-plus'] .contact__links li:first-child a { font-size: clamp(1.1rem, 2.2vw, 2rem); }
+:root[data-bh-mode='static'][data-style='bauhaus-plus'] .contact__links a { font-size: min(4.6vw, 1.5rem); }
+:root[data-bh-mode='static'][data-style='bauhaus-plus'] .contact__links li:first-child a { font-size: min(4.2vw, 1.9rem); }
+:root[data-style='bauhaus-plus'] .contact__links a:hover { color: var(--bh-yellow); }
+:root[data-style='bauhaus-plus'] .form input, :root[data-style='bauhaus-plus'] .form textarea { border: 3px solid var(--rule); background: var(--bh-night); color: #efe7d4; }
+:root[data-style='bauhaus-plus'] .form input:focus, :root[data-style='bauhaus-plus'] .form textarea:focus { border-color: var(--bh-yellow); outline: 3px solid var(--bh-yellow); outline-offset: 2px; }
+:root[data-style='bauhaus-plus'] .form__field span { color: var(--muted); font-weight: 800; }
+:root[data-style='bauhaus-plus'] #contact .btn--solid { box-shadow: 5px 5px 0 var(--bh-yellow); }
+
+/* The persona labs and the Style lab, which sit between the chapters in some views, use the same blocks. */
+:root[data-style='bauhaus-plus'] :is(#design-lab, #data-lab, #shop-lab) .style-picker button { border: 3px solid var(--bh-line); border-radius: 0; font-weight: 800; }
+:root[data-style='bauhaus-plus'] .footer { border: 0; padding: 36px 0; font-size: 0.9rem; font-weight: 600; }
+:root[data-style='bauhaus-plus'] .footer__link { color: #141414; text-decoration: underline; text-underline-offset: 3px; }
+
+/* ===== static mode: one column, finished pictograms as headers (phones, reduced motion) ===== */
+:root[data-bh-mode='static'][data-style='bauhaus-plus'] :is(.hero, .section) > .wrap, :root[data-bh-mode='static'][data-style='bauhaus-plus'] .footer > .wrap { max-width: 46rem; }
+:root[data-bh-mode='static'][data-style='bauhaus-plus'] :is(.col-3, .col-4, .col-5, .col-6, .col-7, .col-9) { grid-column: 1 / -1; }
+:root[data-bh-mode='static'][data-style='bauhaus-plus'] .section__head { position: static; margin-bottom: 28px; }
+:root[data-bh-mode='static'][data-style='bauhaus-plus'] .hero__title { font-size: clamp(2.8rem, 15vw, 7rem); margin: 3.4rem 0 3rem 14px; }
+:root[data-bh-mode='static'][data-style='bauhaus-plus'] .section__title { font-size: clamp(2.2rem, 10.5vw, 4.6rem); }
+:root[data-bh-mode='static'][data-style='bauhaus-plus'] #projectList { grid-template-columns: 1fr; }
+:root[data-bh-mode='static'][data-style='bauhaus-plus'] .project { grid-column: 1 / -1; margin-top: 0; }
+:root[data-bh-mode='static'][data-style='bauhaus-plus'] .job { margin-left: 0; }
+:root[data-bh-mode='static'][data-style='bauhaus-plus'] .edu__item { width: 100%; }
+:root[data-bh-mode='static'][data-style='bauhaus-plus'] .skills__group { margin-bottom: 36px; }
+@media (max-width: 720px) {
+  :root[data-style='bauhaus-plus'] .job { padding-left: 34px; }
+  :root[data-style='bauhaus-plus'] .about__lead { padding: 20px; }
+  :root[data-style='bauhaus-plus'] .footer__inner { flex-direction: column; }
+}
+
+/* ===== chat: the same blocks ===== */
+:root[data-style='bauhaus-plus'] .chat { background: var(--bh-paper); color: var(--bh-ink); border: 3px solid var(--bh-line); border-radius: 0; box-shadow: 8px 8px 0 var(--bh-red); }
+:root[data-style='bauhaus-plus'] .chat__head { background: var(--bh-yellow); color: #141414; border-bottom: 3px solid var(--bh-line); }
+:root[data-style='bauhaus-plus'] .chat__head strong { font-family: var(--bh-display); text-transform: uppercase; letter-spacing: -0.01em; }
+:root[data-style='bauhaus-plus'] .chat__head span { opacity: 1; }
+:root[data-style='bauhaus-plus'] .msg--user { background: var(--bh-blue); color: #ffffff; }
+:root[data-style='bauhaus-plus'] .msg--bot { border: 2px solid var(--bh-line); background: var(--bh-paper); color: var(--bh-ink); }
+:root[data-style='bauhaus-plus'] .msg--err { color: var(--bh-redt); border-color: var(--bh-redt); }
+:root[data-style='bauhaus-plus'] .chat__chips button { border: 2px solid var(--bh-line); border-radius: 0; background: var(--bh-paper); color: var(--bh-ink); }
+:root[data-style='bauhaus-plus'] .chat__chips button:hover { background: var(--bh-yellow); color: #141414; }
+:root[data-style='bauhaus-plus'] .chat__form { border-top: 3px solid var(--bh-line); }
+:root[data-style='bauhaus-plus'] .chat__form input { background: var(--bh-paper); color: var(--bh-ink); }
+:root[data-style='bauhaus-plus'] .chat__form button { background: var(--bh-red); color: #ffffff; }
+:root[data-style='bauhaus-plus'] .chat-fab { background: var(--bh-yellow); color: #141414; border: 3px solid var(--bh-line); border-radius: 0; box-shadow: 6px 6px 0 var(--bh-red); font-family: var(--bh-display); text-transform: uppercase; letter-spacing: 0.02em; }
+:root[data-style='bauhaus-plus'] .chat-fab span { background: #141414; color: var(--bh-yellow); border-radius: 50%; }
+:root[data-style='bauhaus-plus'] .chat-fab:hover { filter: none; transform: translate(2px, 2px); box-shadow: 4px 4px 0 var(--bh-red); }
+
+@media (prefers-reduced-motion: reduce) {
+  .bh-piece, .bh-shape, :root[data-style='bauhaus-plus'] .btn, .bh-curr__tile { transition: none; }
+}

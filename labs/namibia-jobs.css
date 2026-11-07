@@ -1,0 +1,113 @@
+/* Namibia jobs map lab. Site tokens for text, rules and background; the series colours and tile bins below are chosen for 3:1 or better
+   against the page background in both themes (checked, see scripts/labs/namibia-jobs.e2e.json). Series are never told apart by colour alone:
+   each also has its own marker shape and line pattern. No inline styles anywhere (CSP). */
+.nj-app, .nj-defs, .nj-table { --s0: #0b5cad; --s1: #b0124f; --s2: #5f5f5f; --s3: #6a3fb0; --s4: #a24a06;
+  --b1: #e8f0fa; --b2: #bcd4f0; --b3: #7fa9dc; --b4: #2f6fb7; --b5: #0b3d7a; --f1: #0a0a0a; --f2: #0a0a0a; --f3: #0a0a0a; --f4: #ffffff; --f5: #ffffff; --warn: #fff3d6; --warn-text: #3d2a00; --warn-edge: #a05a00; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) .nj-app, :root:not([data-theme='light']) .nj-defs, :root:not([data-theme='light']) .nj-table { --s0: #6cb4ff; --s1: #ff7aa8; --s2: #b5b5b5; --s3: #b99bff; --s4: #f0b24a;
+    --b1: #16263a; --b2: #1f4b78; --b3: #4c8fd6; --b4: #86b9ee; --b5: #bfdcfb; --f1: #f2f2f0; --f2: #ffffff; --f3: #0a0a0a; --f4: #0a0a0a; --f5: #0a0a0a; --warn: #2a2110; --warn-text: #f5e7c4; --warn-edge: #f0b24a; }
+}
+:root[data-theme='dark'] .nj-app, :root[data-theme='dark'] .nj-defs, :root[data-theme='dark'] .nj-table { --s0: #6cb4ff; --s1: #ff7aa8; --s2: #b5b5b5; --s3: #b99bff; --s4: #f0b24a;
+  --b1: #16263a; --b2: #1f4b78; --b3: #4c8fd6; --b4: #86b9ee; --b5: #bfdcfb; --f1: #f2f2f0; --f2: #ffffff; --f3: #0a0a0a; --f4: #0a0a0a; --f5: #0a0a0a; --warn: #2a2110; --warn-text: #f5e7c4; --warn-edge: #f0b24a; }
+
+.nj-app { margin: 4px 0 20px; min-width: 0; }
+.nj-controls .lab-controls { margin-bottom: 10px; }
+.nj-controls .lab-controls button { display: inline-flex; align-items: center; gap: 8px; }
+.nj-note { margin: 4px 0 14px; padding: 10px 14px; border-left: 6px solid var(--rule); background: var(--bg-alt); color: var(--text); font-size: 0.9rem; max-width: 60em; }
+.nj-note--warn { background: var(--warn); color: var(--warn-text); border-left-color: var(--warn-edge); }
+.nj-chart { min-width: 0; }
+.nj-svg { display: block; max-width: 100%; height: auto; margin: 0 auto; overflow: visible; font-family: inherit; }
+
+/* series swatches and chart marks: colour, marker shape and line pattern per series */
+.s0 { --c: var(--s0); } .s1 { --c: var(--s1); } .s2 { --c: var(--s2); } .s3 { --c: var(--s3); } .s4 { --c: var(--s4); }
+.nj-sw { display: inline-block; width: 12px; height: 12px; background: var(--c); flex: none; }
+.nj-sw.s0 { border-radius: 50%; }
+.nj-sw.s2 { clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%); width: 14px; height: 14px; }
+.nj-sw.s3 { clip-path: polygon(50% 0, 100% 100%, 0 100%); }
+.nj-sw.s4 { clip-path: polygon(33% 0, 67% 0, 67% 33%, 100% 33%, 100% 67%, 67% 67%, 67% 100%, 33% 100%, 33% 67%, 0 67%, 0 33%, 33% 33%); width: 14px; height: 14px; }
+.nj-svg .mk { fill: var(--c); stroke: var(--bg); stroke-width: 1.5; }
+.nj-svg .poly { fill: var(--c); fill-opacity: 0.1; stroke: var(--c); stroke-width: 2.5; stroke-linejoin: round; }
+.nj-svg .poly.s1 { stroke-dasharray: 9 4; }
+.nj-svg .poly.s2 { stroke-dasharray: 3 3; }
+.nj-svg .poly.s3 { stroke-dasharray: 12 3 2 3; }
+.nj-svg .poly.s4 { stroke-dasharray: 1 4; stroke-linecap: round; }
+.nj-svg .natring, .nj-svg .natline { fill: none; stroke: var(--c); stroke-width: 1.5; stroke-dasharray: 2 4; opacity: 0.9; }
+
+.nj-svg .ring { fill: none; stroke: var(--hair); stroke-width: 1; }
+.nj-svg .ring--outer { stroke: var(--muted); }
+.nj-svg .spoke { stroke: var(--hair); stroke-width: 1; }
+.nj-svg text { fill: var(--text); font-size: 13px; }
+.nj-svg .ringlab { fill: var(--muted); font-size: 11px; paint-order: stroke; stroke: var(--bg); stroke-width: 3px; }
+.nj-svg .slopehead { font-size: 13px; font-weight: 700; }
+.nj-svg .rlab { font-size: 13px; }
+.nj-svg .dotspan { stroke: var(--muted); stroke-width: 2; opacity: 0.6; }
+.nj-svg .slopeline:not(.hit) { fill: none; stroke: var(--muted); stroke-width: 1.5; opacity: 0.75; }
+
+/* hit areas: invisible, wide, easy to hover; the focus ring is drawn on the group */
+.nj-svg .hit { fill: transparent; stroke: transparent; stroke-width: 22px; pointer-events: stroke; }
+.nj-svg .hit--row { pointer-events: all; stroke-width: 0; }
+.nj-svg .hit--line { stroke-width: 12px; }
+.nj-svg .reg { cursor: pointer; outline: none; }
+.nj-svg .reg:focus-visible { outline: none; }
+.nj-svg .reg:focus-visible .rlab, .nj-svg .reg:focus-visible .tilecode { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 3px; }
+.nj-svg .reg:focus-visible .tile { stroke: var(--accent); stroke-width: 4; }
+.nj-svg .reg:focus-visible .hit--row { stroke: var(--accent); stroke-width: 3; fill: transparent; }
+.nj-svg .reg.is-on .rlab { font-weight: 700; }
+.nj-svg .reg.is-on .mk { stroke: var(--text); stroke-width: 2.5; }
+.nj-svg .reg.is-on .tile { stroke: var(--text); stroke-width: 3; }
+.nj-svg .reg.is-on .slopeline:not(.hit) { stroke: var(--text); stroke-width: 3; opacity: 1; }
+.nj-svg .reg.is-on .hit--row { fill: var(--bg-alt); }
+.nj-svg .spoke-on { stroke: transparent; stroke-width: 2; pointer-events: none; }
+.nj-svg .reg.is-on .spoke-on { stroke: var(--text); }
+.nj-svg .reg:focus-visible .spoke-on { stroke: var(--accent); stroke-width: 3; }
+.nj-svg .reg:focus-visible .hit--line { stroke: var(--accent); opacity: 0.5; }
+
+/* tile map */
+.nj-svg .tile { stroke: var(--muted); stroke-width: 1.5; }
+.nj-svg .tile.b1 { fill: var(--b1); } .nj-svg .tile.b2 { fill: var(--b2); } .nj-svg .tile.b3 { fill: var(--b3); } .nj-svg .tile.b4 { fill: var(--b4); } .nj-svg .tile.b5 { fill: var(--b5); }
+.nj-svg .tile.b1 ~ text { fill: var(--f1); } .nj-svg .tile.b2 ~ text { fill: var(--f2); } .nj-svg .tile.b3 ~ text { fill: var(--f3); } .nj-svg .tile.b4 ~ text { fill: var(--f4); } .nj-svg .tile.b5 ~ text { fill: var(--f5); }
+.nj-svg .tilecode { font-size: 14px; font-weight: 700; letter-spacing: 0.04em; }
+.nj-svg .tileval { font-size: 20px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.nj-svg .tilename { font-size: 11px; }
+.nj-legendbox { margin: 10px 0 0; }
+.nj-legendbox p { margin: 6px 0 0; max-width: 60em; }
+.nj-legend { display: flex; flex-wrap: wrap; gap: 6px 16px; }
+.nj-bin { display: inline-flex; align-items: center; gap: 6px; font-size: 0.85rem; color: var(--text); }
+.nj-binsw { display: inline-block; width: 18px; height: 18px; border: 1.5px solid var(--muted); }
+.nj-binsw.b1 { background: var(--b1); } .nj-binsw.b2 { background: var(--b2); } .nj-binsw.b3 { background: var(--b3); } .nj-binsw.b4 { background: var(--b4); } .nj-binsw.b5 { background: var(--b5); }
+
+/* readout */
+.nj-readout { margin: 14px 0 0; padding: 10px 14px; border: 2px solid var(--rule); min-height: 7.5rem; }
+.nj-readout__name { margin: 0 0 6px; font-size: 1.05rem; }
+.nj-readout__list { margin: 0 0 6px; padding: 0; list-style: none; display: grid; gap: 4px; font-size: 0.9rem; }
+.nj-readout__list li { display: flex; gap: 8px; align-items: baseline; flex-wrap: wrap; }
+.nj-readout__list li .nj-sw { align-self: center; }
+.nj-readout p { margin: 0; }
+
+/* definitions and table */
+.nj-defs { margin: 20px 0 0; padding: 12px 16px; border: 1px solid var(--hair); background: var(--bg-alt); }
+.nj-defs h3 { margin: 0 0 6px; font-size: 1rem; }
+.nj-defs dl { margin: 0; display: grid; grid-template-columns: max-content 1fr; gap: 6px 18px; font-size: 0.9rem; }
+.nj-defs dt { font-weight: 700; }
+.nj-defs dd { margin: 0; color: var(--text); }
+.nj-table { margin: 20px 0 0; }
+.nj-table summary { cursor: pointer; font-weight: 700; padding: 8px 0; }
+.nj-table summary:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.nj-scroll { overflow-x: auto; margin: 8px 0 14px; max-width: 100%; }
+.nj-table .lab-table { min-width: 560px; }
+.nj-table .lab-table th[scope='col'] { vertical-align: bottom; font-size: 0.8rem; }
+
+@media (max-width: 640px) {
+  .nj-svg .tilename { display: none; }
+  .nj-svg .tilecode { font-size: 13px; }
+  .nj-svg .tileval { font-size: 17px; }
+  .nj-svg .rlab { font-size: 12px; }
+  .nj-defs dl { grid-template-columns: 1fr; gap: 2px 0; }
+  .nj-defs dd { margin-bottom: 8px; }
+  .nj-controls .lab-controls button { font-size: 0.8rem; padding: 6px 10px; }
+}
+@media (prefers-reduced-motion: reduce) { .nj-svg * { animation: none !important; transition: none !important; } }
+
+/* the site resets list markers; the sources and limits lists need them to read as lists */
+.lab-limits ul { list-style: disc; }
+.lab-limits li { margin: 0 0 8px; }

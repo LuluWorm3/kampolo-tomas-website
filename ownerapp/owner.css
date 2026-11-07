@@ -1,0 +1,43 @@
+/* The private owner page. Site tokens only (see /styles.css); table and button styles come from /labs/lab.css. */
+.ow-login { display: grid; gap: 10px; max-width: 26rem; padding: 40px 0; }
+.ow-login label { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); }
+.ow-login input { padding: 11px 12px; border: 2px solid var(--rule); background: var(--bg); color: var(--text); font: inherit; }
+.ow-login input:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.ow-msg { margin: 0; min-height: 1.4em; color: var(--text); font-weight: 600; border-left: 4px solid var(--accent); padding-left: 10px; }
+.ow-msg:empty { border: 0; }
+.ow-bar { display: flex; flex-wrap: wrap; gap: 12px 24px; align-items: center; justify-content: space-between; padding: 20px 0 8px; }
+.ow-bar .lab-controls { margin: 0; }
+.ow-banner { margin: 8px 0 0; padding: 8px 12px; border: 2px solid var(--accent); font-weight: 600; }
+.ow-body { padding: 8px 0 24px; }
+.ow-note { color: var(--muted); font-size: 0.88rem; max-width: 52rem; }
+.ow-sec { margin: 28px 0; min-width: 0; }
+.ow-sec h2 { font-size: 1.15rem; letter-spacing: -0.02em; margin: 0 0 8px; }
+.ow-kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin: 16px 0; }
+.ow-kpi { border: 2px solid var(--rule); padding: 12px 14px; background: var(--bg); }
+.ow-kpi p { margin: 0; }
+.ow-kpi__v { font-size: 1.9rem; font-weight: 800; letter-spacing: -0.04em; line-height: 1.05; }
+.ow-kpi__l { font-size: 0.8rem; color: var(--muted); }
+.ow-kpi__n { font-size: 0.75rem; color: var(--muted); }
+.ow-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 8px 32px; }
+.ow-chart { width: 100%; height: auto; display: block; margin: 8px 0; }
+.ow-chart__bar { fill: var(--accent); }
+.ow-chart__lab { fill: var(--muted); font: 11px var(--font, system-ui), sans-serif; }
+.ow-bars { list-style: none; margin: 8px 0; padding: 0; display: grid; gap: 8px; }
+.ow-bars li { display: grid; grid-template-columns: 1fr auto; gap: 2px 12px; font-size: 0.88rem; }
+.ow-bars__k { overflow-wrap: anywhere; }
+.ow-bars__n { font-variant-numeric: tabular-nums; font-weight: 700; }
+.ow-bars__t { grid-column: 1 / -1; height: 6px; background: var(--hair); }
+.ow-bars__t i { display: block; height: 100%; background: var(--accent); }
+.ow-det { margin-top: 8px; }
+.ow-det summary { cursor: pointer; font-weight: 600; font-size: 0.9rem; }
+.ow-det .lab-table { margin-top: 8px; }
+.ow-vitals { list-style: none; margin: 8px 0; padding: 0; display: grid; gap: 18px; }
+.ow-vital__h { display: flex; flex-wrap: wrap; gap: 4px 14px; align-items: baseline; margin: 0 0 6px; }
+.ow-vital__h span:nth-child(2) { font-size: 1.3rem; font-weight: 800; letter-spacing: -0.03em; }
+.ow-vital__bar { display: flex; position: relative; height: 10px; border: 1px solid var(--rule); background: var(--bg-alt, var(--bg)); }
+.ow-vital__good { background: var(--accent); opacity: 0.35; }
+.ow-vital__mid { background: var(--accent); opacity: 0.15; }
+.ow-vital__mark { position: absolute; top: -5px; width: 3px; height: 18px; background: var(--text); }
+.ow-meter { width: 100%; max-width: 32rem; height: 16px; }
+.lab-table { margin: 8px 0; }
+@media (max-width: 700px) { .lab-table { display: block; overflow-x: auto; } }

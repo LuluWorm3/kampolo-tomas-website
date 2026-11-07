@@ -117,7 +117,8 @@
       <div class="wrap grid">
         <header class="section__head col-3"><p class="section__num">02</p><h2 class="section__title">The triggers</h2></header>
         <div class="col-9">
-          <p>Two ways in: the Konami code, or asking the assistant for something cool. Both of these phrases are matched in your browser before any message is sent to the AI, so they work even when the AI is offline.</p>
+          <p>Three ways in: the Konami code, asking the assistant for something cool, or switching the "View as" menu in the footer. The menu runs the same swarm, and at the halfway point the page content swaps to the new view (headline, project order, CV link, lab sections). A <code>?swarm=1</code> link also starts it.</p>
+          <p>The two chat phrases below are matched in your browser before any message is sent to the AI, so they work even when the AI is offline.</p>
           <pre class="code code--full" tabindex="0">const COOL = /something cool|anything cool|(show|give|do|got).{0,20}(something|anything|stuff).{0,12}(cool|awesome|impressive|fun|wild|neat)|\b(wow|impress|surprise) me\b/i;
 
 const HOW = /\bhow\s+(was|is|did|does|do)\s+(that|this|it|the\s+(swarm|animation|effect|cursors?|site|website|page))\b.{0,25}(done|made|built|work|works|happen)|\bhow\s+did\s+you\s+(do|build|make|code|create)\s+(that|this|it|the\s+(swarm|animation|effect|site|website|page))|show me (the )?code|behind the scenes|swarm code/i;</pre>

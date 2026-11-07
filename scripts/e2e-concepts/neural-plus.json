@@ -1,0 +1,30 @@
+{
+ "home": {
+  "name": "prompt box, typed pitch, layers rail",
+  "js": "(function(){var h=document.getElementById('home'); var row=h.querySelector('.hero__row'); var rail=document.querySelector('.nn-rail'); var links=rail?rail.querySelectorAll('a[href^=\"#\"]'):[]; var real=h.querySelector('.hero__lead'); var btns=h.querySelectorAll('.hero__actions .btn').length; return !!row.querySelector('.nn-bar') && !!row.querySelector('.nn-prompt__ghost') && getComputedStyle(row).display==='block' && parseFloat(getComputedStyle(row).borderTopLeftRadius)>=10 && links.length>=7 && rail.getAttribute('aria-label')==='Layers' && btns===3 && real.textContent.trim().length>40 && (document.querySelector('.nn-prompt__ghost').textContent.replace(/\\s+/g,' ').trim()===document.querySelector('.hero__role').textContent.replace(/\\s+/g,' ').trim());})()"
+ },
+ "about": {
+  "name": "layer tag and parameters panel",
+  "js": "(function(){var s=document.getElementById('about'); var f=s.querySelector('.facts'); return !!s.querySelector('.nn-layer') && /^L\\d\\d/.test(s.querySelector('.nn-layer').textContent) && getComputedStyle(f).display==='grid' && getComputedStyle(f,'::before').content.indexOf('parameters')>-1 && parseFloat(getComputedStyle(f).borderTopLeftRadius)>=10;})()"
+ },
+ "experience": {
+  "name": "node timeline (date column, trunk, one node per role, live node for Present)",
+  "js": "(function(){var s=document.getElementById('experience'); var j=s.querySelector('.job'); var jobs=s.querySelectorAll('.job').length; var wide=innerWidth>720; return getComputedStyle(s.querySelector('.job__head')).display==='contents' && getComputedStyle(s.querySelector('.jobs'),'::before').content!=='none' && getComputedStyle(j,'::before').borderRadius==='50%' && jobs>=2 && s.querySelectorAll('.nn-now').length>=1 && (!wide || getComputedStyle(j).gridTemplateColumns.split(' ').length===2);})()"
+ },
+ "projects": {
+  "name": "model cards with a type / year / status table from each project's own meta",
+  "js": "(function(){var s=document.getElementById('projects'); var ps=s.querySelectorAll('.project'); var first=ps[0]; var m=first.querySelector('.nn-meta'); var meta=first.querySelector('.project__meta').textContent.replace(/\\s+/g,' ').trim().split(/\\s*·\\s*/); var keys=[].map.call(m.querySelectorAll('.nn-meta__k'),function(n){return n.textContent;}); var vals=[].map.call(m.querySelectorAll('.nn-meta__v'),function(n){return n.textContent;}); var cards=[].every.call(ps,function(p){return !!p.querySelector('.nn-meta');}); return cards && ps.length>=6 && m.getAttribute('aria-hidden')==='true' && keys.join(',')==='type,year,status' && vals.join(' · ')===meta.join(' · ') && getComputedStyle(first).overflow==='hidden' && parseFloat(getComputedStyle(first).borderTopLeftRadius)>=10 && getComputedStyle(first.querySelector('.project__meta')).position==='absolute' && (innerWidth<=960 || getComputedStyle(s.querySelector('.projects')).gridTemplateColumns.split(' ').length===2);})()"
+ },
+ "skills": {
+  "name": "embedding map with points sized by level, clusters per group, and a working map / list toggle",
+  "js": "(function(){var s=document.getElementById('skills'); var lis=s.querySelectorAll('.skill-list li'); var pts=s.querySelectorAll('.nn-pt'); var btns=s.querySelectorAll('.nn-view button'); if(pts.length!==lis.length||btns.length!==2||s.querySelectorAll('.nn-halo').length!==s.querySelectorAll('.skills__group').length) return false; var rs=[].map.call(pts,function(g){return +g.querySelector('.nn-pt__dot').getAttribute('r');}); var lv=[].map.call(pts,function(g){return +/level (\\d)/.exec(g.getAttribute('aria-label'))[1];}); var ok=true; for(var a=0;a<rs.length;a++)for(var b=0;b<rs.length;b++) if(lv[a]>lv[b]&&!(rs[a]>rs[b])) ok=false; btns[1].click(); var list=getComputedStyle(s.querySelector('.skills')).display!=='none' && getComputedStyle(s.querySelector('.nn-map')).display==='none' && btns[1].getAttribute('aria-pressed')==='true'; btns[0].click(); var map=getComputedStyle(s.querySelector('.skills')).display==='none' && getComputedStyle(s.querySelector('.nn-map')).display!=='none' && btns[0].getAttribute('aria-pressed')==='true'; var tab=[].filter.call(pts,function(g){return g.getAttribute('tabindex')==='0';}).length===1; return ok && list && map && tab;})()"
+ },
+ "education": {
+  "name": "checkpoint grid with ring nodes",
+  "js": "(function(){var s=document.getElementById('education'); var e=s.querySelector('.edu'); var it=s.querySelector('.edu__item'); var cols=getComputedStyle(e).gridTemplateColumns.split(' ').length; return getComputedStyle(e).display==='grid' && (innerWidth<=960 ? cols===1 : cols===2) && getComputedStyle(it,'::before').borderRadius==='50%' && parseFloat(getComputedStyle(it).borderTopLeftRadius)>=10;})()"
+ },
+ "contact": {
+  "name": "API request and response with the real links as fields",
+  "js": "(function(){var s=document.getElementById('contact'); var ul=s.querySelector('.contact__links'); var req=s.querySelector('.nn-req'); var a=ul.querySelectorAll('a'); var hrefs=[].map.call(a,function(x){return x.getAttribute('href');}); return !!req && req.getAttribute('aria-hidden')==='true' && /GET/.test(req.textContent) && getComputedStyle(ul,'::before').content.indexOf('{')>-1 && getComputedStyle(ul,'::after').content.indexOf('}')>-1 && /^mailto:/.test(hrefs[0]) && /^tel:/.test(hrefs[1]) && /linkedin/.test(hrefs[2]) && /cv/.test(hrefs[3]) && getComputedStyle(ul.querySelector('li span'),'::after').content.indexOf('\"')>-1;})()"
+ }
+}

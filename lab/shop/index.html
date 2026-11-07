@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shop checkout and images — Kampolo Tomas</title>
+  <meta name="description" content="Real photographs, loading measured in your own browser, and a complete test purchase from product page to confirmation." />
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="canonical" href="https://kampolo-tomas-website.netlify.app/lab/shop/" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <meta property="og:title" content="Shop checkout and images — Kampolo Tomas" />
+  <meta property="og:description" content="Real photographs, loading measured in your own browser, and a complete test purchase from product page to confirmation." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://kampolo-tomas-website.netlify.app/lab/shop/" />
+  <meta property="og:image" content="https://kampolo-tomas-website.netlify.app/og-image.png" />
+  <script>
+    (function () {
+      try { var t = localStorage.getItem('theme'); if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t); } catch (e) {}
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/styles.css" />
+  <link rel="stylesheet" href="/labs/lab.css" />
+  <link rel="stylesheet" href="/labs/shop.css" />
+</head>
+<body>
+  <div class="wrap doc__top">
+    <a href="/">← Back to the site</a>
+    <span class="section__num">Lab · E-commerce</span>
+  </div>
+
+  <header class="doc__hero">
+    <div class="wrap">
+      <p class="section__num">Lab · E-commerce</p>
+      <h1>Shop checkout and images</h1>
+      <p>Real photographs, loading measured in your own browser, and a complete test purchase from product page to confirmation.</p>
+    </div>
+  </header>
+  <main>
+    <section class="doc__block">
+      <div class="wrap grid">
+        <header class="section__head col-3"><p class="section__num">01</p><h2 class="section__title">The situation</h2></header>
+        <div class="col-9"><p>A small shop's photographs are usually the heaviest part of its page. On a phone with a weak signal they arrive slowly, and when they arrive without reserved space the text and buttons jump under the visitor's thumb. The checkout is the next place a buyer gives up: a long form, vague error messages, a fee that appears only at the end. This lab takes a made-up shop that sells things you could find at a Namibian market (baskets, clay bowls, cloth dolls, wool, carvings, dried fruit and fish) and shows both problems being handled.</p></div>
+      </div>
+    </section>
+    <section class="doc__block">
+      <div class="wrap grid">
+        <header class="section__head col-3"><p class="section__num">02</p><h2 class="section__title">What to look at</h2></header>
+        <div class="col-9"><ol class="lab-look"><li><strong>Run the comparison.</strong> The same eight photographs are placed twice: once the careless way, once the careful way. The numbers (layout shift, when the largest image was painted, bytes) are measured by your own browser as the images load.</li><li><strong>Read the connection table.</strong> It works out how long each version would take at four assumed connection speeds, from the real file sizes.</li><li><strong>Buy something.</strong> Open a product, pick a size, change the quantity in the cart, choose a delivery region, then try to place the order with the form empty to see the errors. All of it is test data.</li></ol></div>
+      </div>
+    </section>
+    <section class="doc__block">
+      <div class="wrap grid">
+        <header class="section__head col-3"><p class="section__num">03</p><h2 class="section__title">The demo</h2></header>
+        <div class="col-9"><div class="lab-demo" id="lab-demo">
+<p><span class="lab-badge">Sample data</span> <span class="lab-note">Every product, price, size and delivery fee below is made up for the demo. The photographs are real and credited under “Limits and sources”.</span></p>
+<noscript><p>This demo needs JavaScript. Everything runs in your browser; nothing is sent anywhere.</p></noscript>
+
+<section class="shopx-sec" aria-labelledby="shopx-a">
+  <h3 id="shopx-a">A. Loading: careless markup against careful markup</h3>
+  <p class="lab-note">The two grids below are built one after the other and measured separately; the page scrolls each into view first, because a browser only counts what moves on screen. Your connection is probably faster than a customer's on mobile data, so also try the simulated delay: it holds the images back for the same time in both grids so the jumping becomes visible. It is a simulation, not your network.</p>
+  <div class="lab-controls shopx-controls">
+    <button type="button" id="shopx-run">Run the comparison</button>
+    <label class="shopx-field" for="shopx-delay">Simulated delay before images are requested
+      <select id="shopx-delay"><option value="0">None (your real connection)</option><option value="1500">1.5 seconds</option><option value="4000">4 seconds</option></select>
+    </label>
+  </div>
+  <div class="shopx-cmp">
+    <div class="shopx-col">
+      <h4>Careless markup</h4>
+      <div class="shopx-stage" id="shopx-stage-naive" role="region" aria-label="Careless markup result" tabindex="0"><p class="shopx-empty">Press “Run the comparison”.</p></div>
+      <pre class="shopx-code"><code>&lt;img src=&quot;/img/lab-shop/full/basket-bowl.jpg&quot; alt=&quot;…&quot;&gt;
+&lt;!-- 2400 px JPEG, no width or height, loads at once --&gt;</code></pre>
+    </div>
+    <div class="shopx-col">
+      <h4>Careful markup</h4>
+      <div class="shopx-stage" id="shopx-stage-opt" role="region" aria-label="Careful markup result" tabindex="0"><p class="shopx-empty">Press “Run the comparison”.</p></div>
+      <pre class="shopx-code"><code>&lt;picture&gt;
+  &lt;source type=&quot;image/webp&quot; sizes=&quot;(max-width: 720px) 44vw, 200px&quot;
+    srcset=&quot;…-400.webp 400w, …-800.webp 800w, …-1200.webp 1200w&quot;&gt;
+  &lt;img src=&quot;…-800.jpg&quot; srcset=&quot;…-400.jpg 400w, …&quot; sizes=&quot;…&quot;
+    width=&quot;1200&quot; height=&quot;900&quot; loading=&quot;lazy&quot; decoding=&quot;async&quot; alt=&quot;…&quot;&gt;
+&lt;/picture&gt;
+&lt;!-- box reserved by aspect ratio, tiny blurred placeholder behind it --&gt;</code></pre>
+    </div>
+  </div>
+  <p class="shopx-status" id="shopx-status" role="status" aria-live="polite"></p>
+  <table class="lab-table shopx-results">
+    <caption>Measured in this browser</caption>
+    <thead><tr><th scope="col">Measure</th><th scope="col" class="num">Careless</th><th scope="col" class="num">Careful</th></tr></thead>
+    <tbody id="shopx-results">
+      <tr><th scope="row">Layout shift (CLS)</th><td class="num" data-k="cls-naive">–</td><td class="num" data-k="cls-opt">–</td></tr>
+      <tr><th scope="row">Largest visible image loaded at</th><td class="num" data-k="paint-naive">–</td><td class="num" data-k="paint-opt">–</td></tr>
+      <tr><th scope="row">Page LCP candidate from this grid</th><td class="num" data-k="lcp-naive">–</td><td class="num" data-k="lcp-opt">–</td></tr>
+      <tr><th scope="row">All requested images finished at</th><td class="num" data-k="done-naive">–</td><td class="num" data-k="done-opt">–</td></tr>
+      <tr><th scope="row">Image requests</th><td class="num" data-k="req-naive">–</td><td class="num" data-k="req-opt">–</td></tr>
+      <tr><th scope="row">Bytes received (measured)</th><td class="num" data-k="bytes-naive">–</td><td class="num" data-k="bytes-opt">–</td></tr>
+      <tr><th scope="row">Bytes of the files chosen (file sizes)</th><td class="num" data-k="decl-naive">–</td><td class="num" data-k="decl-opt">–</td></tr>
+    </tbody>
+  </table>
+  <p class="lab-note">CLS is the layout-shift score from the browser's Layout Instability API; lower is better. “Largest visible image loaded at” is the load time of the biggest image showing in each grid. “Page LCP candidate” comes from the Largest Contentful Paint API and only has a value when a grid image became the largest thing on the whole page. If your browser does not support one of these, it says so instead of guessing.</p>
+</section>
+
+<section class="shopx-sec" aria-labelledby="shopx-b">
+  <h3 id="shopx-b">B. How long would it take on a slow connection?</h3>
+  <p class="lab-note">Estimates, not measurements: round-trip time plus size divided by speed, with every image fetched in parallel. They ignore connection warm-up. The four connection profiles are assumptions for illustration, not measured Namibian speeds.</p>
+  <div class="lab-controls shopx-controls">
+    <label class="shopx-field" for="shopx-speed-for">Show the time for
+      <select id="shopx-speed-for"></select>
+    </label>
+  </div>
+  <div class="shopx-tablewrap">
+    <table class="lab-table" id="shopx-speed">
+      <caption id="shopx-speed-cap">Estimated download time</caption>
+      <thead><tr><th scope="col">Connection</th><th scope="col" class="num">Careless: full photo</th><th scope="col" class="num">Careful: phone size</th><th scope="col" class="num">Careful: desktop size</th></tr></thead>
+      <tbody></tbody>
+    </table>
+  </div>
+</section>
+
+<section class="shopx-sec" aria-labelledby="shopx-c">
+  <h3 id="shopx-c">C. A test purchase, from product to confirmation</h3>
+  <p class="lab-note">Nothing here is sent, saved or charged. There is no payment step and no account. The cart lives in this page only and is gone when you reload it.</p>
+  <div id="shopx-app" class="shopx-app"><p class="shopx-empty">Loading the sample shop…</p></div>
+  <p class="shopx-sr" id="shopx-live" role="status" aria-live="polite" aria-atomic="true"></p>
+</section></div></div>
+      </div>
+    </section>
+    <section class="doc__block">
+      <div class="wrap grid">
+        <header class="section__head col-3"><p class="section__num">04</p><h2 class="section__title">How it is built</h2></header>
+        <div class="col-9">
+<ul>
+  <li><strong>Photographs.</strong> Real photos from Wikimedia Commons, accepted only when the page reports CC0, public domain, CC BY or CC BY-SA. <code>scripts/fetch-photos.mjs</code> checks that before it saves anything, writes the author and licence into <code>scripts/photos.json</code>, and rejects anything else. Originals stay in an ignored folder. <code>scripts/build-lab-shop-images.py</code> crops each to 4:3 and writes WebP and JPEG at 400, 800 and 1200 px, plus a 16 px blurred placeholder.</li>
+  <li><strong>Careful markup.</strong> Fixed <code>width</code> and <code>height</code> plus a CSS aspect ratio so the box exists before the file arrives; <code>srcset</code> and <code>sizes</code> so a phone takes the 400 px file; WebP with a JPEG fallback inside <code>picture</code>; <code>loading="lazy"</code> below the first row; <code>decoding="async"</code>; a tiny blurred placeholder behind each photo until it arrives.</li>
+  <li><strong>Measuring.</strong> A <code>PerformanceObserver</code> watches <code>layout-shift</code> and <code>largest-contentful-paint</code> entries; the image <code>load</code> events and Resource Timing give load times and bytes. Each grid is built and settled on its own so the numbers do not mix, and every image URL carries a one-off query string so the browser cannot answer from cache.</li>
+  <li><strong>Checkout.</strong> Plain DOM code, no framework. Prices include VAT, as shop prices usually do, so the summary shows the VAT contained in the total. Each field has a label and a hint; on submit the errors are collected into a summary that takes focus and links to each field, and every field also shows its own message tied to it with <code>aria-describedby</code>. Cart changes are announced in a polite live region.</li>
+  <li><strong>Trade-offs.</strong> The cart is in memory only, so a reload clears it; that keeps the page free of cookies and storage. The slow-connection table is arithmetic, not a network test. Layout Instability and Largest Contentful Paint are Chromium features, so other browsers show “not supported” for those rows.</li>
+</ul></div>
+      </div>
+    </section>
+    <section class="doc__block">
+      <div class="wrap grid">
+        <header class="section__head col-3"><p class="section__num">05</p><h2 class="section__title">Limits and sources</h2></header>
+        <div class="col-9"><div class="lab-limits">
+<ul>
+  <li><strong>Sample, not real.</strong> The shop, products, prices, sizes, delivery zones and fees are invented for this demo. There are no customers, orders or sales behind it. The “order” is never stored or sent, and no payment is taken.</li>
+  <li><strong>VAT.</strong> The sample uses a flat rate of 15%, the standard VAT rate in Namibia according to the Namibia Revenue Agency's general tax brochure (<a href="https://www.namra.org.na/documents/cms/uploaded/information-brochure--general-tax-information--66d64f0d7f.pdf" rel="noopener">NamRA, General Tax Information</a>, read 2026-11-07). The same brochure says some supplies are taxed at 0% or exempt; this demo does not model that, so treat the VAT line as an illustration.</li>
+  <li><strong>CLS thresholds.</strong> Layout shift below 0.1 is generally treated as good and above 0.25 as poor, following the Core Web Vitals guidance published at web.dev.</li>
+  <li><strong>Connection speeds.</strong> The four profiles in table B are assumptions chosen to show the range, not measurements.</li>
+  <li><strong>What was and was not tested.</strong> The measurements were checked in Chrome. Firefox, Safari, real phones and real slow networks were not tested, and the demo does not claim results for them.</li>
+  <li><strong>Photographs.</strong> The photos were resized and cropped, which counts as a modification under the licences below. CC BY-SA photographs stay under their own licence; this does not change the licence of the rest of the site. Photos of people were not used.</li>
+</ul>
+<h3 class="shopx-credits-title">Photo credits</h3>
+<ul class="shopx-credits"><li><strong>Header photo.</strong> “Market Scene Oshakati Namibia” by Pemba.mpimaji, <a href="https://creativecommons.org/licenses/by-sa/4.0" rel="noopener">CC BY-SA 4.0</a>. <a href="https://commons.wikimedia.org/wiki/File:Market_Scene_Oshakati_Namibia.jpg" rel="noopener">Source: Wikimedia Commons</a>.</li><li><strong>Palm-leaf bowl basket.</strong> “Palm leaves basket weaved by hand used in Aawambo homesteads” by Martin Hipangwa, <a href="https://creativecommons.org/licenses/by-sa/4.0" rel="noopener">CC BY-SA 4.0</a>. <a href="https://commons.wikimedia.org/wiki/File:Palm_leaves_basket_weaved_by_hand_used_in_Aawambo_homesteads.jpg" rel="noopener">Source: Wikimedia Commons</a>.</li><li><strong>Flat palm-leaf trays.</strong> “Oshiwambo palm leave baskets” by Martin Hipangwa, <a href="https://creativecommons.org/licenses/by-sa/4.0" rel="noopener">CC BY-SA 4.0</a>. <a href="https://commons.wikimedia.org/wiki/File:Oshiwambo_palm_leave_baskets.jpg" rel="noopener">Source: Wikimedia Commons</a>.</li><li><strong>Decorated clay bowls.</strong> “Pottery in Namibia1” by Pemba.mpimaji, <a href="https://creativecommons.org/licenses/by-sa/4.0" rel="noopener">CC BY-SA 4.0</a>. <a href="https://commons.wikimedia.org/wiki/File:Pottery_in_Namibia1.jpg" rel="noopener">Source: Wikimedia Commons</a>.</li><li><strong>Patchwork cloth doll.</strong> “Handmade dolls” by Fidelisblue, <a href="https://creativecommons.org/licenses/by-sa/4.0" rel="noopener">CC BY-SA 4.0</a>. <a href="https://commons.wikimedia.org/wiki/File:Handmade_dolls.JPG" rel="noopener">Source: Wikimedia Commons</a>.</li><li><strong>Hand-dyed wool yarn.</strong> “Namibia 2017-06 (100) Knäuel aus Swakarawolle” by Kürschner, Public domain. <a href="https://commons.wikimedia.org/wiki/File:Namibia_2017-06_(100)_Kn%C3%A4uel_aus_Swakarawolle.jpg" rel="noopener">Source: Wikimedia Commons</a>.</li><li><strong>Carved wooden chameleon.</strong> “Woody carving of the Bush Control and Biomass Utilisation Project in Namibia” by Tim Brunauer on behalf of Deutsche Gesellschaft für Internationale Zusammenarbeit (GIZ), <a href="https://creativecommons.org/licenses/by-sa/4.0" rel="noopener">CC BY-SA 4.0</a>. <a href="https://commons.wikimedia.org/wiki/File:Woody_carving_of_the_Bush_Control_and_Biomass_Utilisation_Project_in_Namibia.jpg" rel="noopener">Source: Wikimedia Commons</a>.</li><li><strong>Dried wild fruit.</strong> “Dried fruits Jackal berries and Berchemia discolor from Northen Namibia displayed in the Oshiwambo palm basket” by Martin Hipangwa, <a href="https://creativecommons.org/licenses/by-sa/4.0" rel="noopener">CC BY-SA 4.0</a>. <a href="https://commons.wikimedia.org/wiki/File:Dried_fruits_Jackal_berries_and_Berchemia_discolor_from_Northen_Namibia_displayed_in_the_Oshiwambo_palm_basket.jpg" rel="noopener">Source: Wikimedia Commons</a>.</li><li><strong>Air-dried bream.</strong> “Zambezi Bream air dried” by Namibaxab, <a href="https://creativecommons.org/licenses/by-sa/4.0" rel="noopener">CC BY-SA 4.0</a>. <a href="https://commons.wikimedia.org/wiki/File:Zambezi_Bream_air_dried.jpg" rel="noopener">Source: Wikimedia Commons</a>.</li></ul></div></div>
+      </div>
+    </section>
+    <section class="doc__block">
+      <div class="wrap grid">
+        <header class="section__head col-3"><p class="section__num">06</p><h2 class="section__title">Elsewhere</h2></header>
+        <div class="col-9"><p><a class="inline-link" href="/shop/">Back to the Shop view</a> · <a class="inline-link" href="/lab/">All labs</a></p></div>
+      </div>
+    </section>
+  </main>
+  <footer class="footer">
+    <div class="wrap footer__inner">
+      <span>Kampolo Tomas · Windhoek, Namibia</span>
+      <a href="mailto:kampolotomasva@gmail.com" class="footer__top">kampolotomasva@gmail.com</a>
+    </div>
+  </footer>
+  <script src="/track.js" defer></script>
+  <script src="/obs.js" defer></script>
+  <script src="/labs/shop.js" defer></script>
+</body>
+</html>

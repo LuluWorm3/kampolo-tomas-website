@@ -1,0 +1,94 @@
+[
+  {
+    "name": "tokens are read live: every swatch shows the computed value of its custom property",
+    "js": "document.querySelectorAll('#ds-swatches li').length >= 8 && [].every.call(document.querySelectorAll('#ds-swatches li'), function (li) { var n = li.querySelector('.ds-sw__name').textContent; var v = getComputedStyle(document.documentElement).getPropertyValue(n).trim(); return v && li.querySelector('.ds-sw__val').textContent.indexOf(v) === 0; })"
+  },
+  {
+    "name": "layout and type tokens are listed (--gap, --max, --font)",
+    "js": "['--gap', '--max', '--font'].every(function (n) { return [].some.call(document.querySelectorAll('#ds-other .ds-ot__name'), function (e) { return e.textContent === n; }); })"
+  },
+  {
+    "name": "changing a token on :root changes the gallery (swatch value, ratio and spec readout)",
+    "js": "await (async function () { var r = document.documentElement; var wait = function () { return new Promise(function (x) { setTimeout(x, 200); }); }; var acc = function () { return [].find.call(document.querySelectorAll('#ds-swatches li'), function (l) { return l.querySelector('.ds-sw__name').textContent === '--accent'; }).querySelector('.ds-sw__val').textContent; }; var rows = function () { return [].map.call(document.querySelectorAll('#ds-pairs tbody tr'), function (t) { return t.textContent; }).join('|'); }; var before = [acc(), rows()]; r.style.setProperty('--accent', '#00ff00'); await wait(); var after = [acc(), rows()]; r.style.removeProperty('--accent'); await wait(); var restored = acc() === before[0]; return after[0].indexOf('#00ff00') === 0 && after[1] !== before[1] && restored; })()"
+  },
+  {
+    "name": "contrast maths matches known pairs (black on white 21, #777 on #fff 4.48, #767676 on #fff 4.54, red on white 4.00)",
+    "js": "(function () { var D = window.DesignSystemLab; return D.ratio('#000', '#fff') === 21 && D.fmt(D.ratio('#777', '#fff')) === '4.48' && D.fmt(D.ratio('#767676', '#fff')) === '4.54' && D.fmt(D.ratio('red', 'white')) === '4.00' && Math.abs(D.ratio('oklch(0 0 0)', 'hsl(0 0% 100%)') - 21) < 0.1 && Math.abs(D.ratio('rgb(0 0 0 / 50%)', '#fff') - 3.98) < 0.03; })()"
+  },
+  {
+    "name": "a ratio just under a threshold is never shown as meeting it (4.499 shows 4.49, 4.5 shows 4.50)",
+    "js": "window.DesignSystemLab.fmt(4.499) === '4.49' && window.DesignSystemLab.fmt(4.5) === '4.50' && window.DesignSystemLab.fmt(6.999) === '6.99'"
+  },
+  {
+    "name": "invalid colours are refused (not a colour, undefined var(), currentcolor)",
+    "js": "(function () { var D = window.DesignSystemLab; return D.ratio('banana', '#fff') === null && D.ratio('var(--no-such-token)', '#fff') === null && D.ratio('currentcolor', '#fff') === null && D.ratio('', '#fff') === null; })()"
+  },
+  {
+    "name": "checker page: #777 on #fff reports 4.48 to 1, fails AA for small text and passes AA for large text",
+    "js": "await (async function () { var f = document.getElementById('ds-fg'), b = document.getElementById('ds-bg'); var pf = f.value, pb = b.value; f.value = '#777'; b.value = '#fff'; f.dispatchEvent(new Event('input', { bubbles: true })); var s = document.getElementById('ds-cc-summary').textContent; var rows = [].map.call(document.querySelectorAll('#ds-cc-table tbody tr'), function (t) { return t.textContent; }); f.value = pf; b.value = pb; f.dispatchEvent(new Event('input', { bubbles: true })); return s.indexOf('4.48 to 1') === 0 && s.indexOf('Small text fails AA') > -1 && s.indexOf('Large text passes AA') > -1 && /AA . small text4.5 to 1.*Fail/.test(rows[0]) && /AA . large text3 to 1.*Pass/.test(rows[1]); })()"
+  },
+  {
+    "name": "checker page: a bad colour sets aria-invalid and explains itself",
+    "js": "await (async function () { var f = document.getElementById('ds-fg'); var pf = f.value; f.value = 'not a colour'; f.dispatchEvent(new Event('input', { bubbles: true })); var ok = f.getAttribute('aria-invalid') === 'true' && document.getElementById('ds-cc-summary').textContent.indexOf('not a CSS colour') > -1; f.value = pf; f.dispatchEvent(new Event('input', { bubbles: true })); return ok && f.getAttribute('aria-invalid') === 'false'; })()"
+  },
+  {
+    "name": "token pairings in the current theme all pass their AA target and the facts line agrees",
+    "js": "(function () { var m = window.DesignSystemLab.measure().filter(function (x) { return x.pass !== null; }); return m.length >= 6 && m.every(function (x) { return x.pass; }) && document.getElementById('ds-fact-pass').textContent === m.length + '/' + m.length; })()"
+  },
+  {
+    "name": "theme toggle flips the theme and the tokens are read again (state restored afterwards)",
+    "js": "await (async function () { var r = document.documentElement, btn = document.getElementById('ds-theme-btn'); var prevAttr = r.getAttribute('data-theme'), prevStore = null, had = false; try { prevStore = localStorage.getItem('theme'); had = prevStore !== null; } catch (e) {} var wait = function () { return new Promise(function (x) { setTimeout(x, 200); }); }; var bgv = function () { return [].find.call(document.querySelectorAll('#ds-swatches li'), function (l) { return l.querySelector('.ds-sw__name').textContent === '--bg'; }).querySelector('.ds-sw__val').textContent; }; var before = bgv(); btn.click(); await wait(); var mid = bgv(), attr = r.getAttribute('data-theme'); btn.click(); await wait(); var back = bgv(); if (prevAttr === null) r.removeAttribute('data-theme'); else r.setAttribute('data-theme', prevAttr); try { if (had) localStorage.setItem('theme', prevStore); else localStorage.removeItem('theme'); } catch (e) {} await wait(); return before !== mid && (attr === 'light' || attr === 'dark') && back === before; })()"
+  },
+  {
+    "name": "applying a plain style on this page re-skins it and re-reads the tokens; Reset restores Swiss",
+    "js": "await (async function () { var r = document.documentElement; var wait = function () { return new Promise(function (x) { setTimeout(x, 200); }); }; var alt = function () { return [].find.call(document.querySelectorAll('#ds-swatches li'), function (l) { return l.querySelector('.ds-sw__name').textContent === '--bg-alt'; }).querySelector('.ds-sw__val').textContent; }; var prev = r.getAttribute('data-style'); var before = alt(); document.querySelector('[data-skin=brutalist]').click(); await wait(); var on = r.getAttribute('data-style') === 'brutalist' && /ffe94a/i.test(alt()) && /Courier/i.test(getComputedStyle(document.body).fontFamily) && document.getElementById('ds-theme-btn').disabled && document.querySelector('[data-skin=brutalist]').getAttribute('aria-pressed') === 'true'; document.getElementById('ds-skin-reset').click(); await wait(); var off = !r.hasAttribute('data-style') && alt() === before && !document.getElementById('ds-theme-btn').disabled; if (prev) r.setAttribute('data-style', prev); return on && off; })()"
+  },
+  {
+    "name": "a style that is not plain is never offered here (no -plus edition buttons)",
+    "js": "[].every.call(document.querySelectorAll('[data-skin]'), function (b) { return /^[a-z]+$/.test(b.getAttribute('data-skin')) && b.getAttribute('data-skin').indexOf('plus') < 0; }) && document.querySelectorAll('[data-skin]').length === 8"
+  },
+  {
+    "name": "the all-styles check lists eight styles, Swiss passes every graded pairing, and the page style is restored",
+    "js": "await (async function () { var r = document.documentElement, prev = r.getAttribute('data-style'); document.getElementById('ds-audit-btn').click(); var rows = document.querySelectorAll('#ds-audit tbody tr'); var ok = rows.length === 8 && !document.getElementById('ds-audit').hidden && /^8 of 8/.test(rows[0].children[1].textContent) && r.getAttribute('data-style') === prev; return ok; })()"
+  },
+  {
+    "name": "the tab order list matches the focusable elements on the page, each with a name",
+    "js": "await (async function () { var btn = document.getElementById('ds-order-btn'); btn.click(); var items = document.querySelectorAll('#ds-order li'); var expected = [].filter.call(document.querySelectorAll('a[href],button,input:not([type=hidden]),select,textarea,summary'), function (e) { return !e.disabled && e.getClientRects().length > 0 && getComputedStyle(e).visibility !== 'hidden'; }).length; var named = [].every.call(items, function (li) { return li.textContent.replace(/\\s+/g, ' ').trim().split(' ').length >= 2 && li.textContent.indexOf('(no name)') < 0; }); var ok = items.length >= 20 && items.length === expected && named && btn.getAttribute('aria-expanded') === 'true'; btn.click(); return ok && btn.getAttribute('aria-expanded') === 'false'; })()"
+  },
+  {
+    "name": "reduced-motion readout matches matchMedia and the demo transition follows it",
+    "js": "await (async function () { var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches; var box = document.getElementById('ds-rm'); var dur = parseFloat(document.getElementById('ds-rm-dur').textContent); var ok = box.getAttribute('data-reduced') === String(reduce) && document.getElementById('ds-rm-media').textContent === (reduce ? 'reduce' : 'no-preference') && (reduce ? dur === 0 : dur > 0); var calm = document.getElementById('ds-rm-calm'); calm.click(); await new Promise(function (x) { setTimeout(x, 100); }); var calmOk = parseFloat(document.getElementById('ds-rm-dur').textContent) === 0 && calm.getAttribute('aria-pressed') === 'true'; calm.click(); return ok && calmOk; })()"
+  },
+  {
+    "name": "nothing moves until asked: the demo dot has no running animation",
+    "js": "[].every.call(document.querySelectorAll('main *'), function (n) { var cs = getComputedStyle(n); return cs.animationName === 'none' || parseFloat(cs.animationDuration) === 0; })"
+  },
+  {
+    "name": "component readouts name the token a value comes from (solid button background is --text)",
+    "js": "document.querySelector('[data-probe=\".btn--solid\"] .ds-spec').textContent.indexOf('(--text') > -1 && [].every.call(document.querySelectorAll('.ds-spec'), function (e) { return e.textContent.length > 20; })"
+  },
+  {
+    "name": "sample components use the site's real classes (btn, tags, facts, job, details.project, skill-list, form)",
+    "js": "['.btn.btn--solid', '.btn.btn--line', '.tags li', '.facts dt', '.job h3', 'details.project summary', '.skill-list li[data-level]', '.form .form__field input'].every(function (s) { return document.querySelector('#lab-demo ' + s); })"
+  },
+  {
+    "name": "the sample .job heading renders at the size the .job rule declares, not the page's generic h3 size",
+    "js": "parseFloat(getComputedStyle(document.querySelector('#lab-demo .job h3')).fontSize) === 1.4 * parseFloat(getComputedStyle(document.documentElement).fontSize)"
+  },
+  {
+    "name": "the sample form validates in the browser and sends nothing",
+    "js": "await (async function () { var f = document.getElementById('ds-form'); var reqs = performance.getEntriesByType('resource').length; f.requestSubmit(); var invalid = document.getElementById('ds-form-note').textContent.indexOf(':') > -1 && document.getElementById('ds-form-note').textContent.indexOf('Nothing was sent') < 0; f.elements['sample-name'].value = 'A'; f.elements['sample-email'].value = 'a@example.com'; f.elements['sample-message'].value = 'B'; f.requestSubmit(); var valid = document.getElementById('ds-form-note').textContent.indexOf('Nothing was sent') > -1; f.reset(); await new Promise(function (x) { setTimeout(x, 100); }); return invalid && valid && performance.getEntriesByType('resource').length === reqs && location.pathname === '/lab/design-system/'; })()"
+  },
+  {
+    "name": "the details sample opens and closes natively",
+    "js": "await (async function () { var d = document.querySelector('#lab-demo details.project'); var s = d.querySelector('summary'); var was = d.open; s.click(); var a = d.open; s.click(); return a === !was && d.open === was; })()"
+  },
+  {
+    "name": "links to the Style lab on the Design view and no -plus edition script is loaded",
+    "js": "!!document.querySelector('a[href=\"/design/#design-lab\"]') && !document.querySelector('script[src*=\"edition\"]')"
+  },
+  {
+    "name": "the page source has no inline style attributes (CSP) and no external request is made by the lab script",
+    "js": "await (async function () { var html = await (await fetch(location.href)).text(); var ext = performance.getEntriesByType('resource').filter(function (e) { return e.name.indexOf(location.origin) !== 0 && e.name.indexOf('fonts.g') < 0; }); return html.split(' style=').length === 1 && ext.length === 0; })()"
+  }
+]

@@ -1,0 +1,70 @@
+[
+ {
+  "name": "chart draws 14 regions and the controls exist",
+  "js": "(function(){ var a=document.getElementById('nj-app'); return a.querySelectorAll('svg .reg').length===14 && a.querySelectorAll('.lab-controls button').length>=9; })()"
+ },
+ {
+  "name": "no inline style attributes anywhere on the page",
+  "js": "document.querySelectorAll('[style]').length===0"
+ },
+ {
+  "name": "JSON has 5 series, each with 14 regions plus Namibia, a table, page and retrieval date, and rates that match the counts",
+  "js": "await (async function(){ var d=await (await fetch('/labs/namibia-jobs.json')).json(); return d.series.length===5 && d.regions.length===14 && d.series.every(function(s){ return Object.keys(s.values).length===15 && s.table && s.page_printed && s.page_pdf && s.retrieved && /^https:/.test(s.source_url) && d.regions.every(function(r){ var v=s.values[r]; return v.value>0 && v.value<100 && Math.abs(v.unemployed/v.labour_force*100 - v.value) <= 0.06; }); }); })()"
+ },
+ {
+  "name": "static table values equal the JSON values",
+  "js": "await (async function(){ var d=await (await fetch('/labs/namibia-jobs.json')).json(); var rows=[].slice.call(document.querySelectorAll('#nj-table tbody tr')).slice(0,15); if(rows.length!==15) return false; var names=[d.national].concat(d.regions); return rows.every(function(tr,i){ var c=[].slice.call(tr.querySelectorAll('td')); return tr.querySelector('th').textContent===names[i] && c.length===d.series.length && c.every(function(td,k){ var x=d.series[k].values[names[i]].value; return td.textContent===(Math.round(x*10)/10).toFixed(1); }); }); })()"
+ },
+ {
+  "name": "every radar spoke announces the plotted values from the JSON",
+  "js": "await (async function(){ var d=await (await fetch('/labs/namibia-jobs.json')).json(); var ids=['2023-overall-19th-icls','2023-youth-19th-icls']; var regs=[].slice.call(document.querySelectorAll('#nj-app svg .reg')); return regs.length===14 && regs.every(function(g){ var r=g.getAttribute('data-region'); var l=g.getAttribute('aria-label'); return l.indexOf(r+':')===0 && ids.every(function(id){ var s=d.series.find(function(q){return q.id===id;}); var x=s.values[r].value; return l.indexOf((Math.round(x*10)/10).toFixed(1)+' percent')>-1; }); }); })()"
+ },
+ {
+  "name": "2023 series alone show no definition-changed warning",
+  "js": "!document.querySelector('.nj-note--warn')"
+ },
+ {
+  "name": "keyboard: arrow keys move between regions and update the readout",
+  "js": "(function(){ var g=document.querySelector('#nj-app svg .reg[tabindex=\"0\"]'); if(!g) return false; g.dispatchEvent(new MouseEvent('mouseenter')); g.focus(); var first=document.querySelector('.nj-readout__name').textContent; document.activeElement.dispatchEvent(new KeyboardEvent('keydown',{key:'ArrowRight',bubbles:true})); var second=document.querySelector('.nj-readout__name').textContent; return !!first && !!second && first!==second && document.activeElement.getAttribute('data-region')===second; })()"
+ },
+ {
+  "name": "readout shows counts and the source table and page",
+  "js": "/unemployed of [\\d,]+ in the labour force\\. Source: Table [\\dA]\\.\\d, page \\d+/.test(document.querySelector('.nj-readout').textContent)"
+ },
+ {
+  "name": "switching on a 2018 series shows the definition-changed warning",
+  "js": "(function(){ var b=[].slice.call(document.querySelectorAll('#nj-app .nj-ser')).find(function(x){return /2018 all 15\\+ . broad/.test(x.textContent);}); if(!b) return false; b.click(); var n=document.querySelector('.nj-note--warn'); return !!n && /cannot be directly compared/.test(n.textContent); })()"
+ },
+ {
+  "name": "radar has one polygon per selected series",
+  "js": "(function(){ var a=document.getElementById('nj-app'); var on=a.querySelectorAll('.nj-ser[aria-pressed=\"true\"]').length; return on===3 && a.querySelectorAll('svg polygon.poly').length===3; })()"
+ },
+ {
+  "name": "the last selected series cannot be switched off",
+  "js": "(function(){ var a=document.getElementById('nj-app'); var bs=[].slice.call(a.querySelectorAll('.nj-ser')); bs.forEach(function(b){ if(a.querySelectorAll('.nj-ser[aria-pressed=\"true\"]').length>1 && b.getAttribute('aria-pressed')==='true') b.click(); bs=[].slice.call(a.querySelectorAll('.nj-ser')); }); var on=a.querySelectorAll('.nj-ser[aria-pressed=\"true\"]'); if(on.length!==1) return false; on[0].click(); var again=a.querySelectorAll('.nj-ser[aria-pressed=\"true\"]'); return again.length===1; })()"
+ },
+ {
+  "name": "ranked dots view draws 14 regions with markers",
+  "js": "(function(){ [].slice.call(document.querySelectorAll('#nj-app .lab-controls button')).find(function(x){return x.textContent.trim()==='Ranked dots';}).click(); var regs=[].slice.call(document.querySelectorAll('#nj-app svg .reg')); return regs.length===14 && document.querySelectorAll('#nj-app svg .mk').length>=14; })()"
+ },
+ {
+  "name": "slope chart draws 14 lines, both ends labelled, says it is not a measured change and carries the warning",
+  "js": "(function(){ [].slice.call(document.querySelectorAll('#nj-app .lab-controls button')).find(function(x){return x.textContent.trim()==='Slope chart';}).click(); var a=document.getElementById('nj-app'); return a.querySelectorAll('svg .reg').length===14 && a.querySelectorAll('svg .slopeline:not(.hit)').length===14 && /not a measured change/.test(a.querySelector('.nj-legendbox').textContent) && !!a.querySelector('.nj-note--warn') && a.querySelectorAll('svg .rlab').length===28; })()"
+ },
+ {
+  "name": "tile map shades 14 tiles and each tile prints the JSON value",
+  "js": "await (async function(){ var d=await (await fetch('/labs/namibia-jobs.json')).json(); [].slice.call(document.querySelectorAll('#nj-app .lab-controls button')).find(function(x){return x.textContent.trim()==='Tile map';}).click(); var s=d.series[0]; var tiles=[].slice.call(document.querySelectorAll('#nj-app svg .reg')); return tiles.length===14 && tiles.every(function(g){ var r=g.getAttribute('data-region'); var x=s.values[r].value; return g.querySelector('.tileval').textContent===(Math.round(x*10)/10).toFixed(1) && /tile b[1-5]/.test(g.querySelector('rect').getAttribute('class')); }); })()"
+ },
+ {
+  "name": "no horizontal overflow inside the demo",
+  "js": "(function(){ var d=document.getElementById('lab-demo'); return d.scrollWidth<=d.clientWidth+1; })()"
+ },
+ {
+  "name": "chart text reaches 4.5:1 on tiles and page, series swatches and tile outlines 3:1",
+  "js": "(function(){ function p(c){ var m=c.match(/rgba?\\(([^)]+)\\)/); return m[1].split(/[ ,\\/]+/).map(parseFloat).slice(0,3); } function lin(v){ v/=255; return v<=0.03928?v/12.92:Math.pow((v+0.055)/1.055,2.4); } function L(c){ return 0.2126*lin(c[0])+0.7152*lin(c[1])+0.0722*lin(c[2]); } function R(a,b){ var x=L(a),y=L(b); return (Math.max(x,y)+0.05)/(Math.min(x,y)+0.05); } var bg=p(getComputedStyle(document.getElementById('lab-demo')).backgroundColor); var bad=[]; [].slice.call(document.querySelectorAll('#nj-app svg text')).forEach(function(t){ if(getComputedStyle(t).display==='none') return; var rect=t.parentNode.querySelector('rect.tile'); var back=rect? p(getComputedStyle(rect).fill) : bg; var r=R(p(getComputedStyle(t).fill),back); if(r<4.5) bad.push(t.textContent+' '+r.toFixed(2)); }); [].slice.call(document.querySelectorAll('#nj-app svg .tile')).forEach(function(t){ var r=R(p(getComputedStyle(t).stroke),bg); if(r<3) bad.push('tile outline '+r.toFixed(2)); }); [].slice.call(document.querySelectorAll('#nj-app .lab-controls button')).find(function(x){return x.textContent.trim()==='Radar';}).click(); [].slice.call(document.querySelectorAll('#nj-app .nj-ser .nj-sw')).forEach(function(s,i){ var r=R(p(getComputedStyle(s).backgroundColor),bg); if(r<3) bad.push('series '+i+' '+r.toFixed(2)); }); if(bad.length) console.warn(bad.join(' | ')); return bad.length===0; })()"
+ },
+ {
+  "name": "the table details opens and holds the source rows",
+  "js": "(function(){ var d=document.getElementById('nj-table'); d.open=true; var t=d.querySelectorAll('table'); return t.length===2 && t[1].querySelectorAll('tbody tr').length===5 && /Table 5\\.3/.test(d.textContent) && /Table 6\\.7/.test(d.textContent); })()"
+ }
+]

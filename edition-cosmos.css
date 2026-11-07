@@ -1,0 +1,258 @@
+/* Cosmos Edition, "Flight" (the + beside Cosmos in the Style lab; style name cosmos-plus). Lazy-loaded by editions-plus.js on first entry, so
+   visitors who never open it download nothing. Dark is a night sky, light is a daylight star chart in line art. The shared controls (.px-hud,
+   .px-btn, .px-canvas), the Pause rule and the chat launcher/title glyph rules live in editions-plus.css; this file holds the tokens, the data
+   slates, the system layouts and the chrome (orrery, readout, chat). Script: edition-cosmos.js. Prefix rule: every class the script adds
+   starts with cs-. Content slates keep their own backgrounds, so text never depends on what the canvas draws behind it. */
+
+/* ---------- Tokens ---------- */
+:root[data-style='cosmos-plus'] {
+  --font: 'Inter', system-ui, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif;
+  --mono: ui-monospace, 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
+  --bg: #eaf0fb; --bg-alt: transparent; --text: #14203a; --muted: #44557c; --rule: #2f5fd0; --hair: rgba(47, 95, 208, 0.34);
+  --accent: #a85a00; --on-accent: #ffffff; --glass: rgba(255, 255, 255, 0.82); --glow: rgba(47, 95, 208, 0.16);
+  --slate: rgba(255, 255, 255, 0.92); --shade: rgba(47, 95, 208, 0.14); --blue: #2f5fd0;
+  --px-a: #c26a00; --px-b: #2f5fd0; --px-c: #7a5cd6; --px-ink: #14203a; --px-dark: 0; color-scheme: light;
+}
+:root[data-style='cosmos-plus'][data-theme='dark'] {
+  --bg: #03040c; --text: #f1efff; --muted: #b3aedd; --rule: #aab4ff; --hair: rgba(170, 180, 255, 0.3);
+  --accent: #ffb347; --on-accent: #03040c; --glass: rgba(8, 10, 28, 0.7); --glow: rgba(122, 167, 255, 0.24);
+  --slate: rgba(7, 10, 28, 0.88); --shade: rgba(0, 0, 0, 0.5); --blue: #7aa7ff;
+  --px-a: #ffb347; --px-b: #7aa7ff; --px-c: #b69cff; --px-ink: #f1efff; --px-dark: 1; color-scheme: dark;
+}
+@media (prefers-color-scheme: dark) {
+  :root[data-style='cosmos-plus']:not([data-theme]) {
+    --bg: #03040c; --text: #f1efff; --muted: #b3aedd; --rule: #aab4ff; --hair: rgba(170, 180, 255, 0.3);
+    --accent: #ffb347; --on-accent: #03040c; --glass: rgba(8, 10, 28, 0.7); --glow: rgba(122, 167, 255, 0.24);
+    --slate: rgba(7, 10, 28, 0.88); --shade: rgba(0, 0, 0, 0.5); --blue: #7aa7ff;
+    --px-a: #ffb347; --px-b: #7aa7ff; --px-c: #b69cff; --px-ink: #f1efff; --px-dark: 1; color-scheme: dark;
+  }
+}
+/* One colour per project planet: it keys the slate to the planet drawn beside it. */
+:root[data-style='cosmos-plus'] { --pc0: #a82f6e; --pc1: #0e7a6b; --pc2: #6a4cc4; --pc3: #a85a00; --pc4: #1f5fb8; --pc5: #3f7a0c; --pc6: #b83a1c; --pc7: #3a48c0; }
+:root[data-style='cosmos-plus'][data-theme='dark'] { --pc0: #ff8bd0; --pc1: #6ff5dc; --pc2: #b69cff; --pc3: #ffb347; --pc4: #8fd0ff; --pc5: #b6f26b; --pc6: #ff8a6a; --pc7: #8b9bff; }
+@media (prefers-color-scheme: dark) {
+  :root[data-style='cosmos-plus']:not([data-theme]) { --pc0: #ff8bd0; --pc1: #6ff5dc; --pc2: #b69cff; --pc3: #ffb347; --pc4: #8fd0ff; --pc5: #b6f26b; --pc6: #ff8a6a; --pc7: #8b9bff; }
+}
+
+/* ---------- Page: the canvas is the sky, everything else floats above it ---------- */
+:root[data-style='cosmos-plus'] { scroll-padding-bottom: 72px; }
+:root[data-style='cosmos-plus'] body { background: var(--bg); }
+:root[data-style='cosmos-plus'] :is(.nav, .hero, main, .footer) { position: relative; z-index: 1; }
+:root[data-style='cosmos-plus'] .nav { position: sticky; z-index: 50; border-bottom: 1px solid var(--hair); }
+/* The glass sits on a pseudo-element: backdrop-filter on the bar itself would make it the containing block of the fixed phone menu. */
+:root[data-style='cosmos-plus'] .nav::before { content: ''; position: absolute; inset: 0; z-index: -1; background: var(--glass); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); pointer-events: none; }
+:root[data-style='cosmos-plus'] .nav__links a { font-family: var(--mono); font-size: 0.74rem; letter-spacing: 0.1em; }
+:root[data-style='cosmos-plus'] .nav__brand { font-weight: 300; letter-spacing: -0.02em; }
+:root[data-style='cosmos-plus'] :is(.hero, .section, .section--alt) { background: transparent; border: 0; }
+/* The page's own reveal fades sections in; the canvas measures their positions, so they must not also slide. */
+:root[data-style='cosmos-plus'] :is(.section, .hero) { transform: none !important; }
+:root[data-style='cosmos-plus'] h1, :root[data-style='cosmos-plus'] h2, :root[data-style='cosmos-plus'] h3 { letter-spacing: -0.02em; }
+:root[data-style='cosmos-plus'] .btn { border-radius: 2px; font-family: var(--mono); font-size: 0.78rem; letter-spacing: 0.06em; text-transform: uppercase; }
+:root[data-style='cosmos-plus'] .btn--solid { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+:root[data-style='cosmos-plus'] .btn--solid:hover { filter: brightness(1.1); }
+:root[data-style='cosmos-plus'] .btn--line { border-color: var(--hair); }
+
+/* ---------- Data slates: glass panes with corner brackets ---------- */
+:root[data-style='cosmos-plus'] :where(.hero__row, .section__head, .section__intro, .about__lead, .about__cols > .col-6:first-child, .facts > div, .job, .project, .edu__item, .skills__group, .contact__links, .form) {
+  position: relative; background: var(--slate); border: 1px solid var(--hair); border-radius: 3px;
+  -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); box-shadow: 0 12px 40px var(--shade);
+}
+:root[data-style='cosmos-plus'] :where(.hero__row, .about__lead, .job, .project, .edu__item, .skills__group, .contact__links, .form, .about__cols > .col-6:first-child)::before,
+:root[data-style='cosmos-plus'] :where(.hero__row, .about__lead, .job, .project, .edu__item, .skills__group, .contact__links, .form, .about__cols > .col-6:first-child)::after {
+  content: ''; position: absolute; width: 12px; height: 12px; border: 0 solid var(--accent); pointer-events: none;
+}
+:root[data-style='cosmos-plus'] :where(.hero__row, .about__lead, .job, .project, .edu__item, .skills__group, .contact__links, .form, .about__cols > .col-6:first-child)::before { left: -1px; top: -1px; border-width: 2px 0 0 2px; }
+:root[data-style='cosmos-plus'] :where(.hero__row, .about__lead, .job, .project, .edu__item, .skills__group, .contact__links, .form, .about__cols > .col-6:first-child)::after { right: -1px; bottom: -1px; border-width: 0 2px 2px 0; }
+:root[data-style='cosmos-plus'] :is(.job, .project, .edu__item, .skills__group):hover,
+:root[data-style='cosmos-plus'] :is(.job, .project, .edu__item, .skills__group):focus-within { border-color: var(--rule); }
+
+/* Layout of a chapter: a column of slates on one side (640px at most, 56% of the page width), the system's planet on the other. */
+:root[data-style='cosmos-plus'] .section { min-height: 100vh; display: flex; align-items: center; padding: 13vh 0; }
+:root[data-style='cosmos-plus'] .section > .wrap { display: flex; flex-direction: column; gap: 16px; }
+:root[data-style='cosmos-plus'] .cs-at-l > .wrap { align-items: flex-start; }
+:root[data-style='cosmos-plus'] .cs-at-r > .wrap { align-items: flex-end; }
+:root[data-style='cosmos-plus'] .cs-at-c > .wrap { align-items: stretch; }
+:root[data-style='cosmos-plus'] .section > .wrap > * { width: min(640px, 100%); max-width: 56%; margin: 0; }
+:root[data-style='cosmos-plus'] .cs-at-c > .wrap > * { width: 100%; max-width: none; }
+:root[data-style='cosmos-plus'] .section > .wrap > .grid:not(.skills) { display: block; }
+:root[data-style='cosmos-plus'] .section > .wrap > .grid > * { max-width: none; }
+:root[data-style='cosmos-plus'] .section > .wrap > :is(.col-9, .grid) > * { margin-left: 0; }
+:root[data-style='cosmos-plus'] .section .col-9 { display: flex; flex-direction: column; gap: 14px; }
+:root[data-style='cosmos-plus'] .section .col-9 > * { max-width: none; }
+:root[data-style='cosmos-plus'] :is(.jobs, .edu, .projects, .about) { margin-top: 0; }
+:root[data-style='cosmos-plus'] .section__head { position: static; width: auto !important; max-width: none !important; display: inline-flex; align-items: baseline; gap: 12px; padding: 9px 16px; margin-bottom: 0; }
+:root[data-style='cosmos-plus'] .section > .wrap > .grid > .section__head { margin-bottom: 14px; }
+:root[data-style='cosmos-plus'] .section__num { font-family: var(--mono); font-size: 0.76rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--blue); }
+:root[data-style='cosmos-plus'] .section__num::after { content: ' / system'; color: var(--muted); }
+:root[data-style='cosmos-plus'] .section__title { font-size: clamp(1.7rem, 3vw, 2.5rem); font-weight: 300; margin: 0; }
+:root[data-style='cosmos-plus'] .section__intro { padding: 14px 18px; font-size: 0.95rem; }
+:root[data-style='cosmos-plus'] .legend i { background: var(--hair); }
+:root[data-style='cosmos-plus'] .legend i:nth-child(-n+3) { background: var(--accent); }
+
+/* ---------- Cover: the home star ---------- */
+:root[data-style='cosmos-plus'] .hero { min-height: calc(100vh - 62px); display: flex; align-items: center; padding: 7vh 0 9vh; }
+:root[data-style='cosmos-plus'] .hero > .wrap { width: 100%; }
+:root[data-style='cosmos-plus'] .hero__meta { font-family: var(--mono); color: var(--blue); letter-spacing: 0.1em; text-transform: uppercase; }
+:root[data-style='cosmos-plus'] .hero__title { font-size: clamp(3.2rem, 10vw, 8.6rem); line-height: 0.95; letter-spacing: -0.045em; font-weight: 300; color: var(--text); margin-bottom: 36px; }
+:root[data-style='cosmos-plus'] .hero__title::first-line { color: var(--accent); font-weight: 600; }
+:root[data-style='cosmos-plus'] .hero__row { display: block; width: min(640px, 100%); max-width: 56%; padding: 22px 26px 24px; }
+:root[data-style='cosmos-plus'] .hero__row > * { grid-column: auto; }
+:root[data-style='cosmos-plus'] .hero__role { border-top: 0; padding-top: 0; margin-bottom: 14px; font-weight: 300; }
+:root[data-style='cosmos-plus'] .hero__lead { font-size: 1.05rem; color: var(--muted); }
+:root[data-style='cosmos-plus'] .hero__status { color: var(--muted); }
+
+/* ---------- About: a home world ---------- */
+:root[data-style='cosmos-plus'] .about__lead { padding: 22px 26px; margin-bottom: 0; font-weight: 300; font-size: clamp(1.25rem, 2.3vw, 1.8rem); max-width: none; }
+:root[data-style='cosmos-plus'] .about { display: flex; flex-direction: column; gap: 14px; }
+:root[data-style='cosmos-plus'] .about__cols { display: flex; flex-direction: column; gap: 14px; }
+:root[data-style='cosmos-plus'] .about__cols > .col-6:first-child { padding: 20px 24px 8px; }
+:root[data-style='cosmos-plus'] .facts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+:root[data-style='cosmos-plus'] .facts > div { display: block; padding: 14px 16px; border-top: 1px solid var(--hair); }
+:root[data-style='cosmos-plus'] .facts dt { font-size: 2rem; font-weight: 300; color: var(--accent); letter-spacing: -0.04em; }
+:root[data-style='cosmos-plus'] .facts dd { font-size: 0.8rem; margin-top: 4px; }
+
+/* ---------- Experience: a ringed planet (content on the right) ---------- */
+:root[data-style='cosmos-plus'] .job { padding: 20px 24px 14px; border-top: 1px solid var(--hair); }
+:root[data-style='cosmos-plus'] .job h3 { font-weight: 600; font-size: 1.2rem; }
+:root[data-style='cosmos-plus'] .job__date { font-family: var(--mono); font-size: 0.74rem; letter-spacing: 0.04em; }
+:root[data-style='cosmos-plus'] .job li { border-top: 1px dashed var(--hair); }
+:root[data-style='cosmos-plus'] .job li::before { height: 2px; border-radius: 1px; }
+
+/* ---------- Projects: one planet per project; a slate keyed to its planet ---------- */
+:root[data-style='cosmos-plus'] .projects { display: flex; flex-direction: column; gap: 10px; }
+:root[data-style='cosmos-plus'] .project { padding: 0 18px; border-left: 3px solid var(--pc0); }
+:root[data-style='cosmos-plus'] .project:last-child { border-bottom: 1px solid var(--hair); }
+:root[data-style='cosmos-plus'] .cs-p0 { border-left-color: var(--pc0); } :root[data-style='cosmos-plus'] .cs-p1 { border-left-color: var(--pc1); }
+:root[data-style='cosmos-plus'] .cs-p2 { border-left-color: var(--pc2); } :root[data-style='cosmos-plus'] .cs-p3 { border-left-color: var(--pc3); }
+:root[data-style='cosmos-plus'] .cs-p4 { border-left-color: var(--pc4); } :root[data-style='cosmos-plus'] .cs-p5 { border-left-color: var(--pc5); }
+:root[data-style='cosmos-plus'] .cs-p6 { border-left-color: var(--pc6); } :root[data-style='cosmos-plus'] .cs-p7 { border-left-color: var(--pc7); }
+:root[data-style='cosmos-plus'] .cs-p0 .project__idx { color: var(--pc0); } :root[data-style='cosmos-plus'] .cs-p1 .project__idx { color: var(--pc1); }
+:root[data-style='cosmos-plus'] .cs-p2 .project__idx { color: var(--pc2); } :root[data-style='cosmos-plus'] .cs-p3 .project__idx { color: var(--pc3); }
+:root[data-style='cosmos-plus'] .cs-p4 .project__idx { color: var(--pc4); } :root[data-style='cosmos-plus'] .cs-p5 .project__idx { color: var(--pc5); }
+:root[data-style='cosmos-plus'] .cs-p6 .project__idx { color: var(--pc6); } :root[data-style='cosmos-plus'] .cs-p7 .project__idx { color: var(--pc7); }
+:root[data-style='cosmos-plus'] .project summary { grid-template-columns: 2.6rem 1fr 1.5rem; row-gap: 4px; padding: 16px 0; align-items: center; }
+:root[data-style='cosmos-plus'] .project__idx { font-family: var(--mono); font-size: 0.85rem; grid-row: span 2; }
+:root[data-style='cosmos-plus'] .project__name { font-size: clamp(1.02rem, 1.7vw, 1.3rem); font-weight: 600; grid-column: 2; }
+:root[data-style='cosmos-plus'] .project__meta { grid-column: 2; grid-row: 2; text-align: left; font-family: var(--mono); font-size: 0.7rem; }
+:root[data-style='cosmos-plus'] .project__plus { grid-column: 3; grid-row: 1 / span 2; }
+:root[data-style='cosmos-plus'] .project__body { padding: 0 0 18px calc(2.6rem + var(--gap)); }
+
+/* ---------- Skills: constellations on three slates, across a nebula ---------- */
+:root[data-style='cosmos-plus'] .skills { margin-top: 0; gap: var(--gap); }
+:root[data-style='cosmos-plus'] .skills__group { padding: 20px 22px 10px; }
+:root[data-style='cosmos-plus'] .skills__group h3 { border-bottom: 1px dashed var(--hair); font-family: var(--mono); color: var(--blue); }
+:root[data-style='cosmos-plus'] .cs-const-list { position: relative; }
+:root[data-style='cosmos-plus'] .cs-const-list li { padding-left: 52px; border-bottom: 0; }
+.cs-const { position: absolute; left: 0; top: 0; pointer-events: none; overflow: visible; }
+.cs-const__line { fill: none; stroke: var(--px-b); stroke-width: 1; opacity: 0.75; transition: stroke-dashoffset 1.6s ease-out; }
+.cs-const__star { fill: var(--px-a); }
+
+/* ---------- Education: a giant and its moons (content on the right) ---------- */
+:root[data-style='cosmos-plus'] .edu__item { padding: 18px 24px 20px; }
+:root[data-style='cosmos-plus'] .edu__date { font-family: var(--mono); font-size: 0.74rem; letter-spacing: 0.04em; }
+:root[data-style='cosmos-plus'] .edu h3 { font-weight: 600; }
+
+/* ---------- Contact: a pulsar's signal ---------- */
+:root[data-style='cosmos-plus'] .contact__links { padding: 6px 24px; }
+:root[data-style='cosmos-plus'] .contact__links li { border-top: 1px dashed var(--hair); }
+:root[data-style='cosmos-plus'] .contact__links li:first-child { border-top: 0; }
+:root[data-style='cosmos-plus'] .contact__links li:last-child { border-bottom: 0; }
+:root[data-style='cosmos-plus'] .contact__links span { font-family: var(--mono); color: var(--blue); }
+:root[data-style='cosmos-plus'] .contact__links span::before { content: ''; display: inline-block; width: 7px; height: 7px; margin-right: 9px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 3px var(--hair); }
+:root[data-style='cosmos-plus'] .contact__links a { font-weight: 400; }
+:root[data-style='cosmos-plus'] .form { padding: 22px 24px; margin-top: 0; }
+:root[data-style='cosmos-plus'] .form input, :root[data-style='cosmos-plus'] .form textarea { background: transparent; border: 1px solid var(--hair); border-radius: 2px; }
+:root[data-style='cosmos-plus'] .form input:focus, :root[data-style='cosmos-plus'] .form textarea:focus { border-color: var(--accent); outline: 2px solid var(--accent); outline-offset: 1px; }
+
+/* ---------- The Style lab (design view) and other persona sections keep a plain slate ---------- */
+:root[data-style='cosmos-plus'] .cs-at-c.persona-only .col-9 { background: var(--slate); border: 1px solid var(--hair); padding: 20px 24px; }
+:root[data-style='cosmos-plus'] .footer { background: var(--slate); border-top: 1px solid var(--hair); }
+
+/* ---------- Orrery: a small map of the chapters; click a dot to warp there ---------- */
+.cs-orrery { position: fixed; right: 12px; bottom: 84px; z-index: 55; padding: 6px; border: 1px solid var(--hair); border-radius: 50%; background: var(--glass); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); line-height: 0; }
+.cs-orrery__ring { fill: none; stroke: var(--hair); stroke-width: 1; }
+.cs-orrery__sun { fill: var(--px-a); }
+.cs-orrery__planet circle { fill: var(--px-b); transition: r 0.25s, fill 0.25s; cursor: pointer; }
+.cs-o-home circle { fill: #ffb347; } .cs-o-about circle { fill: #3aa6ff; } .cs-o-experience circle { fill: #e8a85a; } .cs-o-projects circle { fill: #ff6fa8; }
+.cs-o-skills circle { fill: #36e0c4; } .cs-o-education circle { fill: #e08cff; } .cs-o-contact circle { fill: #7ff0ff; }
+:root[data-style='cosmos-plus']:not([data-theme='dark']) .cs-o-home circle { fill: #a85a00; } :root[data-style='cosmos-plus']:not([data-theme='dark']) .cs-o-about circle { fill: #1f5fb8; }
+:root[data-style='cosmos-plus']:not([data-theme='dark']) .cs-o-experience circle { fill: #8a4a00; } :root[data-style='cosmos-plus']:not([data-theme='dark']) .cs-o-projects circle { fill: #a82f6e; }
+:root[data-style='cosmos-plus']:not([data-theme='dark']) .cs-o-skills circle { fill: #0e7a6b; } :root[data-style='cosmos-plus']:not([data-theme='dark']) .cs-o-education circle { fill: #8a3fb0; }
+:root[data-style='cosmos-plus']:not([data-theme='dark']) .cs-o-contact circle { fill: #0a7a8a; }
+.cs-orrery__planet:hover circle, .cs-orrery__planet:focus-visible circle { r: 6.5; }
+.cs-orrery__planet.cs-here circle { r: 7.5; stroke: var(--text); stroke-width: 1.5; }
+.cs-orrery__planet:focus-visible { outline: none; }
+.cs-orrery__planet:focus-visible circle { stroke: var(--text); stroke-width: 2.5; }
+.cs-orrery svg { width: 72px; height: 72px; transition: width 0.3s ease, height 0.3s ease; }
+.cs-orrery:hover svg, .cs-orrery:focus-within svg { width: 150px; height: 150px; }
+@media (max-width: 1359px) { .cs-orrery { right: 66px; } }
+@media (max-width: 1100px) { .cs-orrery { display: none; } }
+
+/* ---------- Readout: where you are, how far you have come ---------- */
+.cs-readout { position: fixed; left: 50%; transform: translateX(-50%); bottom: 14px; z-index: 55; display: flex; gap: 6px 18px; flex-wrap: wrap; justify-content: center; max-width: calc(100vw - 280px); padding: 7px 16px 9px; border: 1px solid var(--hair); border-radius: 2px; background: var(--glass); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); font: 0.68rem/1.3 var(--mono, ui-monospace, Consolas, monospace); letter-spacing: 0.08em; color: var(--muted); text-transform: uppercase; pointer-events: none; overflow: hidden; }
+.cs-readout__sys { color: var(--text); }
+.cs-readout__bar { position: absolute; left: 0; right: 0; bottom: 0; height: 2px; background: var(--hair); }
+.cs-readout__fill { display: block; height: 100%; width: 100%; background: var(--accent); transform-origin: left; transform: scaleX(0); }
+.cs-warp { border-color: var(--accent); color: var(--accent); }
+@media (max-width: 1000px) { .cs-readout { display: none; } }
+
+/* ---------- Chat: the comms slate ---------- */
+:root[data-style='cosmos-plus'] .chat {
+  background: var(--slate); -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px);
+  border: 1px solid var(--hair); border-radius: 3px; overflow: hidden; box-shadow: 0 0 40px var(--glow), 0 24px 60px rgba(0, 0, 0, 0.35);
+}
+:root[data-style='cosmos-plus'] .chat::after { content: ''; position: absolute; right: -1px; bottom: -1px; width: 14px; height: 14px; border: 0 solid var(--accent); border-width: 0 2px 2px 0; pointer-events: none; }
+:root[data-style='cosmos-plus'] .chat__head { background: transparent; color: var(--text); border-bottom: 1px dashed var(--hair); padding: 14px 18px; }
+:root[data-style='cosmos-plus'] .chat__head strong { letter-spacing: -0.01em; font-weight: 400; }
+:root[data-style='cosmos-plus'] .chat__head span { font-family: var(--mono); text-transform: uppercase; letter-spacing: 0.06em; color: color-mix(in srgb, var(--px-b) 70%, var(--text)); opacity: 1; }
+:root[data-style='cosmos-plus'] .chat__head button:hover { color: var(--accent); }
+:root[data-style='cosmos-plus'] .msg { border-radius: 2px; }
+:root[data-style='cosmos-plus'] .msg--bot { background: var(--glass); border: 1px solid var(--hair); border-left: 3px solid var(--blue); }
+:root[data-style='cosmos-plus'] .msg--user { background: var(--accent); color: var(--on-accent); }
+:root[data-style='cosmos-plus'] .msg--err { color: color-mix(in srgb, var(--accent) 78%, var(--text)); }
+:root[data-style='cosmos-plus'] .chat__chips button { border: 1px solid var(--hair); border-radius: 2px; color: var(--text); background: transparent; font-family: var(--mono); font-size: 0.74rem; }
+:root[data-style='cosmos-plus'] .chat__chips button:hover { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+:root[data-style='cosmos-plus'] .chat__form { border-top: 1px dashed var(--hair); align-items: center; padding: 6px; }
+:root[data-style='cosmos-plus'] .chat__form input { background: transparent; border-radius: 2px; }
+:root[data-style='cosmos-plus'] .chat__form input:focus { box-shadow: inset 0 0 0 1px var(--accent); }
+:root[data-style='cosmos-plus'] .chat__form button { height: 40px; padding: 0 18px; border-radius: 2px; background: var(--accent); color: var(--on-accent); }
+:root[data-style='cosmos-plus'] .chat__match textarea { background: transparent; border: 1px solid var(--hair); border-radius: 2px; }
+:root[data-style='cosmos-plus'] .chat__match button { border-radius: 2px; background: var(--accent); color: var(--on-accent); }
+:root[data-style='cosmos-plus'] .chat-fab { border-radius: 50%; background: var(--accent); color: var(--on-accent); border-color: var(--bg); box-shadow: 0 0 0 1px var(--accent), 0 0 28px var(--glow); }
+:root[data-style='cosmos-plus'] .chat-fab span { border-radius: 50%; }
+/* The ring-and-planet glyph, drawn as a mask in the text colour (launcher and panel title). */
+:root[data-style='cosmos-plus'] { --glyph: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2024%2024%27%3E%3Ccircle%20cx%3D%2712%27%20cy%3D%2712%27%20r%3D%275%27%2F%3E%3Cellipse%20cx%3D%2712%27%20cy%3D%2712%27%20rx%3D%2710.5%27%20ry%3D%273.6%27%20transform%3D%27rotate%28-20%2012%2012%29%27%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.6%27%2F%3E%3C%2Fsvg%3E"); }
+:root[data-style='cosmos-plus'] .chat__head strong::before { color: var(--px-a); filter: drop-shadow(0 0 6px var(--px-a)); }
+
+/* ---------- Reduced motion: the same sky, held still ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .cs-const__line { transition: none; }
+  .cs-orrery svg { transition: none; }
+  :root[data-style='cosmos-plus'] .section { min-height: 0; padding: 72px 0; }
+  :root[data-style='cosmos-plus'] .hero { min-height: 0; }
+  :root[data-style='cosmos-plus'] .cs-k-const > .wrap { align-items: flex-start; }
+  :root[data-style='cosmos-plus'] .cs-k-const > .wrap > * { width: min(640px, 100%); max-width: 56%; }
+  :root[data-style='cosmos-plus'] .cs-k-const .skills { display: flex; flex-direction: column; gap: 14px; }
+  :root[data-style='cosmos-plus'] .facts { grid-template-columns: 1fr; }
+}
+
+/* ---------- Phone: static, one column; each chapter's planet sits beside its heading, project and moon planets in a lane ---------- */
+@media (max-width: 720px) {
+  :root[data-style='cosmos-plus'] .hero { min-height: 0; padding: 128px 0 40px; }
+  :root[data-style='cosmos-plus'] .section { min-height: 0; padding: 52px 0 28px; }
+  :root[data-style='cosmos-plus'] .hero__row, :root[data-style='cosmos-plus'] .section > .wrap > *, :root[data-style='cosmos-plus'] .form { width: 100%; max-width: none; }
+  :root[data-style='cosmos-plus'] .cs-at-r > .wrap, :root[data-style='cosmos-plus'] .cs-at-l > .wrap { align-items: stretch; }
+  :root[data-style='cosmos-plus'] .section__head { align-self: flex-start; }
+  :root[data-style='cosmos-plus'] .section > .wrap > .grid > .section__head { margin-bottom: 14px; }
+  :root[data-style='cosmos-plus'] .hero__title { font-size: clamp(3rem, 15vw, 4.4rem); }
+  :root[data-style='cosmos-plus'] :is(.hero__row, .section__head, .section__intro, .about__lead, .about__cols > .col-6:first-child, .facts > div, .job, .project, .edu__item, .skills__group, .contact__links, .form),
+  :root[data-style='cosmos-plus'] .chat { -webkit-backdrop-filter: none; backdrop-filter: none; }
+  :root[data-style='cosmos-plus'] :is(.job, .edu__item, .skills__group, .contact__links, .form, .about__lead, .hero__row) { padding-left: 16px; padding-right: 16px; }
+  :root[data-style='cosmos-plus'] :is(.cs-planet, .cs-moon) { margin-left: 44px; }
+  :root[data-style='cosmos-plus'] .facts { grid-template-columns: 1fr; }
+  :root[data-style='cosmos-plus'] .skills { display: flex; flex-direction: column; }
+  :root[data-style='cosmos-plus'] .project__body { padding-left: 0; }
+  :root[data-style='cosmos-plus'] .edu__item, :root[data-style='cosmos-plus'] .contact__links li { grid-template-columns: 1fr; }
+  :root[data-style='cosmos-plus'] .chat { background: var(--bg); }
+  .cs-readout { display: none; }
+}

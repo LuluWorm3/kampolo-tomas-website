@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex, follow" />
+<title>Particle demos</title>
+<link rel="stylesheet" href="/particles/particles.css" />
+</head>
+<body>
+<main>
+  <header>
+    <h1>Particle demos for the Plus Editions</h1>
+    <p class="lead">Five small effects, one per style, drawn with plain canvas and no libraries. Move the pointer and click on the stage. Pause stops motion; the effects also stay still if your system asks for reduced motion.</p>
+  </header>
+
+  <div class="bar">
+    <div class="tabs" role="tablist" aria-label="Effect">
+      <button class="tab" role="tab" data-d="neural" aria-selected="true">Neural</button>
+      <button class="tab" role="tab" data-d="cosmos" aria-selected="false">Cosmos</button>
+      <button class="tab" role="tab" data-d="bauhaus" aria-selected="false">Bauhaus</button>
+      <button class="tab" role="tab" data-d="brutalist" aria-selected="false">Brutalist</button>
+      <button class="tab" role="tab" data-d="swiss" aria-selected="false">Swiss</button>
+    </div>
+    <button class="ctl" id="pause" aria-pressed="false">Pause motion</button>
+  </div>
+
+  <div class="stagewrap" id="wrap" data-demo="neural">
+    <canvas id="cv" aria-label="Particle demonstration"></canvas>
+    <button class="hire" id="hire" hidden>HIRE ME</button>
+  </div>
+
+  <div class="cap" aria-live="polite">
+    <span class="hint" id="hint"></span>
+    <b id="name"></b>
+    <p id="desc"></p>
+    <p class="rm" id="rm" hidden>Reduced motion is on, so the scenes are drawn once and do not move.</p>
+  </div>
+</main>
+
+<script src="/particles/particles.js"></script>
+</body>
+</html>
