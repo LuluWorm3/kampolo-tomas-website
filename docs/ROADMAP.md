@@ -2,7 +2,7 @@
 
 Single source of truth for what is done, what is next, and what is blocked. Any person or AI agent picking up this repo should read [../AGENTS.md](../AGENTS.md) first, then this file. Update the checkboxes in the same change as the work.
 
-Last updated: 2026-11-07. Live site: https://kampolo-tomas-website.netlify.app (deployed from `main` on Netlify).
+Last updated: 2026-11-07. Live site: https://kampolo-tomas.netlify.app (a dedicated Netlify account, deployed from `main` with `scripts/deploy.mjs`).
 
 North star: one calm, corporate-looking site that can become whatever each employer needs, with role-specific links. Full idea write-up: [ideas/multi-persona-site.md](ideas/multi-persona-site.md).
 
@@ -25,6 +25,7 @@ Legend: `[x]` done and verified as stated, `[~]` built but only partly verified 
 | 2026-11-07 | Section concepts for the seven + editions live in one stylesheet (`editions-plus-sections.css`), pure CSS, so the engines stay small. |
 | 2026-11-07 | Editorial Edition rebuilt as "The Kampolo Issue" in its own `edition-editorial.js` / `.css` (a scrolling magazine: cover, contents, a pinned feature opener per section, folded-page spreads, colophon). Owner decisions: a scrolling issue, the existing Renaissance paintings reused as halftone print plates, light = day edition (cream), dark = evening edition (ink). All copy comes from text already on the site; plates are lazy; phones and reduced motion get static plate headers. The old Editorial + rules were removed from `editions-plus2.*` and `editions-plus-sections.css`. |
 | 2026-11-07 | Owner section: a hidden `/owner/` page behind a secret token (`OWNER_TOKEN`), counters in Netlify Blobs written one document per function instance and day (no read-modify-write races), an `obs.js` reporter with swappable sinks, a Prometheus-format `/api/metrics` (separate token) and a global daily chat token cap. Sentry is a prepared sink, off until a DSN and the SDK are approved. See `docs/observability.md`. |
+| 2026-11-08 | Deploy only public files with `scripts/deploy.mjs`: case-sensitive redirects did not stop `/DOCS/...` from serving internal notes and source. The portfolio moves to a dedicated Netlify account. SEO and AI-answer review saved in [seo-and-aeo-review.md](seo-and-aeo-review.md). |
 | 2026-11-07 | Role links are short paths: `/data/`, `/design/`, `/shop/`, `/bank/`. |
 | 2026-11-07 | Email `kampolotomasva@gmail.com` may be public. |
 | 2026-11-07 | Documents to publish: CV PDF, MIT and HP certificates, academic transcript (redacted), reference/recommendation letters (with author consent). Anything else "safe and public" is fine; the rest by email request. |

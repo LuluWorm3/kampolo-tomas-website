@@ -47,7 +47,7 @@ scrape_configs:
       type: Bearer
       credentials_file: /etc/prometheus/kampolo-metrics-token   # a file holding METRICS_TOKEN
     static_configs:
-      - targets: ['kampolo-tomas-website.netlify.app']
+      - targets: ['kampolo-tomas.netlify.app']
 ```
 
 Series: `kt_events_total{event}`, `kt_page_views_total{path}`, `kt_persona_views_total{persona}`, `kt_device_views_total{device}`, `kt_errors_total`, `kt_chat_requests_total{status}`, `kt_chat_tokens_total{direction}`, `kt_chat_failovers_total`, `kt_web_vital_bucket_total{vital,le}`, and the gauges `kt_chat_tokens_today` and `kt_chat_daily_token_cap`. Counters add up the retained 90 days; when old days drop off a counter can fall, which Prometheus treats as a reset, so use `increase()` and `rate()`.

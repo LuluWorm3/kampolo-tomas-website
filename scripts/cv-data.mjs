@@ -10,7 +10,7 @@ export const PERSON = {
   email: 'kampolotomasva@gmail.com',
   phone: '+264 81 850 3687',
   linkedin: 'linkedin.com/in/kampolo-tomas-8453b129b',
-  site: 'kampolo-tomas-website.netlify.app',
+  site: 'kampolo-tomas.netlify.app',
 };
 
 const JOBS = {

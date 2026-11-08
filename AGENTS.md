@@ -4,7 +4,7 @@ Guidance for any AI coding agent or chatbot working in this repository. Read thi
 
 ## What this is
 
-Personal portfolio for Kampolo Tomas Vaino Amunyela (software engineer and IT specialist, Windhoek, Namibia). Deployed on Netlify at https://kampolo-tomas-website.netlify.app from `main`. Goal: a calm corporate-looking site that can become role-specific personas for different employers, with hidden depth underneath. Idea write-up: [docs/ideas/multi-persona-site.md](docs/ideas/multi-persona-site.md).
+Personal portfolio for Kampolo Tomas Vaino Amunyela (software engineer and IT specialist, Windhoek, Namibia). Deployed on Netlify (a dedicated account, deployed with `scripts/deploy.mjs`) at https://kampolo-tomas.netlify.app. Goal: a calm corporate-looking site that can become role-specific personas for different employers, with hidden depth underneath. Idea write-up: [docs/ideas/multi-persona-site.md](docs/ideas/multi-persona-site.md).
 
 ## Stack and layout
 
@@ -25,7 +25,7 @@ Dependency-free static site. No build step, no framework.
 - `netlify.toml`: headers, CSP, functions directory. Keep the CSP working when adding scripts or styles (inline `style=` attributes are blocked; set styles through CSS classes or CSSOM in JS).
 - `thanks.html`, `404.html`, `robots.txt`, `favicon.svg`, `og-image.png`.
 
-Note: Netlify publishes the repo root (`publish = "."`), so internal notes (`docs/`, `AGENTS.md`, `CLAUDE.md`, `netlify/`) are blocked from the live site by `[[redirects]]` in `netlify.toml`. Keep those rules when editing it, and never put secrets or private details in this repo. If the GitHub repository is public, these notes are public too.
+Note: **deploy with `node scripts/deploy.mjs --site <id> [--prod]`**, which publishes only the public files (it leaves out `docs/`, `scripts/`, `netlify/` source, `AGENTS.md`, `CLAUDE.md`, `README.md` and `netlify.toml`) and uploads the functions separately. Do not deploy the repo root: Netlify serves files case-insensitively but its `[[redirects]]` rules in `netlify.toml` are case-sensitive, so `/DOCS/...` and `/Scripts/...` were readable even though `/docs/*` was blocked. The redirects stay as a second layer. Never put secrets or private details in this repo. If the GitHub repository is public, these notes are public too. The SEO and AI-answer review, with what has been checked and what is open, is in [docs/seo-and-aeo-review.md](docs/seo-and-aeo-review.md).
 
 ## Run locally
 
