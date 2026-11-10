@@ -64,4 +64,4 @@ if (flag('dry-run')) { console.log('dry run: nothing uploaded. Folder kept at ' 
 const args = ['deploy', '--site', SITE, '--dir', 'site', '--functions', 'functions', '--message', arg('message') || 'Deploy from scripts/deploy.mjs'];
 if (flag('prod')) args.push('--prod');
 run('netlify', args, { cwd: proj });
-fs.rmSync(tmp, { recursive: true, force: true });
+try { fs.rmSync(tmp, { recursive: true, force: true }); } catch { /* Windows may still hold a file in the temp folder: the deploy has already succeeded */ }
