@@ -865,3 +865,8 @@ html[data-persona='data'] .hero { background-image: linear-gradient(var(--hair) 
 .lab-link a:hover { color: var(--accent); }
 .lab-link span { margin-left: 12px; font-size: 0.8rem; }
 @media print { .lab-link { display: none; } }
+
+/* Netlify adds a "Powered by Netlify" promo and badge to new Free-plan projects as a floating iframe (#nl-badge-frame, injected from
+   /.netlify/scripts/hud) that covers the chat launcher. It stays in the page but is not shown. It can also be switched off in the Netlify
+   dashboard (Project configuration, General, Powered by Netlify badge). */
+#nl-badge-frame { display: none !important; }
